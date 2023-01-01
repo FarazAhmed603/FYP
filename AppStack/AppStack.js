@@ -11,6 +11,7 @@ import PaymentMethod from './ClientStack/Screen/PaymentMethod';
 import EditProfile from './ClientStack/Screen/EditProfile';
 import ChangePassword from './ClientStack/Screen/ChangePassword';
 import settings from './ClientStack/Dashboard/Settings';
+import SkillProviderDetail from './ClientStack/Screen/SkillProviderDetail';
 
 // Skill provider stack
 import SkillProviderDashboard from './SkillProviderStack/Dashboard/Dashboard';
@@ -55,6 +56,10 @@ const ClientStack = props => {
             }}
           />
           <Stack.Screen name="Verification" component={Verification} />
+          <Stack.Screen
+            name="SkillProviderDashboard"
+            component={SkillProviderDetail}
+          />
           <Stack.Screen
             name="PaymentMethod"
             component={PaymentMethod}

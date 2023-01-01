@@ -36,20 +36,31 @@ export default function Profile({navigation}) {
   };
   const picker = () => {
     console.log('im in image picker');
-    launchImageLibrary(options, response => {
-      console.log('Response = ', response);
-      if (response.didCancel) {
+    launchImageLibrary(options, res => {
+      console.log('Response = ', res);
+      if (res.didCancel) {
         console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-        alert(response.customButton);
+      } else if (res.error) {
+        console.log('ImagePicker Error: ', res.error);
+      } else if (res.customButton) {
+        console.log('User tapped custom button: ', res.customButton);
+        alert(res.customButton);
       } else {
-        setFilePath(response);
+        let source = res.uri;
+        setimage(source);
+        console.log('image loaded', image);
       }
     });
   };
+  const createTwoButtonAlert = () =>
+    Alert.alert('Alert Title', 'My Alert Msg', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ]);
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <View style={styles.header}>
@@ -61,21 +72,27 @@ export default function Profile({navigation}) {
           <Icon style={{marginTop: 8}} name="email" size={23} color="black" />
           <Text style={styles.text}>fa628804@gmail.com</Text>
         </View>
-        <TouchableOpacity
-          // style={styles.avatar1}
-          onPress={() => {
-            picker;
-          }}>
-          <Image
-            source={{
-              uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
-            }}
-            style={styles.avatar}
-          />
-        </TouchableOpacity>
+
+        <Image
+          source={{
+            uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
+            // uri: image.uri,
+            // uri: 'data:image/jpeg;base64,' + image,
+          }}
+          style={styles.avatar}
+        />
       </View>
 
       <View style={styles.body}>
+        <TouchableOpacity
+          style={{
+            alignContent: 'center',
+            alignItems: 'center',
+            marginBottom: 20,
+          }}
+          onPress={picker}>
+          <Text>Edit profile picture</Text>
+        </TouchableOpacity>
         <ProfileHeading heading="About" />
         <View style={styles.descriptionhead}>
           <Text style={styles.descriptiontext}>Description</Text>
@@ -119,7 +136,7 @@ const styles = StyleSheet.create({
     borderRadius: 63,
     borderWidth: 4,
     borderColor: '#c2c2a3',
-    marginBottom: 10,
+    marginTop: 80,
     alignSelf: 'center',
     position: 'absolute',
   },

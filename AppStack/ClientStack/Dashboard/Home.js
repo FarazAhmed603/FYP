@@ -15,7 +15,7 @@ import ContractComponent from '../Components/ContractComponent';
 import HomeComponent from '../Components/HomeComponent';
 import Icon from 'react-native-vector-icons/Fontisto';
 
-const Home = () => {
+export default function Home({navigation}) {
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
@@ -59,7 +59,13 @@ const Home = () => {
     return (
       // Flat List Item
       <View style={{margin: 3}}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('SkillProviderDashboard', {
+              id: item.id,
+              title: item.title,
+            })
+          }>
           <HomeComponent title={item.id} description={item.title} />
         </TouchableOpacity>
       </View>
@@ -101,7 +107,7 @@ const Home = () => {
       </View>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -122,5 +128,3 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
 });
-
-export default Home;

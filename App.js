@@ -6,7 +6,6 @@ import AppStack from './AppStack/AppStack';
 
 export default function App() {
   const [auth, setauth] = useState(true);
-  const [Client, isClient] = useState(true);
 
   return (
     <NavigationContainer>
