@@ -27,11 +27,15 @@ const Task = props => {
           </TouchableOpacity>
         </View>
         <View style={styles.inputView3}>
-          <Text style={styles.email}>{props.title} </Text>
-          <Text style={styles.email1}>
+          <Text style={styles.email} numberOfLines={1} ellipsizeMode="tail">
+            {props.title}{' '}
+          </Text>
+          <Text style={styles.email1} numberOfLines={1} ellipsizeMode="tail">
             {props.description} I have 2 room jbaso
           </Text>
-          <Text style={styles.email1}>{props.location} Lahore</Text>
+          <Text style={styles.email1} numberOfLines={1} ellipsizeMode="tail">
+            {props.location} Lahore
+          </Text>
         </View>
         <View style={styles.inputView2}>
           <View>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -8,16 +8,61 @@ import {
   TouchableOpacity,
   Keyboard,
   ScrollView,
+  SafeAreaView,
+  FlatList,
 } from 'react-native';
 
 import Task from '../Components/ContractComponent';
+import ContractComponent from '../Components/ContractComponent';
 
 export default function Contracts({navigation}) {
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
+  const [search, setSearch] = useState('');
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  const [masterDataSource, setMasterDataSource] = useState([]);
 
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/posts')
+      .then(response => response.json())
+      .then(responseJson => {
+        setFilteredDataSource(responseJson);
+        // setMasterDataSource(responseJson);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+  const ItemView = ({item}) => {
+    return (
+      // Flat List Item
+      <View style={{margin: 3}}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.push('YourContractDetail', {
+              id: item.id,
+              title: item.title,
+            })
+          }>
+          <ContractComponent title={item.id} description={item.title} />
+        </TouchableOpacity>
+      </View>
+      // <Text style={styles.itemStyle} onPress={() => getItem(item)}>
+      //   {item.id}
+      //   {'.'}
+      //   {item.title.toUpperCase()}
+      // </Text>
+    );
+  };
   return (
     <View style={styles.container}>
+      <View>
+        <FlatList
+          data={filteredDataSource}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={ItemView}
+        />
+      </View>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.writeTaskWrapper}>
@@ -75,5 +120,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginRight: 15,
   },
-  addText: {},
+  addText: {
+    // fontWeight: 'bold',
+    fontSize: 40,
+  },
 });

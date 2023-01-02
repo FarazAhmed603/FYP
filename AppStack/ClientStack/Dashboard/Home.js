@@ -61,7 +61,7 @@ export default function Home({navigation}) {
       <View style={{margin: 3}}>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('SkillProviderDashboard', {
+            navigation.navigate('SkillProviderDetail', {
               id: item.id,
               title: item.title,
             })

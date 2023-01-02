@@ -12,6 +12,8 @@ import EditProfile from './ClientStack/Screen/EditProfile';
 import ChangePassword from './ClientStack/Screen/ChangePassword';
 import settings from './ClientStack/Dashboard/Settings';
 import SkillProviderDetail from './ClientStack/Screen/SkillProviderDetail';
+import YourContractDetail from './ClientStack/Screen/YourContractDetail';
+import EditContract from './ClientStack/Screen/EditContract';
 
 // Skill provider stack
 import SkillProviderDashboard from './SkillProviderStack/Dashboard/Dashboard';
@@ -57,8 +59,13 @@ const ClientStack = props => {
           />
           <Stack.Screen name="Verification" component={Verification} />
           <Stack.Screen
-            name="SkillProviderDashboard"
+            name="SkillProviderDetail"
             component={SkillProviderDetail}
+          />
+          <Stack.Screen name="EditContract" component={EditContract} />
+          <Stack.Screen
+            name="YourContractDetail"
+            component={YourContractDetail}
           />
           <Stack.Screen
             name="PaymentMethod"

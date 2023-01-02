@@ -7,23 +7,21 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  Linking,
+  Alert,
 } from 'react-native';
 import ProfileHeading from '../Components/ProfileHeading';
-export default function SkillProviderDetail({navigation, route}) {
+export default function YourContractDetail({navigation, route}) {
   const [press, setpress] = useState(false);
 
-  const dialCall = () => {
-    let phoneNumber = '';
-
-    if (Platform.OS === 'android') {
-      phoneNumber = 'tel:${+923001113207}';
-    } else {
-      phoneNumber = 'telprompt:${+923001113207}';
-    }
-
-    Linking.openURL(phoneNumber);
-  };
+  const ConfirmationAlert = () =>
+    Alert.alert('Delete Contract', 'Want to delete permanently', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => navigation.goBack()},
+    ]);
   return (
     // <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
     //   <Text
@@ -65,20 +63,37 @@ export default function SkillProviderDetail({navigation, route}) {
         <Text style={{fontWeight: 'bold', fontSize: 25}}>Faraz Ahmed</Text>
       </View>
       <ScrollView>
-        <ProfileHeading heading="About" />
+        <ProfileHeading heading="Category" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.title}
         </Text>
-        <ProfileHeading heading="Skill" />
+        <ProfileHeading heading="Title" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.title}
         </Text>
-        <ProfileHeading heading="Location" />
+        <ProfileHeading heading="Description" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.title}
         </Text>
-        <TouchableOpacity style={styles.button} onPress={() => setpress(true)}>
-          <Text style={{color: 'white'}}>Hire </Text>
+        <ProfileHeading heading="Loction" />
+        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+          {route.params.title}
+        </Text>
+        <ProfileHeading heading="Date" />
+        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+          {route.params.title}
+        </Text>
+        <ProfileHeading heading="Budget" />
+        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+          {route.params.title}
+        </Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.push('EditContract')}>
+          <Text style={{color: 'white'}}>Edit Contract </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={ConfirmationAlert}>
+          <Text style={{color: 'white'}}>Delete Contract</Text>
         </TouchableOpacity>
         {press && (
           <Text
