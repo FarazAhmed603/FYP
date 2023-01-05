@@ -7,12 +7,22 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Alert,
   Linking,
 } from 'react-native';
-import ProfileHeading from '../Components/ProfileHeading';
-export default function SkillProviderDetail({navigation, route}) {
+import ProfileHeading from '../Component/ProfileHeading';
+export default function ContractDetails({navigation, route}) {
   const [press, setpress] = useState(false);
 
+  const ConfirmationAlert = () =>
+    Alert.alert('Accept Contract', 'Want to work on contract', [
+      {
+        text: 'No',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'Yes', onPress: () => setpress(true)},
+    ]);
   const dialCall = () => {
     let phoneNumber = '';
 
@@ -65,11 +75,11 @@ export default function SkillProviderDetail({navigation, route}) {
         <Text style={{fontWeight: 'bold', fontSize: 25}}>Faraz Ahmed</Text>
       </View>
       <ScrollView>
-        <ProfileHeading heading="About" />
+        <ProfileHeading heading="Category" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.title}
         </Text>
-        <ProfileHeading heading="Skill" />
+        <ProfileHeading heading="Title" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.title}
         </Text>
@@ -77,12 +87,20 @@ export default function SkillProviderDetail({navigation, route}) {
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.title}
         </Text>
-        <ProfileHeading heading="Location" />
+        <ProfileHeading heading="Loction" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.title}
         </Text>
-        <TouchableOpacity style={styles.button} onPress={() => setpress(true)}>
-          <Text style={{color: 'white'}}>Hire </Text>
+        <ProfileHeading heading="Date" />
+        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+          {route.params.title}
+        </Text>
+        <ProfileHeading heading="Budget" />
+        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+          {route.params.title}
+        </Text>
+        <TouchableOpacity style={styles.button} onPress={ConfirmationAlert}>
+          <Text style={{color: 'white'}}>Accept </Text>
         </TouchableOpacity>
         {press && (
           <Text

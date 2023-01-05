@@ -16,7 +16,7 @@ const myContractsName = 'Contracts';
 const settingsName = 'Settings';
 const messagesName = 'Messages';
 
-const Dashboard = ({navigation}) => {
+const Dashboard = ({navigation, route}) => {
   return (
     <Tab.Navigator
       initialRouteName={homeName}

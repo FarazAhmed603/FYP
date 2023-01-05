@@ -19,6 +19,7 @@ export default function Home({navigation}) {
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
+  const [errror, seterrror] = useState('');
 
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/posts')
@@ -29,6 +30,7 @@ export default function Home({navigation}) {
       })
       .catch(error => {
         console.error(error);
+        seterrror(error);
       });
   }, []);
 
@@ -84,27 +86,34 @@ export default function Home({navigation}) {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View>
-        <View style={styles.textInputStyle}>
-          <Icon
-            style={{marginRight: 10, marginTop: 6}}
-            name="search"
-            size={23}
-            color="black"
-          />
-          <TextInput
-            onChangeText={text => searchFilterFunction(text)}
-            value={search}
-            underlineColorAndroid="transparent"
-            placeholder="Search Here"
+      {!errror && (
+        <View>
+          <View style={styles.textInputStyle}>
+            <Icon
+              style={{marginRight: 10, marginTop: 6}}
+              name="search"
+              size={23}
+              color="black"
+            />
+            <TextInput
+              onChangeText={text => searchFilterFunction(text)}
+              value={search}
+              underlineColorAndroid="transparent"
+              placeholder="Search Here"
+            />
+          </View>
+          <FlatList
+            data={filteredDataSource}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={ItemView}
           />
         </View>
-        <FlatList
-          data={filteredDataSource}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={ItemView}
-        />
-      </View>
+      )}
+      {errror && (
+        <View>
+          <Text>Check your internet connection</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 }

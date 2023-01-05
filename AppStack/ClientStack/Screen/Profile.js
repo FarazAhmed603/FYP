@@ -44,9 +44,9 @@ export default function Profile({navigation}) {
         console.log('ImagePicker Error: ', res.error);
       } else if (res.customButton) {
         console.log('User tapped custom button: ', res.customButton);
-        alert(res.customButton);
+        // alert(res.customButton);
       } else {
-        let source = res.uri;
+        let source = res;
         setimage(source);
         console.log('image loaded', image);
       }
@@ -76,8 +76,8 @@ export default function Profile({navigation}) {
         <Image
           source={{
             uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
-            // uri: image.uri,
-            // uri: 'data:image/jpeg;base64,' + image,
+            //uri: image.uri,
+            //uri: 'data:image/jpeg;base64,' + image.uri,
           }}
           style={styles.avatar}
         />

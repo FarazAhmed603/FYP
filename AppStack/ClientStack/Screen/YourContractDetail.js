@@ -11,8 +11,6 @@ import {
 } from 'react-native';
 import ProfileHeading from '../Components/ProfileHeading';
 export default function YourContractDetail({navigation, route}) {
-  const [press, setpress] = useState(false);
-
   const ConfirmationAlert = () =>
     Alert.alert('Delete Contract', 'Want to delete permanently', [
       {
@@ -95,22 +93,6 @@ export default function YourContractDetail({navigation, route}) {
         <TouchableOpacity style={styles.button} onPress={ConfirmationAlert}>
           <Text style={{color: 'white'}}>Delete Contract</Text>
         </TouchableOpacity>
-        {press && (
-          <Text
-            style={{
-              marginHorizontal: 20,
-              marginVertical: 10,
-              fontWeight: 'bold',
-              fontSize: 30,
-            }}>
-            03001113207
-          </Text>
-        )}
-        {press && (
-          <TouchableOpacity style={styles.button} onPress={dialCall}>
-            <Text style={{color: 'white'}}>Call Now</Text>
-          </TouchableOpacity>
-        )}
       </ScrollView>
     </View>
   );

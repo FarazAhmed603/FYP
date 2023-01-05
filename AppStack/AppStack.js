@@ -17,9 +17,12 @@ import EditContract from './ClientStack/Screen/EditContract';
 
 // Skill provider stack
 import SkillProviderDashboard from './SkillProviderStack/Dashboard/Dashboard';
+import ContractDetails from './SkillProviderStack/Screens/ContractDetails';
+import UploadSkill from './SkillProviderStack/Screens/UploadSkill';
+
 const Stack = createNativeStackNavigator();
 const ClientStack = props => {
-  const [names, setname] = useState(true);
+  const [names, setname] = useState(1);
   const navigation = useNavigation();
   console.log('i am here ');
   return (
@@ -82,6 +85,8 @@ const ClientStack = props => {
             component={SkillProviderDashboard}
             options={{headerShown: false}}
           />
+          <Stack.Screen name="ContractDetails" component={ContractDetails} />
+          <Stack.Screen name="UploadSkill" component={UploadSkill} />
         </Stack.Navigator>
       )}
     </>
