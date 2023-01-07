@@ -13,49 +13,22 @@ import {
   TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import ProfileHeading from '../Components/ProfileHeading';
-
-import ImagePicker, {launchImageLibrary} from 'react-native-image-picker';
+import DropDownPicker from 'react-native-dropdown-picker';
+import ProfileHeading from '../Component/ProfileHeading';
 
 export default function Profile({navigation}) {
-  const [image, setimage] = useState(null);
-
-  var options = {
-    title: 'Select Image',
-
-    storageOptions: {
-      skipBackup: true,
-      path: 'images',
-    },
-  };
-  const picker = () => {
-    console.log('im in image picker');
-    launchImageLibrary(options, res => {
-      console.log('Response = ', res.assets);
-      if (res.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (res.error) {
-        console.log('ImagePicker Error: ', res.error);
-      } else if (res.customButton) {
-        console.log('User tapped custom button: ', res.customButton);
-        // alert(res.customButton);
-      } else {
-        let source = res.assets;
-        setimage(source);
-        console.log('image loaded', image);
-      }
-    });
-  };
-  const createTwoButtonAlert = () =>
-    Alert.alert('Alert Title', 'My Alert Msg', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
-    ]);
+  const [open, setOpen] = useState(false);
+  const [valuepicker, setValuepicker] = useState(null);
+  const [items, setItems] = useState([
+    {value: '1', label: 'painter'},
+    {value: '2', label: 'plumber'},
+    {value: '3', label: 'writer'},
+    {value: '4', label: 'gardener'},
+    {value: '5', label: 'developer'},
+    {value: '6', label: 'teacher'},
+    {value: '7', label: 'electrition'},
+    {value: '8', label: 'housekeeper'},
+  ]);
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <View style={styles.header}>
@@ -70,45 +43,24 @@ export default function Profile({navigation}) {
 
         <Image
           source={{
-            // uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
+            uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
             //uri: image.uri,
-            uri: 'data:image/jpeg;base64,' + image,
+            // uri: 'data:image/jpeg;base64,' + image,
           }}
           style={styles.avatar}
         />
       </View>
 
       <View style={styles.body}>
-        <TouchableOpacity
-          style={{
-            alignContent: 'center',
-            alignItems: 'center',
-            marginBottom: 20,
-          }}
-          onPress={picker}>
-          <Text>Edit profile picture</Text>
-        </TouchableOpacity>
-        <ProfileHeading heading="About" />
-        <View style={styles.descriptionhead}>
-          <Text style={styles.descriptiontext}>Description</Text>
-        </View>
-        <View style={styles.inputView}>
-          <Text style={styles.TextInput}>Location</Text>
-        </View>
-        <View style={styles.inputView}>
-          <Icon
-            style={{marginRight: 20, marginLeft: 20}}
-            name="phone"
-            size={23}
-            color="black"
-          />
-          <Text style={styles.TextInput}>0300-1113207</Text>
-        </View>
-
-        <ProfileHeading heading="Education" />
-        <View style={styles.descriptionhead}>
-          <Text style={styles.descriptiontext}>Education</Text>
-        </View>
+        <ProfileHeading heading="Skill" />
+        <DropDownPicker
+          open={open}
+          value={valuepicker}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValuepicker}
+          setItems={setItems}
+        />
       </View>
     </View>
   );

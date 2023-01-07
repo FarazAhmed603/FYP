@@ -25,6 +25,7 @@ export default function Home({navigation}) {
     fetch('https://jsonplaceholder.typicode.com/posts')
       .then(response => response.json())
       .then(responseJson => {
+        // console.log(responseJson);
         setFilteredDataSource(responseJson);
         setMasterDataSource(responseJson);
       })

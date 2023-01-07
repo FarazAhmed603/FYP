@@ -1,15 +1,13 @@
-import React, {useState} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import React, {useState, createContext, useContext} from 'react';
 
-import AuthStack from './AuthStack/AuthStack';
-import AppStack from './AppStack/AppStack';
+import Container from './Container/Container';
+
+import {AuthProvider} from './Context/AuthContext';
 
 export default function App() {
-  const [auth, setauth] = useState(true);
-
   return (
-    <NavigationContainer>
-      {auth ? <AppStack /> : <AuthStack />}
-    </NavigationContainer>
+    <AuthProvider>
+      <Container />
+    </AuthProvider>
   );
 }

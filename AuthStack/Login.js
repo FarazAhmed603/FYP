@@ -1,5 +1,5 @@
 import {StatusBar} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,11 +11,14 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {AuthContext} from '../Context/AuthContext';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const {login} = useContext(AuthContext);
+  // console.log('use context data', {isLoading});
   return (
     <View
       style={[
@@ -59,7 +62,9 @@ const Login = ({navigation}) => {
 
         <TouchableOpacity
           style={styles.loginBtn}
-          onPress={() => navigation.navigate('dashboard')}>
+          onPress={() => {
+            login();
+          }}>
           <Text style={styles.loginText}> LOGIN </Text>
         </TouchableOpacity>
 
@@ -70,6 +75,7 @@ const Login = ({navigation}) => {
             Sign up for Account
           </Text>
         </TouchableOpacity>
+        {/* <Text>{test}</Text> */}
       </View>
     </View>
   );

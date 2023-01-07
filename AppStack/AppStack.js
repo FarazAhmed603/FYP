@@ -19,10 +19,12 @@ import EditContract from './ClientStack/Screen/EditContract';
 import SkillProviderDashboard from './SkillProviderStack/Dashboard/Dashboard';
 import ContractDetails from './SkillProviderStack/Screens/ContractDetails';
 import UploadSkill from './SkillProviderStack/Screens/UploadSkill';
+import SkillProviderProfile from './SkillProviderStack/Screens/Profile';
+import SkillProviderPaymentMethod from './SkillProviderStack/Screens/PaymentMethod';
 
 const Stack = createNativeStackNavigator();
 const ClientStack = props => {
-  const [names, setname] = useState(1);
+  const [names, setname] = useState(0);
   const navigation = useNavigation();
   console.log('i am here ');
   return (
@@ -87,6 +89,12 @@ const ClientStack = props => {
           />
           <Stack.Screen name="ContractDetails" component={ContractDetails} />
           <Stack.Screen name="UploadSkill" component={UploadSkill} />
+          <Stack.Screen name="Profile" component={SkillProviderProfile} />
+          <Stack.Screen
+            name="PaymentMethod"
+            component={SkillProviderPaymentMethod}
+            options={{title: 'Payment Method'}}
+          />
         </Stack.Navigator>
       )}
     </>

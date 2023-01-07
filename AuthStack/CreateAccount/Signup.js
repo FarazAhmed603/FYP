@@ -14,6 +14,7 @@ const Signup = ({navigation}) => {
   const [surName, setsurName] = useState('');
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
+  const [phoneNumber, setphoneNumber] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
   return (
     <View
@@ -55,6 +56,16 @@ const Signup = ({navigation}) => {
             placeholderTextColor="grey"
             secureTextEntry={true}
             onChangeText={surName => setsurName(surName)}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <Icon style={styles.iconimage} name="phone" size={23} color="black" />
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Mobile Number"
+            placeholderTextColor="grey"
+            secureTextEntry={true}
+            onChangeText={phoneNumber => setphoneNumber(phoneNumber)}
           />
         </View>
         <View style={styles.inputView}>
