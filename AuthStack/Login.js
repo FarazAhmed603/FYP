@@ -16,9 +16,21 @@ import {AuthContext} from '../Context/AuthContext';
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [checkValidEmail, setCheckValidEmail] = useState(false);
 
   const {login} = useContext(AuthContext);
   // console.log('use context data', {isLoading});
+  const handleCheckEmail = text => {
+    let re = /\S+@\S+\.\S+/;
+    let regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+
+    setEmail(text);
+    if (re.test(text) || regex.test(text)) {
+      setCheckValidEmail(false);
+    } else {
+      setCheckValidEmail(true);
+    }
+  };
   return (
     <View
       style={[
@@ -38,10 +50,14 @@ const Login = ({navigation}) => {
             style={styles.TextInput}
             placeholder="Enter Email                                              "
             placeholderTextColor="grey"
-            onChangeText={email => setEmail(email)}
+            onChangeText={text => handleCheckEmail(text)}
           />
         </View>
-
+        {checkValidEmail ? (
+          <Text style={styles.textFailed}>Wrong format email</Text>
+        ) : (
+          <Text style={styles.textFailed}> </Text>
+        )}
         <View style={styles.inputView}>
           <Icon style={styles.iconimage} name="lock" size={23} color="black" />
           <TextInput
@@ -59,14 +75,24 @@ const Login = ({navigation}) => {
             Forgot Password?
           </Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.loginBtn}
-          onPress={() => {
-            login();
-          }}>
-          <Text style={styles.loginText}> LOGIN </Text>
-        </TouchableOpacity>
+        {email == '' || password == '' || checkValidEmail == true ? (
+          <TouchableOpacity
+            disabled
+            style={styles.loginBtn}
+            onPress={() => {
+              login(email, password);
+            }}>
+            <Text style={styles.loginText}> LOGIN </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.loginBtn}
+            onPress={() => {
+              login(email, password);
+            }}>
+            <Text style={styles.loginText}> LOGIN </Text>
+          </TouchableOpacity>
+        )}
 
         <TouchableOpacity>
           <Text
@@ -136,6 +162,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 20,
     borderWidth: 1,
+  },
+  textFailed: {
+    color: 'red',
   },
 });
 

@@ -7,6 +7,7 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const Signup = ({navigation}) => {
@@ -16,6 +17,31 @@ const Signup = ({navigation}) => {
   const [password, setpassword] = useState('');
   const [phoneNumber, setphoneNumber] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
+  const [checkValidEmail, setCheckValidEmail] = useState(false);
+  const [passCheck, setpassCheck] = useState(false);
+
+  const handleCheckEmail = text => {
+    let re = /\S+@\S+\.\S+/;
+    let regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+
+    setemail(text);
+    if (re.test(text) || regex.test(text)) {
+      setCheckValidEmail(false);
+    } else {
+      setCheckValidEmail(true);
+    }
+  };
+
+  const confirmPass = text => {
+    if (passCheck) {
+    }
+    if (text !== password) {
+      setpassCheck(false);
+    } else {
+      setpassCheck(true);
+    }
+  };
+
   return (
     <View
       style={[
@@ -25,87 +51,140 @@ const Signup = ({navigation}) => {
           flexDirection: 'column',
         },
       ]}>
-      <View style={styles.image}>
-        <Text style={styles.text_join}>Signup for account</Text>
+      <ScrollView>
+        <View style={styles.image}>
+          <Text style={styles.text_join}>Signup for account</Text>
+          <Text style={{color: 'black'}}>
+            All fields are required for next step
+          </Text>
 
-        <View style={styles.inputView}>
-          <Icon
-            style={styles.iconimage}
-            name="account"
-            size={23}
-            color="black"
-          />
-          <TextInput
-            style={styles.TextInput}
-            placeholder="First Name"
-            placeholderTextColor="grey"
-            onChangeText={firstName => setfirstName(firstName)}
-          />
-        </View>
+          <View style={styles.inputView}>
+            <Icon
+              style={styles.iconimage}
+              name="account"
+              size={23}
+              color="black"
+            />
+            <TextInput
+              style={styles.TextInput}
+              placeholder="First Name"
+              placeholderTextColor="grey"
+              onChangeText={firstName => setfirstName(firstName)}
+            />
+          </View>
 
-        <View style={styles.inputView}>
-          <Icon
-            style={styles.iconimage}
-            name="account"
-            size={23}
-            color="black"
-          />
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Surname"
-            placeholderTextColor="grey"
-            secureTextEntry={true}
-            onChangeText={surName => setsurName(surName)}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <Icon style={styles.iconimage} name="phone" size={23} color="black" />
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Mobile Number"
-            placeholderTextColor="grey"
-            secureTextEntry={true}
-            onChangeText={phoneNumber => setphoneNumber(phoneNumber)}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <Icon style={styles.iconimage} name="email" size={23} color="black" />
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Enter email"
-            placeholderTextColor="grey"
-            onChangeText={email => setemail(email)}
-          />
-        </View>
+          <View style={styles.inputView}>
+            <Icon
+              style={styles.iconimage}
+              name="account"
+              size={23}
+              color="black"
+            />
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Surname"
+              placeholderTextColor="grey"
+              onChangeText={surName => setsurName(surName)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <Icon
+              style={styles.iconimage}
+              name="phone"
+              size={23}
+              color="black"
+            />
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Mobile Number"
+              placeholderTextColor="grey"
+              maxLength={11}
+              keyboardType="numeric"
+              onChangeText={phoneNumber => setphoneNumber(phoneNumber)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <Icon
+              style={styles.iconimage}
+              name="email"
+              size={23}
+              color="black"
+            />
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Enter email"
+              placeholderTextColor="grey"
+              onChangeText={text => handleCheckEmail(text)}
+            />
+          </View>
 
-        <View style={styles.inputView}>
-          <Icon style={styles.iconimage} name="lock" size={23} color="black" />
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Password"
-            placeholderTextColor="grey"
-            onChangeText={password => setpassword(password)}
-          />
-        </View>
+          <View style={styles.inputView}>
+            <Icon
+              style={styles.iconimage}
+              name="lock"
+              size={23}
+              color="black"
+            />
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Password"
+              placeholderTextColor="grey"
+              secureTextEntry={true}
+              onChangeText={password => setpassword(password)}
+            />
+          </View>
 
-        <View style={styles.inputView}>
-          <Icon style={styles.iconimage} name="lock" size={23} color="black" />
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Confirm Password"
-            placeholderTextColor="grey"
-            onChangeText={confirmPassword =>
-              setconfirmPassword(confirmPassword)
-            }
-          />
-        </View>
+          <View style={styles.inputView}>
+            <Icon
+              style={styles.iconimage}
+              name="lock"
+              size={23}
+              color="black"
+            />
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Confirm Password"
+              placeholderTextColor="grey"
+              secureTextEntry={true}
+              onChangeText={confirmPassword =>
+                setconfirmPassword(confirmPassword)
+              }
+            />
+          </View>
+          {firstName == '' ||
+          surName == '' ||
+          phoneNumber == '' ||
+          email == '' ||
+          password == '' ||
+          confirmPassword == '' ||
+          passCheck == true ||
+          checkValidEmail == true ? (
+            <TouchableOpacity
+              disabled
+              style={styles.NextButton}
+              onPress={() => navigation.navigate('ConfirmationCode')}>
+              <Text style={styles.NextText}> Signup</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.NextButton}
+              onPress={() => navigation.navigate('ConfirmationCode')}>
+              <Text style={styles.NextText}> Signup</Text>
+            </TouchableOpacity>
+          )}
 
-        <TouchableOpacity
-          style={styles.NextButton}
-          onPress={() => navigation.navigate('ConfirmationCode')}>
-          <Text style={styles.NextText}> Signup</Text>
-        </TouchableOpacity>
-      </View>
+          {checkValidEmail ? (
+            <Text style={styles.textFailed}>Wrong format email</Text>
+          ) : (
+            <Text style={styles.textFailed}> </Text>
+          )}
+          {passCheck ? (
+            <Text style={styles.textFailed}>Passwords do not match</Text>
+          ) : (
+            <Text style={styles.textFailed}> </Text>
+          )}
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -119,7 +198,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 200,
+    marginTop: 40,
   },
   text_join: {
     marginBottom: 10,
@@ -155,6 +234,9 @@ const styles = StyleSheet.create({
   iconimage: {
     marginTop: 18,
     marginRight: 10,
+  },
+  textFailed: {
+    color: 'red',
   },
 });
 

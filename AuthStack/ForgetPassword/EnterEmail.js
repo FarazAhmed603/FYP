@@ -13,6 +13,20 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const EnterEmail = ({navigation}) => {
   const [email, setemail] = useState('');
+  const [checkValidEmail, setCheckValidEmail] = useState(false);
+
+  const handleCheckEmail = text => {
+    let re = /\S+@\S+\.\S+/;
+    let regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+
+    setemail(text);
+    if (re.test(text) || regex.test(text)) {
+      setCheckValidEmail(false);
+    } else {
+      setCheckValidEmail(true);
+    }
+  };
+
   return (
     <View
       style={[
@@ -34,15 +48,28 @@ const EnterEmail = ({navigation}) => {
             style={styles.TextInput}
             placeholder="Enter email"
             placeholderTextColor="grey"
-            onChangeText={email => setemail(email)}
+            onChangeText={text => handleCheckEmail(text)}
           />
         </View>
-
-        <TouchableOpacity
-          style={styles.NextButton}
-          onPress={() => navigation.navigate('VerificationCode')}>
-          <Text style={styles.NextText}> Next </Text>
-        </TouchableOpacity>
+        {checkValidEmail ? (
+          <Text style={styles.textFailed}>Wrong format email</Text>
+        ) : (
+          <Text style={styles.textFailed}> </Text>
+        )}
+        {email == '' || checkValidEmail == true ? (
+          <TouchableOpacity
+            disabled
+            style={styles.NextButton}
+            onPress={() => navigation.navigate('VerificationCode')}>
+            <Text style={styles.NextText}> Next </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.NextButton}
+            onPress={() => navigation.navigate('VerificationCode')}>
+            <Text style={styles.NextText}> Next </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -96,6 +123,9 @@ const styles = StyleSheet.create({
   iconimage: {
     marginTop: 18,
     marginRight: 10,
+  },
+  textFailed: {
+    color: 'red',
   },
 });
 

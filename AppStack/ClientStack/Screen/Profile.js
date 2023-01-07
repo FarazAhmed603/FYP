@@ -41,8 +41,8 @@ export default function Profile({navigation}) {
         console.log('User tapped custom button: ', res.customButton);
         // alert(res.customButton);
       } else {
-        let source = res.assets;
-        setimage(source);
+        let {uri} = res.assets[0];
+        setimage(uri);
         console.log('image loaded', image);
       }
     });
@@ -71,8 +71,8 @@ export default function Profile({navigation}) {
         <Image
           source={{
             // uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
-            //uri: image.uri,
-            uri: 'data:image/jpeg;base64,' + image,
+            uri: image,
+            // uri: 'data:image/jpeg;base64,' + image,
           }}
           style={styles.avatar}
         />
@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
     marginTop: 80,
     alignSelf: 'center',
     position: 'absolute',
+    backgroundColor: 'white',
   },
   body: {
     marginTop: 50,

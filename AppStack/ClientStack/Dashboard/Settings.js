@@ -1,21 +1,24 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {View, TouchableOpacity, Switch, StyleSheet, Text} from 'react-native';
 
 import SettingComponent from '../Components/SettingComponent';
+import {AuthContext} from '../../../Context/AuthContext';
 
-export default function Settings({navigation, route}) {
-  const [isEnabled, setisEnabled] = useState(true);
+export default function Settings({navigation}) {
+  const {change} = useContext(AuthContext);
+  const {switchToSkillProvider} = useContext(AuthContext);
+  const [isEnabled, setisEnabled] = useState(change);
+  const {logout} = useContext(AuthContext);
+
   console.log('i an ub setting');
+
   const toggleSwitch = () => {
     setisEnabled(previousState => !previousState);
     if (isEnabled) {
-      // navigation.navigate('AppStack', {data: isEnabled});
-      console.log('true', isEnabled);
-      // route.params.setState(false);
-      // route.setname(false);
+      console.log('if toggle  true', isEnabled);
+      switchToSkillProvider();
     } else {
-      // navigation.navigate('Home', {data: isEnabled});
-      console.log(isEnabled);
+      console.log('if toggle false ', isEnabled);
     }
   };
 
@@ -65,8 +68,9 @@ export default function Settings({navigation, route}) {
         <SettingComponent text="Contact Us" />
       </TouchableOpacity>
       <TouchableOpacity
-      // onPress={() => navigation.navigate('Login')}
-      >
+        onPress={() => {
+          logout();
+        }}>
         <SettingComponent text="Logout" />
       </TouchableOpacity>
       <View style={styles.item1}>

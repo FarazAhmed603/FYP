@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {StatusBar, Button} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+// context
+import {AuthContext} from '../Context/AuthContext';
 // Client Stack
 import Dashboard from './ClientStack/Dashboard/Dashboard';
 import CreateContract from './ClientStack/Screen/CreateContract';
@@ -24,12 +26,14 @@ import SkillProviderPaymentMethod from './SkillProviderStack/Screens/PaymentMeth
 
 const Stack = createNativeStackNavigator();
 const ClientStack = props => {
-  const [names, setname] = useState(0);
+  const {change} = useContext(AuthContext);
+  const [names, setname] = useState(change);
   const navigation = useNavigation();
-  console.log('i am here ');
+  console.log('value of change from context in appstack', change);
+  console.log('i am here in appstack');
   return (
     <>
-      {names ? (
+      {change ? (
         <Stack.Navigator>
           <Stack.Screen
             name="dashboard"

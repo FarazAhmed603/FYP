@@ -1,21 +1,20 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {View, TouchableOpacity, Switch, StyleSheet, Text} from 'react-native';
-
+import {AuthContext} from '../../../Context/AuthContext';
 import SettingComponent from '../Component/SettingComponent';
 
 export default function Settings({navigation, route}) {
-  const [isEnabled, setisEnabled] = useState(true);
-  console.log('i an ub setting');
+  const {change} = useContext(AuthContext);
+  const {switchClient} = useContext(AuthContext);
+  const [isEnabled, setisEnabled] = useState(change);
+  console.log('i an skillprovider setting');
   const toggleSwitch = () => {
     setisEnabled(previousState => !previousState);
     if (isEnabled) {
-      // navigation.navigate('AppStack', {data: isEnabled});
-      console.log('true', isEnabled);
-      // route.params.setState(false);
-      // route.setname(false);
-    } else {
-      // navigation.navigate('Home', {data: isEnabled});
       console.log(isEnabled);
+    } else {
+      console.log(isEnabled);
+      switchClient();
     }
   };
 

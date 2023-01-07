@@ -48,12 +48,20 @@ const NewPassword = ({navigation}) => {
             }
           />
         </View>
-
-        <TouchableOpacity
-          style={styles.NextButton}
-          onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.NextText}> Next </Text>
-        </TouchableOpacity>
+        {password == '' || confirmPassword == '' ? (
+          <TouchableOpacity
+            disabled
+            style={styles.NextButton}
+            onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.NextText}> Next </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.NextButton}
+            onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.NextText}> Next </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
