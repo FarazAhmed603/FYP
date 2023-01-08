@@ -76,12 +76,7 @@ const Login = ({navigation}) => {
           </Text>
         </TouchableOpacity>
         {email == '' || password == '' || checkValidEmail == true ? (
-          <TouchableOpacity
-            disabled
-            style={styles.loginBtn}
-            onPress={() => {
-              login(email, password);
-            }}>
+          <TouchableOpacity style={styles.loginBtn}>
             <Text style={styles.loginText}> LOGIN </Text>
           </TouchableOpacity>
         ) : (

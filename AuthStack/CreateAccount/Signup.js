@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const Signup = ({navigation}) => {
   const [firstName, setfirstName] = useState('');
@@ -18,7 +19,21 @@ const Signup = ({navigation}) => {
   const [phoneNumber, setphoneNumber] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
   const [checkValidEmail, setCheckValidEmail] = useState(false);
-  const [passCheck, setpassCheck] = useState(false);
+  const [fields, setfields] = useState(false);
+
+  const createuser = async () => {
+    axios({
+      method: 'post',
+      url: 'http://localhost:4000/signup',
+      data: {
+        firstname: firstName,
+        lastname: surName,
+        phone: phoneNumber,
+        email: email,
+        password: password,
+      },
+    });
+  };
 
   const handleCheckEmail = text => {
     let re = /\S+@\S+\.\S+/;
@@ -32,14 +47,8 @@ const Signup = ({navigation}) => {
     }
   };
 
-  const confirmPass = text => {
-    if (passCheck) {
-    }
-    if (text !== password) {
-      setpassCheck(false);
-    } else {
-      setpassCheck(true);
-    }
+  const confirmfield = text => {
+    setfields(true);
   };
 
   return (
@@ -157,18 +166,15 @@ const Signup = ({navigation}) => {
           email == '' ||
           password == '' ||
           confirmPassword == '' ||
-          passCheck == true ||
           checkValidEmail == true ? (
-            <TouchableOpacity
-              disabled
-              style={styles.NextButton}
-              onPress={() => navigation.navigate('ConfirmationCode')}>
+            <TouchableOpacity style={styles.NextButton} onPress={confirmfield}>
               <Text style={styles.NextText}> Signup</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
               style={styles.NextButton}
-              onPress={() => navigation.navigate('ConfirmationCode')}>
+              // onPress={() => navigation.navigate('ConfirmationCode')}
+              onPress={createuser}>
               <Text style={styles.NextText}> Signup</Text>
             </TouchableOpacity>
           )}
@@ -178,8 +184,8 @@ const Signup = ({navigation}) => {
           ) : (
             <Text style={styles.textFailed}> </Text>
           )}
-          {passCheck ? (
-            <Text style={styles.textFailed}>Passwords do not match</Text>
+          {fields ? (
+            <Text style={styles.textFailed}>All credentials are required</Text>
           ) : (
             <Text style={styles.textFailed}> </Text>
           )}
