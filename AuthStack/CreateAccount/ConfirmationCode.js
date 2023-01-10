@@ -1,5 +1,5 @@
 import {StatusBar} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,10 +7,79 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
+import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-const ConfirmationCode = ({navigation}) => {
+
+const ConfirmationCode = ({navigation, route}) => {
   const [code, setcode] = useState('');
+  const [check, setcheck] = useState(false);
+  const [check1, setcheck1] = useState(true);
+  const {Email} = route.params;
+  const [timeLeft, setTimeLeft] = useState(1 * 60); // 5 minutes in seconds
+
+  const timmer = () => {
+    setTimeLeft(1 * 60);
+    sendotp();
+    const intervalId = setInterval(() => {
+      setTimeLeft(timeLeft => {
+        setcheck1(false);
+        if (timeLeft === 0) {
+          clearInterval(intervalId);
+          setcheck1(true);
+          return 0;
+        }
+        return timeLeft - 1;
+      });
+    }, 1000);
+  };
+
+  const verifyotp = () => {
+    try {
+      axios
+        .post('http://192.168.10.5:4000/verifyotp', {
+          email: Email,
+          otp: code,
+        })
+        .then(function (response) {
+          console.log('otp match');
+          Alert.alert('Verified', 'Now you can login');
+          navigation.navigate('Login');
+        })
+        .catch(function (error) {
+          Alert.alert('Error', 'OTP not match');
+        });
+    } catch {
+      Alert.alert('Error', 'Something went wrong');
+    }
+  };
+
+  const sendotp = () => {
+    try {
+      axios
+        .post('http://192.168.10.5:4000/sendotp', {
+          email: Email,
+        })
+        .then(function (response) {
+          Alert.alert('Success', 'OTP send');
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } catch {
+      Alert.alert('Error', 'Something went wrong');
+    }
+  };
+
+  const confirmfield = () => {
+    setcheck(true);
+  };
+
+  const postotp = () => {
+    setcheck(false);
+    verifyotp();
+  };
 
   return (
     <View
@@ -31,19 +100,35 @@ const ConfirmationCode = ({navigation}) => {
             placeholder="Enter confirmation code"
             placeholderTextColor="grey"
             onChangeText={code => setcode(code)}
-            keyboardType="numeric"
           />
         </View>
+        {check ? (
+          <Text style={styles.textFailed}>Enter OTP</Text>
+        ) : (
+          <Text style={styles.textFailed}> </Text>
+        )}
+        {code == '' ? (
+          <TouchableOpacity style={styles.NextButton} onPress={confirmfield}>
+            <Text style={styles.NextText}> Done </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.NextButton} onPress={postotp}>
+            <Text style={styles.NextText}> Done </Text>
+          </TouchableOpacity>
+        )}
 
-        <TouchableOpacity
-          style={styles.NextButton}
-          onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.NextText}> Done </Text>
-        </TouchableOpacity>
         <Text>If you not receive code then press</Text>
-        <TouchableOpacity>
-          <Text style={{fontWeight: 'bold'}}> Resend </Text>
-        </TouchableOpacity>
+        {check1 ? (
+          <TouchableOpacity onPress={timmer}>
+            <Text style={{fontWeight: 'bold'}}> Resend</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity>
+            <Text style={{fontWeight: 'bold'}}> Resend</Text>
+          </TouchableOpacity>
+        )}
+
+        <Text>resend otp in {timeLeft} sec</Text>
       </View>
     </View>
   );
@@ -95,6 +180,9 @@ const styles = StyleSheet.create({
   iconimage: {
     marginTop: 18,
     marginRight: 10,
+  },
+  textFailed: {
+    color: 'red',
   },
 });
 
