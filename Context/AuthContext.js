@@ -1,6 +1,7 @@
 import React, {createContext, useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 
 export const AuthContext = createContext();
 
@@ -13,46 +14,33 @@ export const AuthProvider = ({children}) => {
   const login = (Email, Password) => {
     setisLoading(true);
     axios
-      .post('http://192.168.10.10:4000/login', {
+      .post('http://192.168.10.8:4000/login', {
         email: Email,
         password: Password,
       })
       .then(function (response) {
-        console.log(JSON.stringify(response.data.Token));
-        setUserToken(response.data.Token);
+        var token = response.data.Token;
+        var decoded = jwt_decode(token);
+        if (response && response.data && token) {
+          AsyncStorage.setItem('userToken', response.data.Token);
+          AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+          setUserToken(response.data.Token);
+          setuserInfo(JSON.stringify(decoded));
+        }
       })
       .catch(function (error) {
         console.log(error);
       });
-    // axios
-    //   .get('http://192.168.10.10:4000/login', {
-    //     params: {
-    //       email,
-    //       password,
-    //     },
-    //   })
-    //   .then(res => {
-    //     console.log(res);
-    // let userInfo = res.data;
-    // setuserInfo(userInfo);
-    // setUserToken(userInfo.userToken);
 
-    // AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
-    // AsyncStorage.setItem('userToken', userInfo.userToken);
-    // })
-    // .catch(e => {
-    //   console.log(e);
-    // });
-    // setUserToken('1234');
-    // AsyncStorage.setItem('userToken', '1234');
     setisLoading(false);
   };
 
   const logout = () => {
     setisLoading(true);
     setUserToken(null);
-    // AsyncStorage.removeItem('userInfo');
-    AsyncStorage.removeItem('userToken');
+    AsyncStorage.removeItem(JSON.stringify(userInfo));
+    AsyncStorage.removeItem(userToken);
+    console.log('aysnc storage clear now');
 
     setisLoading(false);
   };
@@ -60,32 +48,22 @@ export const AuthProvider = ({children}) => {
   const isLoggedIn = async () => {
     try {
       setisLoading(true);
-      //   let userInfo = await AsyncStorage.getItem('userInfo');
+      let userInfo = await AsyncStorage.getItem('userInfo');
+
       let userToken = await AsyncStorage.getItem('userToken');
-      //   userInfo = JSON.parse(userInfo);
-      //   if (userInfo) {
-      //     setUserToken(userToken);
-      //     setuserInfo(userInfo);
-      //   }
-      setUserToken(userToken);
+      userInfo = JSON.parse(userInfo);
+      console.log('user infoooo in authenticaion', userInfo);
+      console.log('user Token in authenticaion', userToken);
+      if (userInfo) {
+        setUserToken(userToken);
+        setuserInfo(userInfo);
+      }
       setisLoading(false);
     } catch (e) {
       console.log(e);
     }
   };
 
-  // const verityjwttoken = () => {
-  //   const token = '';
-  //   const secret = 'my-secret-key';
-
-  //   try {
-  //     const decoded = jwt.verify(token, secret);
-  //     console.log(decoded);
-  //     // Output: { sub: '1234567890', name: 'John Doe', iat: 1516239022 }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
   const switchToSkillProvider = () => {
     setchange(false);
   };
@@ -105,10 +83,9 @@ export const AuthProvider = ({children}) => {
         switchToSkillProvider,
         switchClient,
         isLoading,
-        userToken,
         change,
-        // userToken,
-        // userInfo,
+        userToken,
+        userInfo,
       }}>
       {children}
     </AuthContext.Provider>

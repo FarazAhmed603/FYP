@@ -16,12 +16,13 @@ const ConfirmationCode = ({navigation, route}) => {
   const [code, setcode] = useState('');
   const [check, setcheck] = useState(false);
   const [check1, setcheck1] = useState(true);
-  const {Email} = route.params;
-  const [timeLeft, setTimeLeft] = useState(1 * 60); // 5 minutes in seconds
+
+  const [timeLeft, setTimeLeft] = useState(0.5 * 60); // 5 minutes in seconds
 
   const timmer = () => {
-    setTimeLeft(1 * 60);
+    setTimeLeft(0.5 * 60);
     sendotp();
+    console.log('email', route.params.email);
     const intervalId = setInterval(() => {
       setTimeLeft(timeLeft => {
         setcheck1(false);
@@ -38,8 +39,8 @@ const ConfirmationCode = ({navigation, route}) => {
   const verifyotp = () => {
     try {
       axios
-        .post('http://192.168.10.5:4000/verifyotp', {
-          email: Email,
+        .put('http://192.168.10.8:4000/verifyotp', {
+          email: route.params.email,
           otp: code,
         })
         .then(function (response) {
@@ -48,6 +49,7 @@ const ConfirmationCode = ({navigation, route}) => {
           navigation.navigate('Login');
         })
         .catch(function (error) {
+          console.log(error.message);
           Alert.alert('Error', 'OTP not match');
         });
     } catch {
@@ -56,10 +58,11 @@ const ConfirmationCode = ({navigation, route}) => {
   };
 
   const sendotp = () => {
+    console.log();
     try {
       axios
-        .post('http://192.168.10.5:4000/sendotp', {
-          email: Email,
+        .post('http://192.168.10.8:4000/sendotp', {
+          email: route.params.email,
         })
         .then(function (response) {
           Alert.alert('Success', 'OTP send');
@@ -120,11 +123,11 @@ const ConfirmationCode = ({navigation, route}) => {
         <Text>If you not receive code then press</Text>
         {check1 ? (
           <TouchableOpacity onPress={timmer}>
-            <Text style={{fontWeight: 'bold'}}> Resend</Text>
+            <Text style={{fontWeight: 'bold'}}> Send</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity>
-            <Text style={{fontWeight: 'bold'}}> Resend</Text>
+            <Text style={{fontWeight: 'bold'}}> Send</Text>
           </TouchableOpacity>
         )}
 

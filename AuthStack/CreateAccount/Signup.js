@@ -1,10 +1,3 @@
-//   const [firstName, setfirstName] = useState('');
-//   const [surName, setsurName] = useState('');
-//   const [email, setemail] = useState('');
-//   const [password, setpassword] = useState('');
-//   const [phoneNumber, setphoneNumber] = useState('');
-//   const [confirmPassword, setconfirmPassword] = useState('');
-
 //   const data = {
 //     firstname: firstName,
 //     lastname: surName,
@@ -35,14 +28,14 @@ const Signup = ({navigation}) => {
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
   const [phoneNumber, setphoneNumber] = useState('');
-  // const [confirmPassword, setconfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [created, setcreated] = useState(false);
 
   const createuser = () => {
     try {
       axios
-        .post('http://192.168.10.5:4000/signup', {
+        .post('http://192.168.10.8:4000/signup', {
           firstname: firstName,
           lastname: lastName,
           phone: phoneNumber,
@@ -54,25 +47,7 @@ const Signup = ({navigation}) => {
         })
         .catch(function (error) {
           console.log(error);
-          Alert.alert('Server Error', 'Not able to create user this time');
-        });
-    } catch {
-      Alert.alert('Error', 'Something went wrong');
-    }
-  };
-
-  const sendotp = async () => {
-    try {
-      await axios
-        .post('http://192.168.10.5:4000/sendotp', {
-          email: email,
-        })
-        .then(function (response) {
-          console.log('otp send');
-        })
-        .catch(function (error) {
-          console.log(error);
-          Alert.alert('Server Error', 'OTP not send');
+          Alert.alert('Server Error', 'Not able to user this time');
         });
     } catch {
       Alert.alert('Error', 'Something went wrong');
@@ -123,23 +98,9 @@ const Signup = ({navigation}) => {
       try {
         setLoading(false);
         createuser();
-        // sendotp();
-        // navigation.navigate('ConfirmationCode');
-      } catch (error) {
-        Alert.alert('Error', 'Something went wrong');
-      }
-      otprequest();
-    }, 3000);
-  };
-  const otprequest = () => {
-    setLoading(true);
-    setTimeout(() => {
-      try {
-        setLoading(false);
-        // createuser();
-        sendotp();
+
         navigation.navigate('ConfirmationCode', {
-          Email: email,
+          email: email,
         });
       } catch (error) {
         Alert.alert('Error', 'Something went wrong');

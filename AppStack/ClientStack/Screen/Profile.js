@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -13,13 +13,16 @@ import {
   TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import {AuthContext} from '../../../Context/AuthContext';
 import ProfileHeading from '../Components/ProfileHeading';
 
-import ImagePicker, {launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 export default function Profile({navigation}) {
   const [image, setimage] = useState(null);
+  const {userInfo} = useContext(AuthContext);
+
+  console.log('userinfo', userInfo);
 
   var options = {
     title: 'Select Image',
@@ -61,7 +64,9 @@ export default function Profile({navigation}) {
       <View style={styles.header}>
         <View style={styles.headerbody}>
           <Icon style={{marginTop: 8}} name="account" size={23} color="black" />
-          <Text style={styles.text}>Faraz Ahmed</Text>
+          <Text style={styles.text}>
+            {userInfo.firstname} {userInfo.lastname}
+          </Text>
         </View>
         <View style={styles.headerbody}>
           <Icon style={{marginTop: 8}} name="email" size={23} color="black" />
