@@ -1,5 +1,5 @@
 import {StatusBar} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,10 +7,103 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+  Keyboard,
 } from 'react-native';
+import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-const VerificationCode = ({navigation}) => {
+import Loader from '../../Loader/Loader';
+
+const VerificationCode = ({navigation, route}) => {
   const [code, setcode] = useState('');
+  const [check, setcheck] = useState(false);
+  const [check1, setcheck1] = useState(true);
+  const [Loading, setLoading] = useState(false);
+  const [verfiedemail, setverfiedemail] = useState(route.params.email);
+
+  const [timeLeft, setTimeLeft] = useState(0.5 * 60); // 5 minutes in seconds
+
+  const timmer = () => {
+    setTimeLeft(0.5 * 60);
+    sendotp();
+    console.log('email', route.params.email);
+    const intervalId = setInterval(() => {
+      setTimeLeft(timeLeft => {
+        setcheck1(false);
+        if (timeLeft === 0) {
+          clearInterval(intervalId);
+          setcheck1(true);
+          return 0;
+        }
+        return timeLeft - 1;
+      });
+    }, 1000);
+  };
+
+  const register = () => {
+    Keyboard.dismiss();
+    setLoading(true);
+    setTimeout(() => {
+      try {
+        setLoading(false);
+        navigation.navigate('NewPassword', {
+          email: verfiedemail,
+        });
+        console.log('verified email', verfiedemail);
+      } catch (error) {
+        Alert.alert('Error', 'Something went wrong');
+      }
+    }, 3000);
+  };
+
+  const verifyotp = async () => {
+    try {
+      await axios
+        .put('http://192.168.10.8:4000/verifyotp', {
+          email: route.params.email,
+          otp: code,
+        })
+        .then(function (response) {
+          console.log(response.data.email);
+          // setverfiedemail(response.data.email);
+          register();
+        })
+        .catch(function (error) {
+          console.log(error);
+          Alert.alert('Error', 'OTP not match');
+        });
+    } catch {
+      Alert.alert('Error', 'Something went wrong');
+    }
+  };
+
+  const sendotp = () => {
+    console.log();
+    try {
+      axios
+        .post('http://192.168.10.8:4000/sendotp', {
+          email: route.params.email,
+        })
+        .then(function (response) {
+          Alert.alert('Success', 'OTP send');
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } catch {
+      Alert.alert('Error', 'Something went wrong');
+    }
+  };
+
+  const confirmfield = () => {
+    setcheck(true);
+  };
+
+  const postotp = () => {
+    setcheck(false);
+    verifyotp();
+  };
 
   return (
     <View
@@ -21,6 +114,7 @@ const VerificationCode = ({navigation}) => {
           flexDirection: 'column',
         },
       ]}>
+      <Loader visible={Loading} />
       <View style={styles.image}>
         <Text style={styles.text_join}>What's your confirmation code?</Text>
 
@@ -31,19 +125,35 @@ const VerificationCode = ({navigation}) => {
             placeholder="Enter confirmation code"
             placeholderTextColor="grey"
             onChangeText={code => setcode(code)}
-            keyboardType="numeric"
           />
         </View>
+        {check ? (
+          <Text style={styles.textFailed}>Enter OTP</Text>
+        ) : (
+          <Text style={styles.textFailed}> </Text>
+        )}
+        {code == '' ? (
+          <TouchableOpacity style={styles.NextButton} onPress={confirmfield}>
+            <Text style={styles.NextText}> Done </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.NextButton} onPress={postotp}>
+            <Text style={styles.NextText}> Done </Text>
+          </TouchableOpacity>
+        )}
 
-        <TouchableOpacity
-          style={styles.NextButton}
-          onPress={() => navigation.navigate('NewPassword')}>
-          <Text style={styles.NextText}> Done </Text>
-        </TouchableOpacity>
         <Text>If you not receive code then press</Text>
-        <TouchableOpacity>
-          <Text style={{fontWeight: 'bold'}}> Resend </Text>
-        </TouchableOpacity>
+        {check1 ? (
+          <TouchableOpacity onPress={timmer}>
+            <Text style={{fontWeight: 'bold'}}> Send otp</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity>
+            <Text style={{fontWeight: 'bold'}}> Send otp</Text>
+          </TouchableOpacity>
+        )}
+
+        <Text>resend otp in {timeLeft} sec</Text>
       </View>
     </View>
   );
@@ -65,9 +175,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
   },
-  text_join1: {
-    marginBottom: 30,
-  },
+
   NextButton: {
     width: '80%',
     borderRadius: 25,
@@ -84,7 +192,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '70%',
     height: 45,
-    marginBottom: 20,
+
     borderBottomWidth: 1,
     borderColor: 'black',
     flexDirection: 'row',
@@ -97,6 +205,9 @@ const styles = StyleSheet.create({
   iconimage: {
     marginTop: 18,
     marginRight: 10,
+  },
+  textFailed: {
+    color: 'red',
   },
 });
 

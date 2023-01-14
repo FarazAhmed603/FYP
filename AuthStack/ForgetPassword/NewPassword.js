@@ -7,77 +7,88 @@ import {
   Alert,
   TextInput,
   TouchableOpacity,
+  SafeAreaView,
+  ScrollView,
+  Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-const NewPassword = ({navigation}) => {
+import axios from 'axios';
+import Input from '../component/Input';
+
+const NewPassword = ({navigation, route}) => {
   const [password, setpassword] = useState('');
-  const [confirmPassword, setconfirmPassword] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const newpass = () => {
+    console.log(route.params);
+    try {
+      axios
+        .put('http://192.168.10.8:4000/forgetpassword', {
+          email: route.params.email,
+          newPassword: password,
+        })
+        .then(res => {
+          console.log(res);
+          navigation.navigate('Login');
+        })
+        .catch(error => {
+          console.log(error);
+          Alert.alert('Server Error', 'Try again later');
+        });
+    } catch {
+      Alert.alert('Server Error', 'Try again later');
+    }
+  };
+
+  const validate = () => {
+    Keyboard.dismiss();
+    let isValid = true;
+    if (!password) {
+      handleError('Please input password', 'password');
+      isValid = false;
+    } else if (password.length < 8) {
+      handleError('Min password length of 8', 'password');
+      isValid = false;
+    }
+
+    if (isValid) {
+      newpass();
+    }
+  };
+
+  const handleError = (error, input) => {
+    setErrors(prevState => ({...prevState, [input]: error}));
+  };
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          // Try setting `flexDirection` to `"row"`.
-          flexDirection: 'column',
-        },
-      ]}>
-      <View style={styles.image}>
+    <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
+      <ScrollView
+        contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
         <Text style={styles.text_join}>What's your new password?</Text>
         <Text style={styles.text_join1}>
           Enter new password you want to use for login.
         </Text>
-        <View style={styles.inputView}>
-          <Icon style={styles.iconimage} name="lock" size={23} color="black" />
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Password"
-            placeholderTextColor="grey"
+        <View style={{marginVertical: 20}}>
+          <Input
             onChangeText={password => setpassword(password)}
+            // onFocus={() => handleError(null, 'password')}
+            iconName="lock-outline"
+            label="Password"
+            placeholder="Enter your password"
+            error={errors.password}
+            password
           />
-        </View>
 
-        <View style={styles.inputView}>
-          <Icon style={styles.iconimage} name="lock" size={23} color="black" />
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Confirm Password"
-            placeholderTextColor="grey"
-            onChangeText={confirmPassword =>
-              setconfirmPassword(confirmPassword)
-            }
-          />
+          <TouchableOpacity style={styles.NextButton} onPress={validate}>
+            <Text style={styles.NextText}> Next </Text>
+          </TouchableOpacity>
         </View>
-        {password == '' || confirmPassword == '' ? (
-          <TouchableOpacity
-            disabled
-            style={styles.NextButton}
-            onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.NextText}> Next </Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={styles.NextButton}
-            onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.NextText}> Next </Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  image: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 200,
-  },
   text_join: {
     marginBottom: 10,
     fontWeight: 'bold',
@@ -87,7 +98,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   NextButton: {
-    width: '80%',
+    width: '100%',
     borderRadius: 25,
     height: 50,
     alignItems: 'center',
@@ -97,23 +108,6 @@ const styles = StyleSheet.create({
   },
   NextText: {
     color: 'white',
-  },
-  inputView: {
-    backgroundColor: 'white',
-    width: '70%',
-    height: 45,
-    marginBottom: 20,
-    borderBottomWidth: 1,
-    borderColor: 'black',
-    flexDirection: 'row',
-  },
-  iconimage: {
-    marginTop: 18,
-    marginRight: 10,
-  },
-  TextInput: {
-    height: 60,
-    color: 'black',
   },
 });
 

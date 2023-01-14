@@ -7,9 +7,9 @@ import {
   Alert,
   TextInput,
   TouchableOpacity,
-  jugijgk,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
 
 const EnterEmail = ({navigation}) => {
   const [email, setemail] = useState('');
@@ -24,6 +24,26 @@ const EnterEmail = ({navigation}) => {
       setCheckValidEmail(false);
     } else {
       setCheckValidEmail(true);
+    }
+  };
+
+  const endpoint = 'http://192.168.10.8:4000/verifyemail/' + email;
+  const verifyEmail = () => {
+    try {
+      axios
+        .get(endpoint)
+        .then(res => {
+          console.log(res);
+          navigation.navigate('VerificationCode', {
+            email: email,
+          });
+        })
+        .catch(error => {
+          console.log(error);
+          Alert.alert('Error', 'Email not found');
+        });
+    } catch {
+      Alert.alert('Server Error', 'Something went wrong');
     }
   };
 
@@ -57,16 +77,11 @@ const EnterEmail = ({navigation}) => {
           <Text style={styles.textFailed}> </Text>
         )}
         {email == '' || checkValidEmail == true ? (
-          <TouchableOpacity
-            disabled
-            style={styles.NextButton}
-            onPress={() => navigation.navigate('VerificationCode')}>
+          <TouchableOpacity style={styles.NextButton}>
             <Text style={styles.NextText}> Next </Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity
-            style={styles.NextButton}
-            onPress={() => navigation.navigate('VerificationCode')}>
+          <TouchableOpacity style={styles.NextButton} onPress={verifyEmail}>
             <Text style={styles.NextText}> Next </Text>
           </TouchableOpacity>
         )}
