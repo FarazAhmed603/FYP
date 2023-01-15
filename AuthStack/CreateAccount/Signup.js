@@ -30,7 +30,6 @@ const Signup = ({navigation}) => {
   const [phoneNumber, setphoneNumber] = useState('');
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [created, setcreated] = useState(false);
 
   const createuser = () => {
     try {

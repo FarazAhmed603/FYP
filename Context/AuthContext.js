@@ -14,7 +14,7 @@ export const AuthProvider = ({children}) => {
   const login = (Email, Password) => {
     setisLoading(true);
     axios
-      .post('http://192.168.10.8:4000/login', {
+      .post('http://192.168.10.2:4000/login', {
         email: Email,
         password: Password,
       })
@@ -38,10 +38,9 @@ export const AuthProvider = ({children}) => {
   const logout = () => {
     setisLoading(true);
     setUserToken(null);
-    AsyncStorage.removeItem(JSON.stringify(userInfo));
-    AsyncStorage.removeItem(userToken);
+    AsyncStorage.removeItem(JSON.stringify('userInfo'));
+    AsyncStorage.removeItem('userToken');
     console.log('aysnc storage clear now');
-
     setisLoading(false);
   };
 

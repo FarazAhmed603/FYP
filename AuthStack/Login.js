@@ -7,29 +7,72 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  SafeAreaView,
+  Keyboard,
   ScrollView,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AuthContext} from '../Context/AuthContext';
+import Button from './component/Button';
+import Input from './component/Input';
+import Loader from '../Loader/Loader';
 
 const Login = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
   const [checkValidEmail, setCheckValidEmail] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const {login} = useContext(AuthContext);
   // console.log('use context data', {isLoading});
-  const handleCheckEmail = text => {
-    let re = /\S+@\S+\.\S+/;
-    let regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+  // const handleCheckEmail = text => {
+  //   let re = /\S+@\S+\.\S+/;
+  //   let regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
 
-    setEmail(text);
-    if (re.test(text) || regex.test(text)) {
-      setCheckValidEmail(false);
-    } else {
-      setCheckValidEmail(true);
+  //   setEmail(text);
+  //   if (re.test(text) || regex.test(text)) {
+  //     setCheckValidEmail(false);
+  //   } else {
+  //     setCheckValidEmail(true);
+  //   }
+  // };
+  const validate = () => {
+    Keyboard.dismiss();
+    let isValid = true;
+
+    if (!email) {
+      handleError('Please input email', 'email');
+      isValid = false;
+    } else if (!email.match(/\S+@\S+\.\S+/)) {
+      handleError('Please input a valid email', 'email');
+      isValid = false;
     }
+
+    if (!password) {
+      handleError('Please input password', 'password');
+      isValid = false;
+    } else if (password.length < 8) {
+      handleError('Min password length of 8 ', 'password');
+      isValid = false;
+    }
+
+    if (isValid) {
+      setLoading(true);
+      setTimeout(() => {
+        try {
+          setLoading(false);
+          login(email, password);
+        } catch (error) {
+          Alert.alert('Error', 'Something went wrong');
+        }
+      }, 3000);
+    }
+  };
+
+  const handleError = (error, input) => {
+    setErrors(prevState => ({...prevState, [input]: error}));
   };
   return (
     <View
@@ -40,65 +83,121 @@ const Login = ({navigation}) => {
           flexDirection: 'column',
         },
       ]}>
-      <View style={styles.image}>
-        <Image source={require('../resoure/logo.png')} />
-      </View>
-      <View style={styles.textarea}>
-        <View style={styles.inputView}>
-          <Icon style={styles.iconimage} name="email" size={23} color="black" />
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Enter Email                                              "
-            placeholderTextColor="grey"
-            onChangeText={text => handleCheckEmail(text)}
-          />
+      <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
+        <Loader visible={loading} />
+        <View style={styles.image}>
+          <Image source={require('../resoure/logo.png')} />
         </View>
-        {checkValidEmail ? (
-          <Text style={styles.textFailed}>Wrong format email</Text>
-        ) : (
-          <Text style={styles.textFailed}> </Text>
-        )}
-        <View style={styles.inputView}>
-          <Icon style={styles.iconimage} name="lock" size={23} color="black" />
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Enter Password                                          "
-            placeholderTextColor="grey"
-            secureTextEntry={true}
-            onChangeText={password => setPassword(password)}
+        <View style={{marginVertical: 20}}>
+          <Input
+            onChangeText={email => setemail(email)}
+            // onFocus={() => handleError(null, 'email')}
+            iconName="email-outline"
+            label="Email"
+            placeholder="Enter your email address"
+            error={errors.email}
           />
-        </View>
-        <TouchableOpacity>
-          <Text
-            style={styles.forgot_button}
-            onPress={() => navigation.navigate('EnterEmail')}>
-            Forgot Password?
-          </Text>
-        </TouchableOpacity>
-        {email == '' || password == '' || checkValidEmail == true ? (
-          <TouchableOpacity style={styles.loginBtn}>
-            <Text style={styles.loginText}> LOGIN </Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={styles.loginBtn}
-            onPress={() => {
-              login(email, password);
-            }}>
-            <Text style={styles.loginText}> LOGIN </Text>
-          </TouchableOpacity>
-        )}
 
-        <TouchableOpacity>
+          <Input
+            onChangeText={password => setpassword(password)}
+            // onFocus={() => handleError(null, 'password')}
+            iconName="lock-outline"
+            label="Password"
+            placeholder="Enter your password"
+            error={errors.password}
+            password
+          />
           <Text
-            style={styles.forgot_button}
-            onPress={() => navigation.navigate('CreateAccount')}>
-            Sign up for Account
+            onPress={() => navigation.navigate('EnterEmail')}
+            style={{
+              color: 'black',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              fontSize: 14,
+            }}>
+            Forget password ?
           </Text>
-        </TouchableOpacity>
-        {/* <Text>{test}</Text> */}
-      </View>
+
+          <Button title="Login" onPress={validate} />
+          <Text
+            onPress={() => navigation.navigate('CreateAccount')}
+            style={{
+              color: 'black',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              fontSize: 16,
+            }}>
+            Signup new account
+          </Text>
+        </View>
+      </SafeAreaView>
     </View>
+    //   style={[
+    //     styles.container,
+    //     {
+    //       // Try setting `flexDirection` to `"row"`.
+    //       flexDirection: 'column',
+    //     },
+    //   ]}>
+    //   <View style={styles.image}>
+    //     <Image source={require('../resoure/logo.png')} />
+    //   </View>
+    //   <View style={styles.textarea}>
+    //     <View style={styles.inputView}>
+    //       <Icon style={styles.iconimage} name="email" size={23} color="black" />
+    //       <TextInput
+    //         style={styles.TextInput}
+    //         placeholder="Enter Email                                              "
+    //         placeholderTextColor="grey"
+    //         onChangeText={text => handleCheckEmail(text)}
+    //       />
+    //     </View>
+    //     {checkValidEmail ? (
+    //       <Text style={styles.textFailed}>Wrong format email</Text>
+    //     ) : (
+    //       <Text style={styles.textFailed}> </Text>
+    //     )}
+    //     <View style={styles.inputView}>
+    //       <Icon style={styles.iconimage} name="lock" size={23} color="black" />
+    //       <TextInput
+    //         style={styles.TextInput}
+    //         placeholder="Enter Password                                          "
+    //         placeholderTextColor="grey"
+    //         secureTextEntry={true}
+    //         onChangeText={password => setPassword(password)}
+    //       />
+    //     </View>
+    //     <TouchableOpacity>
+    //       <Text
+    //         style={styles.forgot_button}
+    //         onPress={() => navigation.navigate('EnterEmail')}>
+    //         Forgot Password?
+    //       </Text>
+    //     </TouchableOpacity>
+    //     {email == '' || password == '' || checkValidEmail == true ? (
+    //       <TouchableOpacity style={styles.loginBtn}>
+    //         <Text style={styles.loginText}> LOGIN </Text>
+    //       </TouchableOpacity>
+    //     ) : (
+    //       <TouchableOpacity
+    //         style={styles.loginBtn}
+    //         onPress={() => {
+    //           login(email, password);
+    //         }}>
+    //         <Text style={styles.loginText}> LOGIN </Text>
+    //       </TouchableOpacity>
+    //     )}
+
+    //     <TouchableOpacity>
+    //       <Text
+    //         style={styles.forgot_button}
+    //         onPress={() => navigation.navigate('CreateAccount')}>
+    //         Sign up for Account
+    //       </Text>
+    //     </TouchableOpacity>
+    //     {/* <Text>{test}</Text> */}
+    //   </View>
+    // </View>
   );
 };
 
@@ -106,60 +205,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    padding: 15,
   },
   image: {
-    flex: 2,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  textarea: {
-    flex: 3,
-    alignItems: 'center',
-  },
-  iconimage: {
-    marginTop: 18,
-    marginRight: 10,
-  },
-  inputView: {
-    backgroundColor: 'white',
-    width: '70%',
-    height: 45,
-    marginBottom: 20,
-    borderBottomWidth: 1,
-    borderColor: 'black',
-    flexDirection: 'row',
-  },
-
-  TextInput: {
-    height: 60,
-    color: 'black',
-  },
-  forgot_button: {
-    height: 20,
-    marginBottom: 30,
-    color: 'black',
-  },
-
-  loginBtn: {
-    width: '80%',
-    borderRadius: 25,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 40,
-    backgroundColor: 'black',
-  },
-  loginText: {
-    color: 'white',
-  },
-  login: {
-    color: 'white',
-    fontSize: 20,
-    marginTop: 20,
-    borderWidth: 1,
-  },
-  textFailed: {
-    color: 'red',
   },
 });
 
