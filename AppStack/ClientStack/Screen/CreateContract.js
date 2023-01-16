@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -9,36 +9,130 @@ import {
   Button,
   multiline,
   ScrollView,
-  KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {AuthContext} from '../../../Context/AuthContext';
+import axios from 'axios';
 
 export default function CreateContract({navigation}) {
+  const {userInfo} = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [valuepicker, setValuepicker] = useState(null);
   const [value, setValue] = useState(null);
   const [description, setdescription] = useState('');
   const [title, settitle] = useState('');
+  const [address, setaddress] = useState('');
   const [date, setDate] = useState(new Date());
   const [opendate, setOpendate] = useState(false);
   const [budget, setbudget] = useState('');
+  const [id, setid] = useState(userInfo._id);
+  const [errors, setErrors] = useState({});
+  const [isValid, setisValid] = useState(false);
 
   const [items, setItems] = useState([
-    {value: '1', label: 'painter'},
-    {value: '2', label: 'plumber'},
-    {value: '3', label: 'writer'},
-    {value: '4', label: 'gardener'},
-    {value: '5', label: 'developer'},
-    {value: '6', label: 'teacher'},
-    {value: '7', label: 'electrition'},
-    {value: '8', label: 'housekeeper'},
+    {value: 'painter', label: 'painter'},
+    {value: 'plumber', label: 'plumber'},
+    {value: 'writer', label: 'writer'},
+    {value: 'gardener', label: 'gardener'},
+    {value: 'developer', label: 'developer'},
+    {value: 'teacher', label: 'teacher'},
+    {value: 'electrition', label: 'electrition'},
+    {value: 'housekeeper', label: 'housekeeper'},
   ]);
 
+  const createcontract = async () => {
+    console.log('createcontract called');
+    console.log(
+      'data..........',
+      id,
+      '.....',
+      valuepicker,
+      '.....',
+      title,
+      '.....',
+      description,
+      '.....',
+      value,
+      '.....',
+      date,
+      '.....',
+      budget,
+      '....',
+      address,
+    );
+    try {
+      await axios
+        .post('http://192.168.10.4:4000/newcontract', {
+          userid: id,
+          category: valuepicker,
+          title: title,
+          description: description,
+          worktype: value,
+          jobdate: date,
+          budget: budget,
+          location: address,
+        })
+        .then(res => {
+          console.log('contract created ', res);
+          navigation.goBack();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const validate = () => {
+    console.log('validating');
+    Keyboard.dismiss();
+    let isValid = true;
+    if (!valuepicker) {
+      handleError('choose a category first', 'valuepicker');
+      isValid = false;
+      setisValid(true);
+    }
+    if (!title) {
+      handleError('Enter title', 'title');
+      isValid = false;
+      setisValid(true);
+    }
+
+    if (!description) {
+      handleError('Write some description', 'description');
+      isValid = false;
+      setisValid(true);
+    }
+    if (!budget) {
+      handleError('Enter your budget', 'budget');
+      isValid = false;
+      setisValid(true);
+    }
+    if (!address) {
+      handleError('Enter your address', 'address');
+      isValid = false;
+      setisValid(true);
+    }
+
+    if (isValid) {
+      createcontract();
+    }
+  };
+
+  const handleError = (error, input) => {
+    setErrors(prevState => ({...prevState, [input]: error}));
+  };
   return (
     <View style={styles.container}>
+      {isValid ? (
+        <Text style={{color: 'red'}}>Fill are credential</Text>
+      ) : (
+        <Text style={styles.textFailed}> </Text>
+      )}
       <Text style={styles.categoryTitle}>Category</Text>
       <DropDownPicker
         open={open}
@@ -81,17 +175,14 @@ export default function CreateContract({navigation}) {
             <Text style={styles.title}>Online</Text>
           </View>
         </RadioButton.Group>
-        <View style={styles.inputView}>
-          <Text style={styles.TextInput}>Location</Text>
-          <TouchableOpacity>
-            <Icon
-              style={{marginRight: 20}}
-              name="map-marker"
-              size={23}
-              color="black"
-            />
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.categoryTitle}>Address</Text>
+        <TextInput
+          style={styles.TextInput1}
+          placeholder="e.g house xyz                                         "
+          placeholderTextColor="grey"
+          onChangeText={address => setaddress(address)}
+        />
+        <Text style={styles.categoryTitle}>Date</Text>
         <View style={styles.date}>
           <Text style={{width: '85%'}}>{date.toUTCString()}</Text>
           <DatePicker
@@ -119,9 +210,7 @@ export default function CreateContract({navigation}) {
           placeholderTextColor="grey"
           onChangeText={budget => setbudget(budget)}
         />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={styles.button} onPress={validate}>
           <Text style={{color: 'white'}}>Add</Text>
         </TouchableOpacity>
       </ScrollView>

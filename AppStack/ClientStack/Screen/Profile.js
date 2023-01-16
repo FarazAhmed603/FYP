@@ -22,7 +22,7 @@ export default function Profile({navigation}) {
   const [image, setimage] = useState(null);
   const {userInfo} = useContext(AuthContext);
 
-  console.log('userinfo', userInfo);
+  console.log('userinfo in profile', userInfo);
 
   var options = {
     title: 'Select Image',
@@ -46,7 +46,6 @@ export default function Profile({navigation}) {
       } else {
         let {uri} = res.assets[0];
         setimage(uri);
-        console.log('image loaded', image);
       }
     });
   };

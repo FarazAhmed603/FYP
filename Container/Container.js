@@ -10,7 +10,7 @@ import {AuthContext} from '../Context/AuthContext';
 const Container = () => {
   const {isLoading} = useContext(AuthContext);
   const {userToken} = useContext(AuthContext);
-  console.log('use context data in container', {isLoading});
+  // console.log('use context data in container', {isLoading});
 
   if (isLoading) {
     return (
@@ -22,7 +22,7 @@ const Container = () => {
 
   return (
     <NavigationContainer>
-      {userToken !== null ? <AppStack /> : <AuthStack />}
+      {userToken ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };
