@@ -15,7 +15,7 @@ export const AuthProvider = ({children}) => {
     console.log('in login fun authContext');
     setisLoading(true);
     axios
-      .post('http://192.168.10.4:4000/login', {
+      .post('http://192.168.10.9:4000/login', {
         email: Email,
         password: Password,
       })

@@ -65,7 +65,7 @@ export default function CreateContract({navigation}) {
     );
     try {
       await axios
-        .post('http://192.168.10.4:4000/newcontract', {
+        .post('http://192.168.10.9:4000/newcontract', {
           userid: id,
           category: valuepicker,
           title: title,

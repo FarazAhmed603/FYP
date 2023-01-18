@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    marginBottom: 20,
+    marginBottom: 5,
   },
   headtext: {
     fontWeight: 'bold',

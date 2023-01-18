@@ -28,18 +28,18 @@ const HomeComponent = props => {
         </View>
         <View style={styles.inputView3}>
           <Text style={styles.email} numberOfLines={1} ellipsizeMode="tail">
-            {props.title}{' '}
+            {props.title}
           </Text>
           <Text style={styles.email1} numberOfLines={1} ellipsizeMode="tail">
-            {props.description} I have 2 room jbaso
+            {props.description}
           </Text>
           <Text style={styles.email1} numberOfLines={1} ellipsizeMode="tail">
-            {props.location} Lahore
+            {props.location}
           </Text>
         </View>
         <View style={styles.inputView2}>
           <View>
-            <Text style={styles.text3}>500</Text>
+            <Text style={styles.text3}>{props.budget}</Text>
           </View>
         </View>
       </View>

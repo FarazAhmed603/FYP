@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,10 +9,32 @@ import {
   TextInput,
   Alert,
   Linking,
+  useAnimatedValue,
 } from 'react-native';
 import ProfileHeading from '../Component/ProfileHeading';
+import axios from 'axios';
 export default function ContractDetails({navigation, route}) {
   const [press, setpress] = useState(false);
+  const [id, setid] = useState(route.params.id);
+  const [userdata, setuserdata] = useState('');
+
+  const getUserName = () => {
+    console.log(id);
+    let getreq = 'http://192.168.10.9:4000/user/' + id;
+    axios
+      .get(getreq)
+      .then(res => {
+        setuserdata(res.data);
+        console.log(userdata);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getUserName();
+  }, []);
 
   const ConfirmationAlert = () =>
     Alert.alert('Accept Contract', 'Want to work on contract', [
@@ -27,9 +49,9 @@ export default function ContractDetails({navigation, route}) {
     let phoneNumber = '';
 
     if (Platform.OS === 'android') {
-      phoneNumber = 'tel:${+923001113207}';
+      phoneNumber = 'tel:${' + userdata.phone + '}';
     } else {
-      phoneNumber = 'telprompt:${+923001113207}';
+      phoneNumber = 'telprompt:${' + userdata.phone + '}';
     }
 
     Linking.openURL(phoneNumber);
@@ -72,32 +94,44 @@ export default function ContractDetails({navigation, route}) {
           backgroundColor: 'white',
           alignItems: 'center',
         }}>
-        <Text style={{fontWeight: 'bold', fontSize: 25}}>Faraz Ahmed</Text>
+        <Text style={{fontWeight: 'bold', fontSize: 25}}>
+          {userdata.firstname} {userdata.lastname}
+        </Text>
       </View>
       <ScrollView>
         <ProfileHeading heading="Category" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
-          {route.params.title}
+        <Text
+          style={{
+            marginHorizontal: 10,
+            marginVertical: 10,
+          }}>
+          {route.params.category}
         </Text>
         <ProfileHeading heading="Title" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+        <Text style={{marginHorizontal: 10, marginVertical: 10}}>
           {route.params.title}
         </Text>
         <ProfileHeading heading="Description" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
-          {route.params.title}
+        <Text style={{marginHorizontal: 10, marginVertical: 10}}>
+          {route.params.description}
         </Text>
         <ProfileHeading heading="Loction" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
-          {route.params.title}
+        <Text style={{marginHorizontal: 10, marginVertical: 10}}>
+          {route.params.location}
         </Text>
         <ProfileHeading heading="Date" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
-          {route.params.title}
+        <Text style={{marginHorizontal: 10, marginVertical: 10}}>
+          {route.params.date}
         </Text>
         <ProfileHeading heading="Budget" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
-          {route.params.title}
+        <Text
+          style={{
+            marginHorizontal: 10,
+            marginVertical: 10,
+            fontWeight: 'bold',
+            fontSize: 25,
+          }}>
+          {route.params.budget}
         </Text>
         <TouchableOpacity style={styles.button} onPress={ConfirmationAlert}>
           <Text style={{color: 'white'}}>Accept </Text>
@@ -110,7 +144,7 @@ export default function ContractDetails({navigation, route}) {
               fontWeight: 'bold',
               fontSize: 30,
             }}>
-            03001113207
+            {userdata.phone}
           </Text>
         )}
         {press && (

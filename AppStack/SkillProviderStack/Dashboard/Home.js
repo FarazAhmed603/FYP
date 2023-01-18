@@ -20,11 +20,15 @@ export default function Home({navigation}) {
   const [masterDataSource, setMasterDataSource] = useState([]);
 
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/posts')
+    fetch('http://192.168.10.9:4000/getcontract')
       .then(response => response.json())
       .then(responseJson => {
         setFilteredDataSource(responseJson);
         setMasterDataSource(responseJson);
+        console.log(
+          responseJson,
+          'response in getting all contract from client ',
+        );
       })
       .catch(error => {
         console.error(error);
@@ -61,11 +65,21 @@ export default function Home({navigation}) {
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('ContractDetails', {
-              id: item.id,
+              category: item.category,
               title: item.title,
+              description: item.description,
+              location: item.location,
+              date: item.jobdate,
+              budget: item.budget,
+              id: item.userid,
             })
           }>
-          <HomeComponent title={item.id} description={item.title} />
+          <HomeComponent
+            title={item.title}
+            description={item.description}
+            location={item.location}
+            budget={item.budget}
+          />
         </TouchableOpacity>
       </View>
       // <Text style={styles.itemStyle} onPress={() => getItem(item)}>
