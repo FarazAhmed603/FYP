@@ -13,14 +13,17 @@ import {
 
 import HomeComponent from '../Component/HomeComponent';
 import Icon from 'react-native-vector-icons/Fontisto';
+import env from '../../../env';
 
 export default function Home({navigation}) {
+  const http = `http://${env.IP}:4000/`;
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
 
   useEffect(() => {
-    fetch('http://192.168.10.9:4000/getcontract')
+    const request = http + 'getcontract';
+    fetch(request)
       .then(response => response.json())
       .then(responseJson => {
         setFilteredDataSource(responseJson);

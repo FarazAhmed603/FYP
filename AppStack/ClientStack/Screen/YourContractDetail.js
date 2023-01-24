@@ -10,7 +10,9 @@ import {
   Alert,
 } from 'react-native';
 import ProfileHeading from '../Components/ProfileHeading';
+import env from '../../../env';
 export default function YourContractDetail({navigation, route}) {
+  const http = `http://${env.IP}:4000/`;
   const ConfirmationAlert = () =>
     Alert.alert('Delete Contract', 'Want to delete permanently', [
       {
@@ -21,15 +23,6 @@ export default function YourContractDetail({navigation, route}) {
       {text: 'OK', onPress: () => navigation.goBack()},
     ]);
   return (
-    // <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-    //   <Text
-    //     onPress={() => alert('This is the "Home" screen.')}
-    //     style={{fontSize: 26, fontWeight: 'bold'}}>
-    //     SkillProviderDetail Screen
-    //   </Text>
-    //   <Text>{route.params.id}</Text>
-    //   <Text>{route.params.title}</Text>
-    // </View>
     <View style={{flex: 1, backgroundColor: '#FFF', margin: 10}}>
       <View
         style={{

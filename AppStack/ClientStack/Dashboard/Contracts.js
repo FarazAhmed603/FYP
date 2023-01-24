@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -13,17 +13,22 @@ import {
 } from 'react-native';
 
 import Task from '../Components/ContractComponent';
+import env from '../../../env';
+import {AuthContext} from '../../../Context/AuthContext';
 import ContractComponent from '../Components/ContractComponent';
 
 export default function Contracts({navigation}) {
+  const http = `http://${env.IP}:4000/`;
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
+  const {userInfo} = useContext(AuthContext);
+  console.log('userinfo in client contracts', userInfo._id);
 
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/posts')
+    fetch(http + 'getcontract')
       .then(response => response.json())
       .then(responseJson => {
         setFilteredDataSource(responseJson);

@@ -13,14 +13,17 @@ import {
 } from 'react-native';
 import ProfileHeading from '../Component/ProfileHeading';
 import axios from 'axios';
+import env from '../../../env';
 export default function ContractDetails({navigation, route}) {
+  const http = `http://${env.IP}:4000/`;
   const [press, setpress] = useState(false);
   const [id, setid] = useState(route.params.id);
   const [userdata, setuserdata] = useState('');
 
   const getUserName = () => {
     console.log(id);
-    let getreq = 'http://192.168.10.9:4000/user/' + id;
+    const request = http + 'user/' + id;
+    let getreq = request;
     axios
       .get(getreq)
       .then(res => {

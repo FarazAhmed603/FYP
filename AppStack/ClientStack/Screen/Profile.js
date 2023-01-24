@@ -69,7 +69,7 @@ export default function Profile({navigation}) {
         </View>
         <View style={styles.headerbody}>
           <Icon style={{marginTop: 8}} name="email" size={23} color="black" />
-          <Text style={styles.text}>fa628804@gmail.com</Text>
+          <Text style={styles.text}>{userInfo.email} </Text>
         </View>
 
         <Image
@@ -93,11 +93,33 @@ export default function Profile({navigation}) {
           <Text>Edit profile picture</Text>
         </TouchableOpacity>
         <ProfileHeading heading="About" />
-        <View style={styles.descriptionhead}>
-          <Text style={styles.descriptiontext}>Description</Text>
+        <View style={styles.inputView}>
+          <Icon
+            style={{marginRight: 20, marginLeft: 20}}
+            name="account"
+            size={23}
+            color="black"
+          />
+          {userInfo.description == '' ? (
+            <Text style={styles.TextInput}>{userInfo.description} </Text>
+          ) : (
+            <Text style={styles.TextInput}>Update your profile</Text>
+          )}
+          {/* <Text style={styles.descriptiontext}>{userInfo.description}</Text> */}
         </View>
         <View style={styles.inputView}>
-          <Text style={styles.TextInput}>Location</Text>
+          <Icon
+            style={{marginRight: 20, marginLeft: 20}}
+            name="map-marker-account"
+            size={23}
+            color="black"
+          />
+          {/* <Text style={styles.TextInput}>{userInfo.location}</Text> */}
+          {userInfo.location == '' ? (
+            <Text style={styles.TextInput}>{userInfo.description} </Text>
+          ) : (
+            <Text style={styles.TextInput}> Update your location</Text>
+          )}
         </View>
         <View style={styles.inputView}>
           <Icon
@@ -106,12 +128,23 @@ export default function Profile({navigation}) {
             size={23}
             color="black"
           />
-          <Text style={styles.TextInput}>0300-1113207</Text>
+          <Text style={styles.TextInput}> {userInfo.phone}</Text>
         </View>
 
         <ProfileHeading heading="Education" />
-        <View style={styles.descriptionhead}>
-          <Text style={styles.descriptiontext}>Education</Text>
+        <View style={styles.inputView}>
+          <Icon
+            style={{marginRight: 20, marginLeft: 20}}
+            name="book-education-outline"
+            size={23}
+            color="black"
+          />
+          {/* <Text style={styles.descriptiontext}>{userInfo.education}</Text> */}
+          {userInfo.education == '' ? (
+            <Text style={styles.TextInput}>{userInfo.education} </Text>
+          ) : (
+            <Text style={styles.TextInput}>Update your education info</Text>
+          )}
         </View>
       </View>
     </View>
@@ -199,20 +232,20 @@ const styles = StyleSheet.create({
     color: 'black',
     padding: 10,
   },
-  descriptionhead: {
-    backgroundColor: 'white',
-    height: 50,
-    borderBottomWidth: 1,
-    borderColor: '#c2c2a3',
+  // descriptionhead: {
+  //   backgroundColor: 'white',
+  //   height: 50,
+  //   borderBottomWidth: 1,
+  //   borderColor: '#c2c2a3',
 
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  descriptiontext: {
-    height: 40,
-    width: '90%',
-    color: 'black',
-    padding: 10,
-    marginLeft: 20,
-  },
+  //   justifyContent: 'center',
+  //   alignItems: 'flex-start',
+  // },
+  // descriptiontext: {
+  //   height: 40,
+  //   width: '90%',
+  //   color: 'black',
+  //   padding: 10,
+  //   marginLeft: 20,
+  // },
 });

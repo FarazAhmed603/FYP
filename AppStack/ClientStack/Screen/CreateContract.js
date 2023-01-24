@@ -15,9 +15,11 @@ import {RadioButton} from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {AuthContext} from '../../../Context/AuthContext';
+import env from '../../../env';
 import axios from 'axios';
 
 export default function CreateContract({navigation}) {
+  const http = `http://${env.IP}:4000/`;
   const {userInfo} = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [valuepicker, setValuepicker] = useState(null);
@@ -63,9 +65,10 @@ export default function CreateContract({navigation}) {
       '....',
       address,
     );
+    const request = http + 'newcontract';
     try {
       await axios
-        .post('http://192.168.10.9:4000/newcontract', {
+        .post(request, {
           userid: id,
           category: valuepicker,
           title: title,

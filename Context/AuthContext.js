@@ -2,10 +2,12 @@ import React, {createContext, useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import env from '../env';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
+  const http = `http://${env.IP}:4000/`;
   const [isLoading, setisLoading] = useState(false);
   const [userToken, setUserToken] = useState('');
   const [change, setchange] = useState(true);
@@ -14,8 +16,10 @@ export const AuthProvider = ({children}) => {
   const login = (Email, Password) => {
     console.log('in login fun authContext');
     setisLoading(true);
+    const request = http + 'login';
+    console.log(request);
     axios
-      .post('http://192.168.10.9:4000/login', {
+      .post(request, {
         email: Email,
         password: Password,
       })
