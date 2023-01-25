@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "400638470466",
+    "project_id": "fus-craft-19403",
+    "storage_bucket": "fus-craft-19403.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400638470466:android:c962b628d58dc4a6b100db",
+        "android_client_info": {
+          "package_name": "com.craft"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "400638470466-91g1qd3d6onkgko7fulboa80srfr9i80.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKWbc22Ur1yNU3Mo9wEDpZRcOt7m5xYl8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "400638470466-91g1qd3d6onkgko7fulboa80srfr9i80.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
