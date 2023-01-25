@@ -39,6 +39,7 @@ export default function Contracts({navigation}) {
       });
   }, []);
   const ItemView = ({item}) => {
+    console.log(item._id);
     return (
       // Flat List Item
       <View style={{margin: 3}}>
@@ -47,9 +48,19 @@ export default function Contracts({navigation}) {
             navigation.push('YourContractDetail', {
               id: item.id,
               title: item.title,
+              description: item.description,
+              location: item.location,
+              date: item.jobdate,
+              budget: item.budget,
+              category: item.category,
             })
           }>
-          <ContractComponent title={item.id} description={item.title} />
+          <ContractComponent
+            title={item.title}
+            description={item.description}
+            location={item.location}
+            budget={item.budget}
+          />
         </TouchableOpacity>
       </View>
       // <Text style={styles.itemStyle} onPress={() => getItem(item)}>
