@@ -56,7 +56,7 @@ export default function YourContractDetail({navigation, route}) {
       <ScrollView>
         <ProfileHeading heading="Category" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
-          {route.params.title}
+          {route.params.category}
         </Text>
         <ProfileHeading heading="Title" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
@@ -64,19 +64,25 @@ export default function YourContractDetail({navigation, route}) {
         </Text>
         <ProfileHeading heading="Description" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
-          {route.params.title}
+          {route.params.description}
         </Text>
         <ProfileHeading heading="Loction" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
-          {route.params.title}
+          {route.params.location}
         </Text>
         <ProfileHeading heading="Date" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
-          {route.params.title}
+          {route.params.date}
         </Text>
         <ProfileHeading heading="Budget" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
-          {route.params.title}
+        <Text
+          style={{
+            marginHorizontal: 20,
+            marginVertical: 10,
+            fontSize: 25,
+            fontWeight: 'bold',
+          }}>
+          {route.params.budget}
         </Text>
         <TouchableOpacity
           style={styles.button}
