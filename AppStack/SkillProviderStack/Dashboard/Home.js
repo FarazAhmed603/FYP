@@ -16,13 +16,12 @@ import Icon from 'react-native-vector-icons/Fontisto';
 import env from '../../../env';
 
 export default function Home({navigation}) {
-  const http = `http://${env.IP}:4000/`;
+  const request = env.IP + 'getcontract';
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
 
   useEffect(() => {
-    const request = http + 'getcontract';
     fetch(request)
       .then(response => response.json())
       .then(responseJson => {

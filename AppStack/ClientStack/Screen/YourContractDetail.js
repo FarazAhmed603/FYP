@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,13 +9,34 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
-import ProfileHeading from '../Components/ProfileHeading';
+import ContractHeading from '../Components/ContractHeading';
 import env from '../../../env';
+import axios from 'axios';
 
 export default function YourContractDetail({navigation, route}) {
-  const [id, setid] = useState(route.params.id);
+  const [id, setid] = useState(route.params.Uid);
+  const [image, setimage] = useState(route.params.profile);
   console.log('contract ID', id);
-  const http = `http://${env.IP}:4000/`;
+  const [userdata, setuserdata] = useState('');
+
+  const getUserName = () => {
+    console.log(id);
+    const request = env.IP + 'user/' + id;
+    let getreq = request;
+    axios
+      .get(getreq)
+      .then(res => {
+        setuserdata(res.data);
+        console.log(userdata);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getUserName();
+  }, []);
 
   const ConfirmationAlert = () =>
     Alert.alert('Delete Contract', 'Want to delete permanently', [
@@ -43,7 +64,7 @@ export default function YourContractDetail({navigation, route}) {
         }}>
         <Image
           source={{
-            uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
+            uri: image,
             // uri: image.uri,
             // uri: 'data:image/jpeg;base64,' + image,
           }}
@@ -56,30 +77,32 @@ export default function YourContractDetail({navigation, route}) {
           backgroundColor: 'white',
           alignItems: 'center',
         }}>
-        <Text style={{fontWeight: 'bold', fontSize: 25}}>Faraz Ahmed</Text>
+        <Text style={{fontWeight: 'bold', fontSize: 25}}>
+          {userdata.firstname} {userdata.lastname}
+        </Text>
       </View>
       <ScrollView>
-        <ProfileHeading heading="Category" />
+        <ContractHeading heading="Category" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.category}
         </Text>
-        <ProfileHeading heading="Title" />
+        <ContractHeading heading="Title" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.title}
         </Text>
-        <ProfileHeading heading="Description" />
+        <ContractHeading heading="Description" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.description}
         </Text>
-        <ProfileHeading heading="Loction" />
+        <ContractHeading heading="Loction" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.location}
         </Text>
-        <ProfileHeading heading="Date" />
+        <ContractHeading heading="Date" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.date}
         </Text>
-        <ProfileHeading heading="Budget" />
+        <ContractHeading heading="Budget" />
         <Text
           style={{
             marginHorizontal: 20,
@@ -89,16 +112,7 @@ export default function YourContractDetail({navigation, route}) {
           }}>
           {route.params.budget}
         </Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={
-            (() => navigation.push('EditContract'),
-            {
-              contractid: id,
-            })
-          }>
-          <Text style={{color: 'white'}}>Edit Contract </Text>
-        </TouchableOpacity>
+
         <TouchableOpacity style={styles.button} onPress={ConfirmationAlert}>
           <Text style={{color: 'white'}}>Delete Contract</Text>
         </TouchableOpacity>

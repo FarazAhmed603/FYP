@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -13,18 +13,29 @@ import {
   TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Material from 'react-native-vector-icons/MaterialIcons'
-import { AuthContext } from '../../../Context/AuthContext';
+import Material from 'react-native-vector-icons/MaterialIcons';
+import {AuthContext} from '../../../Context/AuthContext';
 import ProfileHeading from '../Components/ProfileHeading';
-import { launchImageLibrary } from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import env from '../../../env';
 import axios from 'axios';
 
-export default function Profile({ navigation }) {
-  const { userInfo, setuserInfo } = useContext(AuthContext);
-  const { _id, firstname, lastname, email, location, phone, profile, skill, cnic, education, description } = userInfo;
-
+export default function Profile({navigation}) {
+  const {userInfo, setuserInfo} = useContext(AuthContext);
+  const {
+    _id,
+    firstname,
+    lastname,
+    email,
+    location,
+    phone,
+    profile,
+    skill,
+    cnic,
+    education,
+    description,
+  } = userInfo;
 
   const [data, setData] = useState({
     firstname: firstname,
@@ -40,12 +51,11 @@ export default function Profile({ navigation }) {
   });
 
   const request = env.IP + 'updateuser/' + userInfo._id;
-  const [isEditMode, setIsEditMode] = useState({ name: false, body: false });
+  const [isEditMode, setIsEditMode] = useState({name: false, body: false});
 
   let val = 60;
-  if (((description.length / 35) * 22) > 60) {
+  if ((description.length / 35) * 22 > 60) {
     val = (description.length / 35) * 22;
-
   } else {
     val = 60;
   }
@@ -55,17 +65,16 @@ export default function Profile({ navigation }) {
   const updateUserInfo = async () => {
     try {
       const response = await axios.put(request, data);
-      await setuserInfo({ ...userInfo, ...data })
+      await setuserInfo({...userInfo, ...data});
       await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
     } catch (error) {
       console.log('update error', error);
     }
-  }
-
+  };
 
   useEffect(() => {
-    console.log(height);
-  }, [height]);
+    updateUserInfo();
+  }, [data]);
 
   //--------api end------------
 
@@ -80,23 +89,22 @@ export default function Profile({ navigation }) {
   };
   const picker = async () => {
     try {
-      const res = await launchImageLibrary(options)
-        .then((res) => {
-          if (res.didCancel) {
-            console.log('\n User cancelled image picker');
-          } else if (res.error) {
-            console.log('\n ImagePicker Error: ', res.error);
-          } else if (res.customButton) {
-            console.log('\n User tapped custom button: ', res.customButton);
-          } else {
-            let { uri } = res.assets[0];
-            console.log('\n uri value', uri);
-            setData({
-              ...data,
-              profile: uri
-            });
-          }
-        })
+      const res = await launchImageLibrary(options).then(res => {
+        if (res.didCancel) {
+          console.log('\n User cancelled image picker');
+        } else if (res.error) {
+          console.log('\n ImagePicker Error: ', res.error);
+        } else if (res.customButton) {
+          console.log('\n User tapped custom button: ', res.customButton);
+        } else {
+          let {uri} = res.assets[0];
+          console.log('\n uri value', uri);
+          setData({
+            ...data,
+            profile: uri,
+          });
+        }
+      });
     } catch (error) {
       console.log('\n Error while handling image picker:', error);
     }
@@ -114,9 +122,8 @@ export default function Profile({ navigation }) {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      { text: 'OK', onPress: () => console.log('OK Pressed') },
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
     ]);
-
 
   // useEffect(() => {
   //   updateUserInfo
@@ -124,56 +131,74 @@ export default function Profile({ navigation }) {
 
   //-----------------------render starts here---------------------------------------------------------------------------------------------
 
-
-
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <ScrollView
-        contentContainerStyle={{ paddingTop: 50, paddingHorizontal: 10 }}>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
+      <ScrollView>
         <View style={styles.header}>
           {/*-----------------name---------------*/}
 
-          <View style={{ borderBottomColor: 'black' }}>
+          <View style={{borderBottomColor: 'black'}}>
             {isEditMode.name ? (
               <View style={styles.headerbody}>
-                <Icon style={{ marginTop: 8 }} name="account" size={23} color="black" />
-                <View style={styles.inputouter} >
+                <Icon
+                  style={{marginTop: 8}}
+                  name="account"
+                  size={23}
+                  color="black"
+                />
+                <View style={styles.inputouter}>
                   {/* --------------sadasdasd----------- */}
                   <TextInput
                     style={styles.inputInner}
-                    placeholder='First name'
+                    placeholder="First name"
                     value={data.firstname}
-                    onChangeText={(e) => setData({
-                      ...data,
-                      firstname: e
-                    })}
+                    onChangeText={e =>
+                      setData({
+                        ...data,
+                        firstname: e,
+                      })
+                    }
                   />
                   <TextInput
                     style={styles.inputInner}
-                    placeholder='Last name'
+                    placeholder="Last name"
                     value={data.lastname}
-                    onChangeText={(e) => setData({
-                      ...data,
-                      lastname: e
-                    })}
+                    onChangeText={e =>
+                      setData({
+                        ...data,
+                        lastname: e,
+                      })
+                    }
                   />
                 </View>
-                <View style={{ marginTop: 10, direction: 'ltr' }}>
-                  <TouchableOpacity onPress={() => {
-                    setIsEditMode({ ...isEditMode, name: false });
-                    updateUserInfo();
-                  }}>
+                <View style={{marginTop: 10, direction: 'ltr'}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setIsEditMode({...isEditMode, name: false});
+                      updateUserInfo();
+                    }}>
                     <Icon name="pencil-outline" size={23} color="black" />
                   </TouchableOpacity>
                 </View>
               </View>
             ) : (
               <View style={styles.headerbody}>
-                <Icon style={{ marginTop: 8 }} name="account" size={23} color="black" />
-                <Text style={styles.text}>{userInfo.firstname} {userInfo.lastname}</Text>
+                <Icon
+                  style={{marginTop: 8}}
+                  name="account"
+                  size={23}
+                  color="black"
+                />
+                <Text style={styles.text}>
+                  {userInfo.firstname} {userInfo.lastname}
+                </Text>
 
-                <View style={{ marginLeft: 180, marginTop: 10, direction: 'ltr' }}>
-                  <TouchableOpacity onPress={() => { setIsEditMode({ ...isEditMode, name: true }); }}>
+                <View
+                  style={{marginLeft: 180, marginTop: 10, direction: 'ltr'}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setIsEditMode({...isEditMode, name: true});
+                    }}>
                     <Icon name="pencil" size={23} color="black" />
                   </TouchableOpacity>
                 </View>
@@ -183,7 +208,7 @@ export default function Profile({ navigation }) {
 
           {/*-----------------email---------------*/}
           <View style={styles.headerbody}>
-            <Icon style={{ marginTop: 8 }} name="email" size={23} color="black" />
+            <Icon style={{marginTop: 8}} name="email" size={23} color="black" />
             <Text style={styles.text}>{userInfo.email} </Text>
           </View>
           {/*-----------------image---------------*/}
@@ -208,45 +233,62 @@ export default function Profile({ navigation }) {
           </TouchableOpacity>
 
           {/*-----------------userInfo body---------------*/}
-          <ProfileHeading heading="About" editAble={isEditMode} seteditAble={setIsEditMode} update={updateUserInfo} />
+          <ProfileHeading
+            heading="About"
+            editAble={isEditMode}
+            seteditAble={setIsEditMode}
+            update={updateUserInfo}
+          />
           {/*-----------------phone---------------*/}
 
           <View>
-
             {isEditMode.body ? (
               <View style={styles.inputView}>
-                <View style={{ flexDirection: 'column' }}>
+                <View style={{flexDirection: 'column'}}>
                   <Icon
-                    style={{ marginRight: 20, marginLeft: 20, marginTop: 5 }}
+                    style={{marginRight: 20, marginLeft: 20, marginTop: 5}}
                     name="phone"
                     size={23}
                     color="black"
                   />
-                  <Text style={{ color: 'black', fontSize: 8, fontWeight: 'bold', marginLeft: 18 }}>
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontSize: 8,
+                      fontWeight: 'bold',
+                      marginLeft: 18,
+                    }}>
                     Phone #
                   </Text>
                 </View>
                 <TextInput
                   style={styles.inputInner}
-                  placeholder='phone number'
+                  placeholder="phone number"
                   value={data.phone}
-
-                  onChangeText={(e) => setData({
-                    ...data,
-                    phone: e
-                  })}
+                  onChangeText={e =>
+                    setData({
+                      ...data,
+                      phone: e,
+                    })
+                  }
                 />
               </View>
             ) : (
               <View style={styles.inputView}>
-                <View style={{ flexDirection: 'column' }}>
+                <View style={{flexDirection: 'column'}}>
                   <Icon
-                    style={{ marginRight: 20, marginLeft: 20, marginTop: 5 }}
+                    style={{marginRight: 20, marginLeft: 20, marginTop: 5}}
                     name="phone"
                     size={23}
                     color="black"
                   />
-                  <Text style={{ color: 'black', fontSize: 8, fontWeight: 'bold', marginLeft: 18 }}>
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontSize: 8,
+                      fontWeight: 'bold',
+                      marginLeft: 18,
+                    }}>
                     Phone #
                   </Text>
                 </View>
@@ -256,108 +298,126 @@ export default function Profile({ navigation }) {
           </View>
           {/*-----------------skills---------------*/}
 
-
           {/*-----------------description---------------*/}
           <View>
-            {isEditMode.body ?
-              (
-                <View style={{
+            {isEditMode.body ? (
+              <View
+                style={{
                   flex: 1,
                   height: 70,
                   borderBottomWidth: 1,
                   borderColor: '#c2c2a3',
                   flexDirection: 'row',
                   marginTop: 3,
-                  marginLeft: 10
-                }} >
-                  <View style={{ flexDirection: 'column' }}>
-                    <Material
-                      style={{ marginRight: 20, marginLeft: 20, marginTop: 15 }}
-                      name="description"
-                      size={23}
-                      color="black"
-                    />
-                    <Text style={{ color: 'black', fontSize: 8, fontWeight: 'bold', marginLeft: 10 }}>
-                      Description
-                    </Text>
-                  </View>
-
-                  <TextInput
-                    style={{
-                      marginRight: 15,
-                      backgroundColor: '#FFF',
-                      borderRadius: 10,
-                      borderColor: '#C0C0C0',
-                      borderWidth: 1,
-                      width: 300,
-                      height: 60,
-                      alignSelf: 'center',
-                    }}
-                    multiline={true}
-                    numberOfLines={0}
-                    placeholder='description'
-                    value={data.description}
-                    onChangeText={(e) => {
-                      setData({
-                        ...data,
-                        description: e
-                      })
-                      let val = 60;
-                      if (((description.length / 35) * 22) >= 60) {
-                        val = (description.length / 35) * 22;
-
-                      } else {
-                        val = 60;
-                      }
-
-                      setHeight(val);
-                    }}
+                  marginLeft: 10,
+                }}>
+                <View style={{flexDirection: 'column'}}>
+                  <Material
+                    style={{marginRight: 20, marginLeft: 20, marginTop: 15}}
+                    name="description"
+                    size={23}
+                    color="black"
                   />
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontSize: 8,
+                      fontWeight: 'bold',
+                      marginLeft: 10,
+                    }}>
+                    Description
+                  </Text>
                 </View>
 
-              ) : (
-                <View style={{
+                <TextInput
+                  style={{
+                    marginRight: 15,
+                    backgroundColor: '#FFF',
+                    borderRadius: 10,
+                    borderColor: '#C0C0C0',
+                    borderWidth: 1,
+                    width: 300,
+                    height: 60,
+                    alignSelf: 'center',
+                  }}
+                  multiline={true}
+                  numberOfLines={0}
+                  placeholder="description"
+                  value={data.description}
+                  onChangeText={e => {
+                    setData({
+                      ...data,
+                      description: e,
+                    });
+                    let val = 60;
+                    if ((description.length / 35) * 22 >= 60) {
+                      val = (description.length / 35) * 22;
+                    } else {
+                      val = 60;
+                    }
+
+                    setHeight(val);
+                  }}
+                />
+              </View>
+            ) : (
+              <View
+                style={{
                   flex: 1,
                   height: height,
                   borderBottomWidth: 1,
                   borderColor: '#c2c2a3',
                   flexDirection: 'row',
                   marginTop: 10,
-                  marginLeft: 10
+                  marginLeft: 10,
                 }}>
-                  <View style={{ flexDirection: 'column' }}>
-                    <Material
-                      style={{ marginRight: 20, marginLeft: 20, marginTop: 5 }}
-                      name="description"
-                      size={23}
-                      color="black"
-                    />
-                    <Text style={{ color: 'black', fontSize: 8, fontWeight: 'bold', marginLeft: 10 }}>
-                      Description
-                    </Text>
-                  </View>
-                  <Text style={{
+                <View style={{flexDirection: 'column'}}>
+                  <Material
+                    style={{marginRight: 20, marginLeft: 20, marginTop: 5}}
+                    name="description"
+                    size={23}
+                    color="black"
+                  />
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontSize: 8,
+                      fontWeight: 'bold',
+                      marginLeft: 10,
+                    }}>
+                    Description
+                  </Text>
+                </View>
+                <Text
+                  style={{
                     marginTop: 6,
                     height: 100,
                     width: 300,
                     color: 'black',
-                  }}>{userInfo.description} </Text>
-                </View>
-              )}
+                  }}>
+                  {userInfo.description}{' '}
+                </Text>
+              </View>
+            )}
           </View>
           {/*-----------------location---------------*/}
           <View>
             {isEditMode.body ? (
-
               <View style={styles.inputView}>
-                <View style={{ flexDirection: 'column' }}>
+                <View style={{flexDirection: 'column'}}>
                   <Icon
-                    style={{ marginRight: 20, marginLeft: 20, marginTop: 4 }}
+                    style={{marginRight: 20, marginLeft: 20, marginTop: 4}}
                     name="map-marker-account"
                     size={23}
                     color="black"
                   />
-                  <Text style={{ color: 'black', fontSize: 8, fontWeight: 'bold', marginLeft: 16 }}>
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontSize: 8,
+                      fontWeight: 'bold',
+                      marginLeft: 16,
+                    }}>
                     Location
                   </Text>
                 </View>
@@ -372,25 +432,32 @@ export default function Profile({ navigation }) {
                     width: 300,
                     height: 36,
                   }}
-                  placeholder='enter location'
+                  placeholder="enter location"
                   value={data.location}
-
-                  onChangeText={(e) => setData({
-                    ...data,
-                    location: e
-                  })}
+                  onChangeText={e =>
+                    setData({
+                      ...data,
+                      location: e,
+                    })
+                  }
                 />
               </View>
             ) : (
               <View style={styles.inputView}>
-                <View style={{ flexDirection: 'column' }}>
+                <View style={{flexDirection: 'column'}}>
                   <Icon
-                    style={{ marginRight: 20, marginLeft: 20, marginTop: 4 }}
+                    style={{marginRight: 20, marginLeft: 20, marginTop: 4}}
                     name="map-marker-account"
                     size={23}
                     color="black"
                   />
-                  <Text style={{ color: 'black', fontSize: 8, fontWeight: 'bold', marginLeft: 16 }}>
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontSize: 8,
+                      fontWeight: 'bold',
+                      marginLeft: 16,
+                    }}>
                     Location
                   </Text>
                 </View>
@@ -401,16 +468,21 @@ export default function Profile({ navigation }) {
           {/*-----------------education---------------*/}
           <View>
             {isEditMode.body ? (
-
               <View style={styles.inputView}>
-                <View style={{ flexDirection: 'column' }}>
+                <View style={{flexDirection: 'column'}}>
                   <Icon
-                    style={{ marginRight: 20, marginLeft: 20, marginTop: 4 }}
+                    style={{marginRight: 20, marginLeft: 20, marginTop: 4}}
                     name="book-education-outline"
                     size={23}
                     color="black"
                   />
-                  <Text style={{ color: 'black', fontSize: 8, fontWeight: 'bold', marginLeft: 14 }}>
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontSize: 8,
+                      fontWeight: 'bold',
+                      marginLeft: 14,
+                    }}>
                     Education
                   </Text>
                 </View>
@@ -424,25 +496,32 @@ export default function Profile({ navigation }) {
                     width: 300,
                     height: 36,
                   }}
-                  placeholder='Your education'
+                  placeholder="Your education"
                   value={data.education}
-
-                  onChangeText={(e) => setData({
-                    ...data,
-                    education: e
-                  })}
+                  onChangeText={e =>
+                    setData({
+                      ...data,
+                      education: e,
+                    })
+                  }
                 />
               </View>
             ) : (
               <View style={styles.inputView}>
-                <View style={{ flexDirection: 'column' }}>
+                <View style={{flexDirection: 'column'}}>
                   <Icon
-                    style={{ marginRight: 20, marginLeft: 20, marginTop: 4 }}
+                    style={{marginRight: 20, marginLeft: 20, marginTop: 4}}
                     name="book-education-outline"
                     size={23}
                     color="black"
                   />
-                  <Text style={{ color: 'black', fontSize: 8, fontWeight: 'bold', marginLeft: 14 }}>
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontSize: 8,
+                      fontWeight: 'bold',
+                      marginLeft: 14,
+                    }}>
                     Education
                   </Text>
                 </View>
@@ -451,8 +530,8 @@ export default function Profile({ navigation }) {
             )}
           </View>
         </View>
-      </ScrollView >
-    </View >
+      </ScrollView>
+    </View>
   );
 }
 
@@ -529,7 +608,7 @@ const styles = StyleSheet.create({
     borderColor: '#c2c2a3',
     flexDirection: 'row',
     marginTop: 10,
-    marginLeft: 10
+    marginLeft: 10,
   },
   TextInput: {
     marginTop: 6,
@@ -549,7 +628,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: 110,
     height: 36,
-  }
+  },
   // descriptionhead: {
   //   backgroundColor: 'white',
   //   height: 50,

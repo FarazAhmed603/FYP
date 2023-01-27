@@ -18,20 +18,24 @@ import {AuthContext} from '../../../Context/AuthContext';
 import ContractComponent from '../Components/ContractComponent';
 
 export default function Contracts({navigation}) {
-  const http = `http://${env.IP}:4000/`;
+  const request = env.IP + 'getcontract';
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   const {userInfo} = useContext(AuthContext);
-  console.log('userinfo in client contracts', userInfo._id);
+  // console.log('userinfo in client contracts', userInfo._id);
 
   useEffect(() => {
-    fetch(http + 'getcontract')
+    fetch(request)
       .then(response => response.json())
       .then(responseJson => {
-        setFilteredDataSource(responseJson);
+        setFilteredDataSource(
+          responseJson.filter(
+            item => item.userid === userInfo._id && item.createdby === 'client',
+          ),
+        );
         // setMasterDataSource(responseJson);
       })
       .catch(error => {
@@ -39,21 +43,22 @@ export default function Contracts({navigation}) {
       });
   }, []);
   const ItemView = ({item}) => {
-    console.log(item._id);
+    // console.log(item.profile);
     return (
       // Flat List Item
       <View style={{margin: 3}}>
         <TouchableOpacity
           onPress={() =>
             navigation.push('YourContractDetail', {
-              id: item.id,
+              Uid: item.userid,
               title: item.title,
               description: item.description,
               location: item.location,
               date: item.jobdate,
               budget: item.budget,
               category: item.category,
-              id: item._id,
+              Cid: item._id,
+              profile: userInfo.profile,
             })
           }>
           <ContractComponent
@@ -61,6 +66,7 @@ export default function Contracts({navigation}) {
             description={item.description}
             location={item.location}
             budget={item.budget}
+            profile={userInfo.profile}
           />
         </TouchableOpacity>
       </View>

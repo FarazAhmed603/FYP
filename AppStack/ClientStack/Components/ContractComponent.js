@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Task = props => {
+  const [image, setimage] = useState(props.profile);
   return (
     <View style={{borderRadius: 10}}>
       <View style={styles.inputView}>
@@ -20,7 +21,7 @@ const Task = props => {
             onPress={() => Alert.alert('image clicked')}>
             <Image
               source={{
-                uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
+                uri: image,
               }}
               style={styles.avatar}
             />
