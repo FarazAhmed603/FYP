@@ -1,5 +1,5 @@
-import {StatusBar} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import { StatusBar } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,8 +14,9 @@ import {
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Loader from '../../Loader/Loader';
+import env from '../../env';
 
-const VerificationCode = ({navigation, route}) => {
+const VerificationCode = ({ navigation, route }) => {
   const [code, setcode] = useState('');
   const [check, setcheck] = useState(false);
   const [check1, setcheck1] = useState(true);
@@ -58,9 +59,11 @@ const VerificationCode = ({navigation, route}) => {
   };
 
   const verifyotp = async () => {
+    const request = env.IP + 'verifyotp';
+
     try {
       await axios
-        .put('http://192.168.10.8:4000/verifyotp', {
+        .put(request, {
           email: route.params.email,
           otp: code,
         })
@@ -79,10 +82,11 @@ const VerificationCode = ({navigation, route}) => {
   };
 
   const sendotp = () => {
+    const request = env.IP + 'sendotp';
     console.log();
     try {
       axios
-        .post('http://192.168.10.8:4000/sendotp', {
+        .post(request, {
           email: route.params.email,
         })
         .then(function (response) {
@@ -145,11 +149,11 @@ const VerificationCode = ({navigation, route}) => {
         <Text>If you not receive code then press</Text>
         {check1 ? (
           <TouchableOpacity onPress={timmer}>
-            <Text style={{fontWeight: 'bold'}}> Send otp</Text>
+            <Text style={{ fontWeight: 'bold' }}> Send otp</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity>
-            <Text style={{fontWeight: 'bold'}}> Send otp</Text>
+            <Text style={{ fontWeight: 'bold' }}> Send otp</Text>
           </TouchableOpacity>
         )}
 

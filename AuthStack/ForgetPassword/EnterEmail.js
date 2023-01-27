@@ -1,5 +1,5 @@
-import {StatusBar} from 'react-native';
-import React, {useState} from 'react';
+import { StatusBar } from 'react-native';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,11 +10,12 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
+import env from '../../env';
 
-const EnterEmail = ({navigation}) => {
+const EnterEmail = ({ navigation }) => {
   const [email, setemail] = useState('');
   const [checkValidEmail, setCheckValidEmail] = useState(false);
-
+  const request = env.IP + 'verifyemail';
   const handleCheckEmail = text => {
     let re = /\S+@\S+\.\S+/;
     let regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
@@ -27,7 +28,7 @@ const EnterEmail = ({navigation}) => {
     }
   };
 
-  const endpoint = 'http://192.168.10.8:4000/verifyemail/' + email;
+  const endpoint = request + email;
   const verifyEmail = () => {
     try {
       axios
