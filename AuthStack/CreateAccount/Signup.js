@@ -7,7 +7,7 @@
 //   };
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -21,8 +21,10 @@ import Button from '../component/Button';
 import Input from '../component/Input';
 import Loader from '../../Loader/Loader';
 import axios from 'axios';
+import env from '../../env';
 
-const Signup = ({navigation}) => {
+const Signup = ({ navigation }) => {
+  const request = env.IP + 'signup';
   const [firstName, setfirstName] = useState('');
   const [lastName, setlastName] = useState('');
   const [email, setemail] = useState('');
@@ -34,7 +36,7 @@ const Signup = ({navigation}) => {
   const createuser = () => {
     try {
       axios
-        .post('http://192.168.10.8:4000/signup', {
+        .post(request, {
           firstname: firstName,
           lastname: lastName,
           phone: phoneNumber,
@@ -108,20 +110,20 @@ const Signup = ({navigation}) => {
   };
 
   const handleError = (error, input) => {
-    setErrors(prevState => ({...prevState, [input]: error}));
+    setErrors(prevState => ({ ...prevState, [input]: error }));
   };
   return (
-    <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
+    <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
       <Loader visible={loading} />
       <ScrollView
-        contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
-        <Text style={{color: 'black', fontSize: 40, fontWeight: 'bold'}}>
+        contentContainerStyle={{ paddingTop: 50, paddingHorizontal: 20 }}>
+        <Text style={{ color: 'black', fontSize: 40, fontWeight: 'bold' }}>
           Register
         </Text>
-        <Text style={{color: 'grey', fontSize: 18, marginVertical: 10}}>
+        <Text style={{ color: 'grey', fontSize: 18, marginVertical: 10 }}>
           Enter Your Details to Register
         </Text>
-        <View style={{marginVertical: 20}}>
+        <View style={{ marginVertical: 20 }}>
           {/* <Input
             onChangeText={text => inputs.fullname(text)}
             iconName="account-outline"
