@@ -15,8 +15,12 @@ import {RadioButton} from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
+import env from '../../../env';
 
-export default function EditContact({navigation}) {
+export default function EditContact({navigation, route}) {
+  const http = `http://${env.IP}:4000/`;
+  const [contractid, setcontractid] = useState(route.params.contractid);
   const [open, setOpen] = useState(false);
   const [valuepicker, setValuepicker] = useState(null);
   const [value, setValue] = useState(null);
@@ -25,6 +29,7 @@ export default function EditContact({navigation}) {
   const [date, setDate] = useState(new Date());
   const [opendate, setOpendate] = useState(false);
   const [budget, setbudget] = useState('');
+  console.log('contract id in edit screen ', contractid);
 
   const [items, setItems] = useState([
     {value: '1', label: 'painter'},
@@ -36,6 +41,10 @@ export default function EditContact({navigation}) {
     {value: '7', label: 'electrition'},
     {value: '8', label: 'housekeeper'},
   ]);
+
+  // const getcontract = () => {
+  //   let request = http + 'contract';
+  // };
 
   return (
     <View style={styles.container}>

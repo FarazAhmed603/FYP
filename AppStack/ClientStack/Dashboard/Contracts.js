@@ -53,6 +53,7 @@ export default function Contracts({navigation}) {
               date: item.jobdate,
               budget: item.budget,
               category: item.category,
+              id: item._id,
             })
           }>
           <ContractComponent

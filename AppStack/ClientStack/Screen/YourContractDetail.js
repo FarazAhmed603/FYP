@@ -11,8 +11,12 @@ import {
 } from 'react-native';
 import ProfileHeading from '../Components/ProfileHeading';
 import env from '../../../env';
+
 export default function YourContractDetail({navigation, route}) {
+  const [id, setid] = useState(route.params.id);
+  console.log('contract ID', id);
   const http = `http://${env.IP}:4000/`;
+
   const ConfirmationAlert = () =>
     Alert.alert('Delete Contract', 'Want to delete permanently', [
       {
@@ -22,6 +26,7 @@ export default function YourContractDetail({navigation, route}) {
       },
       {text: 'OK', onPress: () => navigation.goBack()},
     ]);
+
   return (
     <View style={{flex: 1, backgroundColor: '#FFF', margin: 10}}>
       <View
@@ -86,7 +91,12 @@ export default function YourContractDetail({navigation, route}) {
         </Text>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.push('EditContract')}>
+          onPress={
+            (() => navigation.push('EditContract'),
+            {
+              contractid: id,
+            })
+          }>
           <Text style={{color: 'white'}}>Edit Contract </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={ConfirmationAlert}>
