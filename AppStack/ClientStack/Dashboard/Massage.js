@@ -16,7 +16,7 @@
 // https://aboutreact.com/react-native-search-bar-filter-on-listview/
 
 // import React in our code
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 // import all the components we are going to use
 import {
@@ -28,6 +28,7 @@ import {
   TextInput,
 } from 'react-native';
 import axios from 'axios';
+import env from '../../../env';
 // import Massage from '../../SkillProviderStack/Dashboard/Massage';
 
 const Massage = () => {
@@ -70,7 +71,7 @@ const Massage = () => {
     }
   };
 
-  const ItemView = ({item}) => {
+  const ItemView = ({ item }) => {
     return (
       // Flat List Item
       <Text style={styles.itemStyle} onPress={() => getItem(item)}>
@@ -100,7 +101,7 @@ const Massage = () => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, alignItems: 'center'}}>
+    <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
       {/* <View style={styles.container}>
         <TextInput
           style={styles.textInputStyle}

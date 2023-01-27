@@ -1,5 +1,5 @@
-import {StatusBar} from 'react-native';
-import React, {useState} from 'react';
+import { StatusBar } from 'react-native';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,16 +14,18 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 import Input from '../component/Input';
+import env from '../../env';
 
-const NewPassword = ({navigation, route}) => {
+const NewPassword = ({ navigation, route }) => {
   const [password, setpassword] = useState('');
   const [errors, setErrors] = useState({});
 
   const newpass = () => {
+    const request = env.IP + 'forgetpassword';
     console.log(route.params);
     try {
       axios
-        .put('http://192.168.10.8:4000/forgetpassword', {
+        .put(request, {
           email: route.params.email,
           newPassword: password,
         })
@@ -57,18 +59,18 @@ const NewPassword = ({navigation, route}) => {
   };
 
   const handleError = (error, input) => {
-    setErrors(prevState => ({...prevState, [input]: error}));
+    setErrors(prevState => ({ ...prevState, [input]: error }));
   };
 
   return (
-    <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
+    <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
       <ScrollView
-        contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
+        contentContainerStyle={{ paddingTop: 50, paddingHorizontal: 20 }}>
         <Text style={styles.text_join}>What's your new password?</Text>
         <Text style={styles.text_join1}>
           Enter new password you want to use for login.
         </Text>
-        <View style={{marginVertical: 20}}>
+        <View style={{ marginVertical: 20 }}>
           <Input
             onChangeText={password => setpassword(password)}
             // onFocus={() => handleError(null, 'password')}

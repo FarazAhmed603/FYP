@@ -139,7 +139,7 @@
 //   };
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -149,26 +149,28 @@ import {
   Alert,
 } from 'react-native';
 
-import {AuthContext} from '../../../Context/AuthContext';
+import { AuthContext } from '../../../Context/AuthContext';
 import Button from '../Components/Button';
 import Input from '../Components/Input';
 import Loader from '../../../Loader/Loader';
 import axios from 'axios';
+import env from '../../../env';
 
-const ChangePassword = ({navigation}) => {
+const ChangePassword = ({ navigation }) => {
   const [password, setpassword] = useState('');
   const [oldpassword, setoldpassword] = useState('');
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const request = env.IP + 'forgetpassword';
 
-  const {userInfo} = useContext(AuthContext);
+  const { userInfo } = useContext(AuthContext);
 
   console.log('userinfo in change password', userInfo.email);
 
   const createuser = () => {
     try {
       axios
-        .put('http://192.168.43.212:4000/forgetpassword', {
+        .put(request, {
           email: userInfo.email,
           newPassword: password,
         })
@@ -215,17 +217,17 @@ const ChangePassword = ({navigation}) => {
   };
 
   const handleError = (error, input) => {
-    setErrors(prevState => ({...prevState, [input]: error}));
+    setErrors(prevState => ({ ...prevState, [input]: error }));
   };
   return (
-    <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
+    <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
       <Loader visible={loading} />
       <ScrollView
-        contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
-        <Text style={{color: 'grey', fontSize: 18, marginVertical: 10}}>
+        contentContainerStyle={{ paddingTop: 50, paddingHorizontal: 20 }}>
+        <Text style={{ color: 'grey', fontSize: 18, marginVertical: 10 }}>
           Change Password
         </Text>
-        <View style={{marginVertical: 20}}>
+        <View style={{ marginVertical: 20 }}>
           <Input
             onChangeText={oldpassword => setoldpassword(oldpassword)}
             // onFocus={() => handleError(null, 'password')}

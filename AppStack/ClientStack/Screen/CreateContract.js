@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useContext} from 'react';
+import { useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -11,16 +11,15 @@ import {
   ScrollView,
   Keyboard,
 } from 'react-native';
-import {RadioButton} from 'react-native-paper';
+import { RadioButton } from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {AuthContext} from '../../../Context/AuthContext';
+import { AuthContext } from '../../../Context/AuthContext';
 import env from '../../../env';
 import axios from 'axios';
 
-export default function CreateContract({navigation}) {
-  const http = `http://${env.IP}:4000/`;
-  const {userInfo} = useContext(AuthContext);
+export default function CreateContract({ navigation }) {
+  const { userInfo } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [valuepicker, setValuepicker] = useState(null);
   const [value, setValue] = useState(null);
@@ -35,14 +34,14 @@ export default function CreateContract({navigation}) {
   const [isValid, setisValid] = useState(false);
 
   const [items, setItems] = useState([
-    {value: 'painter', label: 'painter'},
-    {value: 'plumber', label: 'plumber'},
-    {value: 'writer', label: 'writer'},
-    {value: 'gardener', label: 'gardener'},
-    {value: 'developer', label: 'developer'},
-    {value: 'teacher', label: 'teacher'},
-    {value: 'electrition', label: 'electrition'},
-    {value: 'housekeeper', label: 'housekeeper'},
+    { value: 'painter', label: 'painter' },
+    { value: 'plumber', label: 'plumber' },
+    { value: 'writer', label: 'writer' },
+    { value: 'gardener', label: 'gardener' },
+    { value: 'developer', label: 'developer' },
+    { value: 'teacher', label: 'teacher' },
+    { value: 'electrition', label: 'electrition' },
+    { value: 'housekeeper', label: 'housekeeper' },
   ]);
 
   const createcontract = async () => {
@@ -65,7 +64,7 @@ export default function CreateContract({navigation}) {
       '....',
       address,
     );
-    const request = http + 'newcontract';
+    const request = env.IP + 'newcontract';
     try {
       await axios
         .post(request, {
@@ -127,12 +126,12 @@ export default function CreateContract({navigation}) {
   };
 
   const handleError = (error, input) => {
-    setErrors(prevState => ({...prevState, [input]: error}));
+    setErrors(prevState => ({ ...prevState, [input]: error }));
   };
   return (
     <View style={styles.container}>
       {isValid ? (
-        <Text style={{color: 'red'}}>Fill are credential</Text>
+        <Text style={{ color: 'red' }}>Fill are credential</Text>
       ) : (
         <Text style={styles.textFailed}> </Text>
       )}
@@ -187,7 +186,7 @@ export default function CreateContract({navigation}) {
         />
         <Text style={styles.categoryTitle}>Date</Text>
         <View style={styles.date}>
-          <Text style={{width: '85%'}}>{date.toUTCString()}</Text>
+          <Text style={{ width: '85%' }}>{date.toUTCString()}</Text>
           <DatePicker
             modal
             open={opendate}
@@ -214,7 +213,7 @@ export default function CreateContract({navigation}) {
           onChangeText={budget => setbudget(budget)}
         />
         <TouchableOpacity style={styles.button} onPress={validate}>
-          <Text style={{color: 'white'}}>Add</Text>
+          <Text style={{ color: 'white' }}>Add</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>

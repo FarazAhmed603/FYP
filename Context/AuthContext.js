@@ -1,4 +1,4 @@
-import React, {createContext, useState, useEffect} from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
@@ -6,18 +6,18 @@ import env from '../env';
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({children}) => {
-  const http = `http://${env.IP}:4000/`;
+export const AuthProvider = ({ children }) => {
+
   const [isLoading, setisLoading] = useState(false);
   const [userToken, setUserToken] = useState('');
   const [change, setchange] = useState(true);
   const [userInfo, setuserInfo] = useState('');
+  const [ID, setID] = useState();
 
   const login = (Email, Password) => {
     console.log('in login fun authContext');
     setisLoading(true);
-    const request = http + 'login';
-    console.log(request);
+    const request = env.IP + 'login';
     axios
       .post(request, {
         email: Email,
@@ -29,7 +29,7 @@ export const AuthProvider = ({children}) => {
         let decoded = jwt_decode(token);
         if (decoded) {
           setUserToken(response.data.Token);
-          setuserInfo(JSON.stringify(decoded));
+          setuserInfo(decoded);
           AsyncStorage.setItem('userToken', response.data.Token);
           AsyncStorage.setItem('userInfo', JSON.stringify(decoded));
           console.log('decoded', decoded);
@@ -61,7 +61,7 @@ export const AuthProvider = ({children}) => {
       setisLoading(true);
       let userInfo = await AsyncStorage.getItem('userInfo');
       let userToken = await AsyncStorage.getItem('userToken');
-      console.log('without stringify...........', userInfo);
+      console.log('without stringify...........', await userInfo);
       userInfo = JSON.parse(userInfo);
       console.log('user info in login function in authcontext', userInfo);
       console.log('user Token in login function in authcontext', userToken);
@@ -94,6 +94,8 @@ export const AuthProvider = ({children}) => {
         logout,
         switchToSkillProvider,
         switchClient,
+        setisLoading,
+        setuserInfo,
         isLoading,
         change,
         userToken,
