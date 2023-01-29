@@ -37,10 +37,6 @@ export default function Home({navigation}) {
             item => item.userid !== userInfo._id && item.createdby === 'client',
           ),
         );
-        console.log(
-          responseJson,
-          'response in getting all contract from client ',
-        );
       })
       .catch(error => {
         console.error(error);

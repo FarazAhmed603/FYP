@@ -43,7 +43,7 @@ export default function Home({navigation}) {
         );
       })
       .catch(error => {
-        console.error(error);
+        console.error(error, 'error sms');
       });
   }, []);
 
