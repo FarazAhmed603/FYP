@@ -41,7 +41,6 @@ export default function Home({navigation}) {
               item.userid !== userInfo._id && item.createdby === 'skprovider',
           ),
         );
-        console.log(responseJson);
       })
       .catch(error => {
         console.error(error);
