@@ -7,8 +7,7 @@ import {
   StyleSheet,
   Text,
   ScrollView,
-,
-  ScrollView,
+
 } from 'react-native';
 
 import SettingComponent from '../Components/SettingComponent';

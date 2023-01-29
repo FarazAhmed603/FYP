@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-//import Button from './Button';
+import Button from './Button';
 
 const Heading = (props, { navigation }) => {
   const { editAble, seteditAble, update } = props;
@@ -11,20 +11,28 @@ const Heading = (props, { navigation }) => {
         <Text style={styles.headtext}> {props.heading} </Text>
         {
           editAble.body ? (
-            <View style={{ marginLeft: 231, marginTop: 8 }}>
+            <View style={{
+              marginLeft: 237, borderRadius: 4, borderColor: '#808080', margin: 5,
+              borderWidth: 4, backgroundColor: '#808080', alignContent: 'center', justifyContent: 'center',
+              paddingLeft: 5, paddingRight: 5, paddingBottom: 5
+            }}>
               <TouchableOpacity onPress={() => {
                 seteditAble({ ...editAble, body: false })
                 update()
               }}>
-                <Text style={{ fontSize: 15, textDecorationLine: 'underline' }}>Save</Text>
+                <Text style={{ fontSize: 15, color: 'white' }}>Save</Text>
               </TouchableOpacity>
             </View>
           ) : (
-            <View style={{ marginLeft: 237, marginTop: 8 }}>
+            <View style={{
+              marginLeft: 237, borderRadius: 4, borderColor: '#808080', margin: 5,
+              borderWidth: 4, backgroundColor: '#808080', alignContent: 'center', justifyContent: 'center',
+              paddingLeft: 8, paddingRight: 8, paddingBottom: 5
+            }}>
               <TouchableOpacity onPress={() => {
                 seteditAble({ ...editAble, body: true })
               }}>
-                <Text style={{ fontSize: 15, textDecorationLine: 'underline' }}>Edit</Text>
+                <Text style={{ fontSize: 15, color: 'white' }}>Edit</Text>
               </TouchableOpacity>
             </View>
           )
@@ -50,7 +58,6 @@ const styles = StyleSheet.create({
   headtext: {
     fontWeight: 'bold',
     marginTop: 8,
-    marginLeft: 20,
     fontSize: 16,
   },
   inputView: {

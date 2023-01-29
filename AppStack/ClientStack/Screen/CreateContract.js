@@ -19,7 +19,6 @@ import env from '../../../env';
 import axios from 'axios';
 
 export default function CreateContract({ navigation }) {
-  const http = `http://${env.IP}:4000/`;
   const { userInfo } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [valuepicker, setValuepicker] = useState(null);
