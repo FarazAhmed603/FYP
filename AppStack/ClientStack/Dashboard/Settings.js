@@ -1,21 +1,24 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import {
+
   View,
   TouchableOpacity,
   Switch,
   StyleSheet,
   Text,
   ScrollView,
+,
+  ScrollView,
 } from 'react-native';
 
 import SettingComponent from '../Components/SettingComponent';
-import {AuthContext} from '../../../Context/AuthContext';
+import { AuthContext } from '../../../Context/AuthContext';
 
-export default function Settings({navigation}) {
-  const {change} = useContext(AuthContext);
-  const {switchToSkillProvider} = useContext(AuthContext);
+export default function Settings({ navigation }) {
+  const { change } = useContext(AuthContext);
+  const { switchToSkillProvider } = useContext(AuthContext);
   const [isEnabled, setisEnabled] = useState(change);
-  const {logout} = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
 
   console.log('i an ub setting');
 
@@ -81,7 +84,7 @@ export default function Settings({navigation}) {
             <Text style={styles.itemText}>Switch to seller mode</Text>
           </View>
           <Switch
-            trackColor={{false: 'lightgreen', true: 'lightgrey'}}
+            trackColor={{ false: 'lightgreen', true: 'lightgrey' }}
             thumbColor={isEnabled ? 'grey' : 'grey'}
             onValueChange={toggleSwitch}
             value={isEnabled}

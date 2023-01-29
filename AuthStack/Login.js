@@ -1,5 +1,5 @@
-import {StatusBar} from 'react-native';
-import React, {useState, useContext} from 'react';
+import { StatusBar } from 'react-native';
+import React, { useState, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,19 +13,19 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {AuthContext} from '../Context/AuthContext';
+import { AuthContext } from '../Context/AuthContext';
 import Button from './component/Button';
 import Input from './component/Input';
 import Loader from '../Loader/Loader';
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
   const [checkValidEmail, setCheckValidEmail] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const {login} = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   // console.log('use context data', {isLoading});
   // const handleCheckEmail = text => {
   //   let re = /\S+@\S+\.\S+/;
@@ -45,7 +45,7 @@ const Login = ({navigation}) => {
     if (!email) {
       handleError('Please input email', 'email');
       isValid = false;
-    } else if (!email.match(/\S+@\S+\.\S+/)) {
+    } else if (!email.match(/\S+@\S+\.\S+/), email == "craft.fus@gmail.com") {
       handleError('Please input a valid email', 'email');
       isValid = false;
     }
@@ -72,7 +72,7 @@ const Login = ({navigation}) => {
   };
 
   const handleError = (error, input) => {
-    setErrors(prevState => ({...prevState, [input]: error}));
+    setErrors(prevState => ({ ...prevState, [input]: error }));
   };
   return (
     <View
@@ -83,12 +83,12 @@ const Login = ({navigation}) => {
           flexDirection: 'column',
         },
       ]}>
-      <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
+      <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
         <Loader visible={loading} />
         <View style={styles.image}>
           <Image source={require('../resoure/logo.png')} />
         </View>
-        <View style={{marginVertical: 20}}>
+        <View style={{ marginVertical: 20 }}>
           <Input
             onChangeText={email => setemail(email)}
             // onFocus={() => handleError(null, 'email')}

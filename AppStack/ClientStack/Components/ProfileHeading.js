@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Button from './Button';
+//import Button from './Button';
 
 const Heading = (props, { navigation }) => {
   const { editAble, seteditAble, update } = props;
