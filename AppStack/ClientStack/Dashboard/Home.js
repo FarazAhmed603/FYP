@@ -103,7 +103,7 @@ export default function Home({navigation}) {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1}}>
       {!errror && (
         <View>
           <View style={styles.textInputStyle}>
