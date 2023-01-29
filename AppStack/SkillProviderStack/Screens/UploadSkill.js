@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 export default function UploadSkill({navigation}) {
   const [open, setOpen] = useState(false);
   const [valuepicker, setValuepicker] = useState(null);
+  const [address, setaddress] = useState();
   const [value, setValue] = useState(null);
   const [description, setdescription] = useState('');
   const [title, settitle] = useState('');
@@ -60,17 +61,13 @@ export default function UploadSkill({navigation}) {
         onChangeText={description => setdescription(description)}
       />
 
-      <View style={styles.inputView}>
-        <Text style={styles.TextInput}>Location</Text>
-        <TouchableOpacity>
-          <Icon
-            style={{marginRight: 20}}
-            name="map-marker"
-            size={23}
-            color="black"
-          />
-        </TouchableOpacity>
-      </View>
+      <Text style={styles.categoryTitle}>Address</Text>
+      <TextInput
+        style={styles.TextInput1}
+        placeholder="e.g house xyz                                         "
+        placeholderTextColor="grey"
+        onChangeText={address => setaddress(address)}
+      />
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.goBack()}>

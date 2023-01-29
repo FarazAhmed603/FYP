@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,8 +9,36 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
+import env from '../../../env';
 
 const HomeComponent = props => {
+  const [image, setimage] = useState();
+  const [id, setid] = useState(props.id);
+  const request = env.IP + 'user/' + id;
+
+  // const getuser = () => {
+  //   try {
+  //     axios
+  //       .get(request)
+  //       .then(res => {
+  //         console.log('console res ', res.data.profile);
+  //         let data = JSON.stringify(res.data.profile);
+  //         setimage(data);
+  //         console.log(id, '\n', image);
+  //       })
+  //       .catch(err => {
+  //         console.log(err);
+  //       });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getuser();
+  // }, []);
+
   return (
     <View style={{borderRadius: 10}}>
       <View style={styles.inputView}>
@@ -28,6 +56,9 @@ const HomeComponent = props => {
         </View>
         <View style={styles.inputView3}>
           <Text style={styles.email} numberOfLines={1} ellipsizeMode="tail">
+            {props.category}
+          </Text>
+          <Text style={styles.email1} numberOfLines={1} ellipsizeMode="tail">
             {props.title}
           </Text>
           <Text style={styles.email1} numberOfLines={1} ellipsizeMode="tail">
@@ -50,7 +81,7 @@ const HomeComponent = props => {
 const styles = StyleSheet.create({
   inputView: {
     flexDirection: 'row',
-    height: 70,
+    height: 85,
   },
   inputView1: {
     width: '20%',

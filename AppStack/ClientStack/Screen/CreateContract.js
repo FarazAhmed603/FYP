@@ -149,7 +149,7 @@ export default function CreateContract({navigation}) {
         <Text style={styles.categoryTitle}>Title</Text>
         <TextInput
           style={styles.TextInput1}
-          maxLength={30}
+          maxLength={50}
           placeholder="e.g Clean house                                         "
           placeholderTextColor="grey"
           onChangeText={title => settitle(title)}

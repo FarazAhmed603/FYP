@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,8 +9,32 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
+import env from '../../../env';
 
 const HomeComponent = props => {
+  // const [image, setimage] = useState();
+  // const [id, setid] = useState(props.id);
+  // const [userdata, setuserdata] = useState();
+
+  // const getUserName = () => {
+  //   console.log(id);
+  //   const request = env.IP + 'user/' + id;
+  //   let getreq = request;
+  //   axios
+  //     .get(getreq)
+  //     .then(res => {
+  //       let data = res.data;
+  //       setuserdata(data);
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   getUserName();
+  // }, []);
   return (
     <View style={{borderRadius: 10}}>
       <View style={styles.inputView}>
@@ -27,14 +51,14 @@ const HomeComponent = props => {
           </TouchableOpacity>
         </View>
         <View style={styles.inputView3}>
-          <Text style={styles.email} numberOfLines={1} ellipsizeMode="tail">
-            {props.title}{' '}
+          <Text style={styles.category} numberOfLines={1} ellipsizeMode="tail">
+            {props.category}
           </Text>
           <Text style={styles.email1} numberOfLines={1} ellipsizeMode="tail">
-            {props.description} I have 2 room jbaso
+            {props.title}
           </Text>
           <Text style={styles.email1} numberOfLines={1} ellipsizeMode="tail">
-            {props.location} Lahore
+            {props.location} lahore
           </Text>
         </View>
         <View style={styles.inputView2}>
@@ -73,6 +97,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 5,
     fontSize: 16,
+  },
+  category: {
+    fontWeight: 'bold',
+    marginLeft: 5,
+    fontSize: 16,
+    color: 'brown',
   },
   email1: {
     marginLeft: 5,

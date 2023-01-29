@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 
 // import all the components we are going to use
 import {
@@ -14,19 +14,29 @@ import {
 import HomeComponent from '../Component/HomeComponent';
 import Icon from 'react-native-vector-icons/Fontisto';
 import env from '../../../env';
+import {AuthContext} from '../../../Context/AuthContext';
 
 export default function Home({navigation}) {
   const request = env.IP + 'getcontract';
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
+  const {userInfo} = useContext(AuthContext);
 
   useEffect(() => {
     fetch(request)
       .then(response => response.json())
       .then(responseJson => {
-        setFilteredDataSource(responseJson);
-        setMasterDataSource(responseJson);
+        setFilteredDataSource(
+          responseJson.filter(
+            item => item.userid !== userInfo._id && item.createdby === 'client',
+          ),
+        );
+        setMasterDataSource(
+          responseJson.filter(
+            item => item.userid !== userInfo._id && item.createdby === 'client',
+          ),
+        );
         console.log(
           responseJson,
           'response in getting all contract from client ',
@@ -44,8 +54,8 @@ export default function Home({navigation}) {
       // Filter the masterDataSource
       // Update FilteredDataSource
       const newData = masterDataSource.filter(function (item) {
-        const itemData = item.title
-          ? item.title.toUpperCase()
+        const itemData = item.category
+          ? item.category.toUpperCase()
           : ''.toUpperCase();
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
@@ -81,6 +91,8 @@ export default function Home({navigation}) {
             description={item.description}
             location={item.location}
             budget={item.budget}
+            category={item.category}
+            id={item.userid}
           />
         </TouchableOpacity>
       </View>
@@ -98,7 +110,7 @@ export default function Home({navigation}) {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView>
       <View>
         <View style={styles.textInputStyle}>
           <Icon

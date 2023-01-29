@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,9 +9,15 @@ import {
   TextInput,
   Linking,
 } from 'react-native';
-import ProfileHeading from '../Components/ProfileHeading';
+
+import ContractHeading from '../Components/ContractHeading';
+import env from '../../../env';
+import axios from 'axios';
+
 export default function SkillProviderDetail({navigation, route}) {
   const [press, setpress] = useState(false);
+  const [image, setimage] = useState();
+  const [userdata, setuserdata] = useState();
 
   const dialCall = () => {
     let phoneNumber = '';
@@ -24,16 +30,8 @@ export default function SkillProviderDetail({navigation, route}) {
 
     Linking.openURL(phoneNumber);
   };
+  console.log('........................... user data', userdata);
   return (
-    // <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-    //   <Text
-    //     onPress={() => alert('This is the "Home" screen.')}
-    //     style={{fontSize: 26, fontWeight: 'bold'}}>
-    //     SkillProviderDetail Screen
-    //   </Text>
-    //   <Text>{route.params.id}</Text>
-    //   <Text>{route.params.title}</Text>
-    // </View>
     <View style={{flex: 1, backgroundColor: '#FFF', margin: 10}}>
       <View
         style={{
@@ -62,22 +60,24 @@ export default function SkillProviderDetail({navigation, route}) {
           backgroundColor: 'white',
           alignItems: 'center',
         }}>
-        <Text style={{fontWeight: 'bold', fontSize: 25}}>Faraz Ahmed</Text>
+        <Text style={{fontWeight: 'bold', fontSize: 25}}>
+          {/* {userdata.firstname} {userdata.lastname} */}
+        </Text>
       </View>
       <ScrollView>
-        <ProfileHeading heading="About" />
+        <ContractHeading heading="About" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.title}
         </Text>
-        <ProfileHeading heading="Skill" />
+        <ContractHeading heading="Skill" />
+        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+          {route.params.category}
+        </Text>
+        <ContractHeading heading="Description" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.title}
         </Text>
-        <ProfileHeading heading="Description" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
-          {route.params.title}
-        </Text>
-        <ProfileHeading heading="Location" />
+        <ContractHeading heading="Location" />
         <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.title}
         </Text>
