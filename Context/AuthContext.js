@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
       console.log('without stringify...........', await userInfo);
       userInfo = JSON.parse(userInfo);
       console.log('user info in login function in authcontext', userInfo);
-      console.log('user Token in login function in authcontext', userToken);
+      console.log('user Token in login function in authcontext\n\t\t', userToken);
       if (userToken) {
         setUserToken(userToken);
         setuserInfo(userInfo);
