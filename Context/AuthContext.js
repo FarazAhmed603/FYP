@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState('');
   const [change, setchange] = useState(true);
   const [userInfo, setuserInfo] = useState('');
-  const [ID, setID] = useState();
+
 
   const login = (Email, Password) => {
     console.log('in login fun authContext');
@@ -23,20 +23,7 @@ export const AuthProvider = ({ children }) => {
         email: Email,
         password: Password,
       })
-      .then(function (response) {
-        console.log('response in login function in authContext');
-        let token = response.data.Token;
-        let decoded = jwt_decode(token);
-        if (decoded) {
-          setUserToken(response.data.Token);
-          setuserInfo(decoded);
-          AsyncStorage.setItem('userToken', response.data.Token);
-          AsyncStorage.setItem('userInfo', JSON.stringify(decoded));
-          console.log('decoded', decoded);
-
-          console.log('user info while login', userInfo);
-        }
-      })
+      .then((response) => setresponse(response))
       .catch(function (error) {
         console.log(error);
       });
@@ -44,15 +31,34 @@ export const AuthProvider = ({ children }) => {
     setisLoading(false);
   };
 
-  const logout = () => {
+  const setresponse = async (response) => {
+    console.log('response in login function in authContext');
+    let token = response.data.Token;
+    let decoded = await jwt_decode(token);
+    if (decoded) {
+      await setUserToken(response.data.Token);
+      await setuserInfo(decoded);
+      await AsyncStorage.setItem('userToken', response.data.Token);
+      await AsyncStorage.setItem('userInfo', JSON.stringify(decoded));
+      console.log('decoded', decoded);
+      console.log('user info while login', userInfo);
+    }
+  }
+
+  const logout = async () => {
     console.log('in logout function in authContext');
-    setisLoading(true);
-    setUserToken(null);
-    AsyncStorage.removeItem('userInfo');
-    AsyncStorage.removeItem('userToken');
+    await setisLoading(true);
+    await setUserToken(null);
+    AsyncStorage.removeItem('userInfo')
+      .then(() => AsyncStorage.removeItem('userToken')
+        .then(() => AsyncStorage.clear()
+          .then(() => {
+            setuserInfo();
+            setUserToken();
+          })))
     // AsyncStorage.clear();
-    console.log('aysnc storage clear now');
-    setisLoading(false);
+
+    await setisLoading(false);
   };
 
   const isLoggedIn = async () => {
@@ -82,6 +88,7 @@ export const AuthProvider = ({ children }) => {
   const switchClient = () => {
     setchange(true);
   };
+
 
   useEffect(() => {
     isLoggedIn();
