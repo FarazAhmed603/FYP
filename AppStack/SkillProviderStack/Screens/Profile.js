@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useContext } from 'react';
 import {
   SafeAreaView,
@@ -309,7 +310,11 @@ export default function Profile({ navigation }) {
                   }
                 />
               ) : (
-                <Text style={styles.TextInput}> {userInfo.phone}</Text>
+                <Text style={{
+                  marginTop: 6,
+                  height: 43,
+                  color: !userInfo.phone ? "grey" : "black"
+                }}> {!userInfo.phone ? "Press edit to add phone number" : userInfo.phone}</Text>
               )}
             </View>
           </View>
@@ -347,6 +352,7 @@ export default function Profile({ navigation }) {
               {isEditMode.body ? (
                 <TextInput
                   style={{
+                    paddingLeft: 5,
                     marginRight: 15,
                     backgroundColor: '#FFF',
                     borderRadius: 10,
@@ -378,13 +384,13 @@ export default function Profile({ navigation }) {
               ) : (
                 <Text
                   style={{
-                    marginTop: 6,
+                    marginVertical: 10,
                     height: height,
                     width: 300,
-                    color: 'black',
+                    paddingLeft: 5,
+                    color: userInfo.description ? "black" : "grey",
                   }}>
-                  {userInfo.description}
-                </Text>
+                  {!userInfo.description ? "Press edit to add education" : userInfo.description}</Text>
               )}
             </View>
           </View>
@@ -415,12 +421,15 @@ export default function Profile({ navigation }) {
                     marginRight: 15,
                     backgroundColor: '#FFF',
                     borderRadius: 10,
+                    paddingLeft: 5,
                     borderColor: '#C0C0C0',
                     borderWidth: 1,
                     width: 300,
                     height: 36,
                   }}
+
                   placeholder="enter location"
+
                   value={data.location}
                   onChangeText={e =>
                     setData({
@@ -430,12 +439,15 @@ export default function Profile({ navigation }) {
                   }
                 />
               ) : (
-                <Text style={styles.TextInput}> {userInfo.location}</Text>
+                <Text style={{
+                  marginTop: 6,
+                  height: 43,
+                  color: !userInfo.location ? "grey" : "black"
+                }}> {!userInfo.location ? "Press edit to add Location" : userInfo.location}</Text>
               )}
             </View>
           </View>
           {/*--------------------CNIC---------------------- */}
-
           <View>
             <View style={styles.inputView}>
               <View style={{ flexDirection: 'column' }}>
@@ -464,6 +476,7 @@ export default function Profile({ navigation }) {
                     borderRadius: 10,
                     borderColor: '#C0C0C0',
                     borderWidth: 1,
+                    paddingLeft: 5,
                     width: 300,
                     height: 36,
                   }}
@@ -477,9 +490,11 @@ export default function Profile({ navigation }) {
                   }
                 />
               ) : (
-
-                <Text style={styles.TextInput}> {userInfo.cnic}</Text>
-
+                <Text style={{
+                  marginTop: 6,
+                  height: 43,
+                  color: !userInfo.cnic ? "grey" : "black"
+                }}> {!userInfo.cnic ? "Press edit to add CNIC" : userInfo.cnic}</Text>
               )}
             </View>
           </View>
@@ -507,6 +522,7 @@ export default function Profile({ navigation }) {
                 <TextInput
                   style={{
                     marginRight: 15,
+                    paddingLeft: 5,
                     backgroundColor: '#FFF',
                     borderRadius: 10, borderColor: '#C0C0C0', borderWidth: 1,
                     width: 300, height: 36,
@@ -516,7 +532,11 @@ export default function Profile({ navigation }) {
                   onChangeText={e => setData({ ...data, education: e, })}
                 />
               ) : (
-                <Text style={styles.TextInput}> {userInfo.education}</Text>
+                <Text style={{
+                  marginTop: 6,
+                  height: 43,
+                  color: !userInfo.education ? "grey" : "black"
+                }}> {!userInfo.education ? "Press edit to add education" : userInfo.education}</Text>
               )}
             </View>
           </View>
@@ -586,17 +606,26 @@ export default function Profile({ navigation }) {
               //</View>
             ) : (
               <View style={{ flexDirection: 'row' }}>
-                {data.skill.map((item, index) => {
-                  return <Text
-                    key={index}
-                    style={styles.skills}>{item}{data.skill[index + 1] ? "," : ""} </Text>
-                })}
+                {userInfo.skill[0] ?
+                  (
+                    data.skill.map((item, index) => {
+                      return <Text
+                        key={index}
+                        style={styles.skills}>{item}
+                        {data.skill[index + 1] ? "," : ""}
+                      </Text>
+                    })
+                  ) : (
+                    <Text style={{
+                      marginTop: 15,
+                      height: 43,
+                      color: "grey"
+                    }}>  Press edit to add skills </Text>
+                  )
+                }
               </View>
             )}
-
-
           </View>
-
         </View>
       </ScrollView >
 
@@ -687,7 +716,7 @@ const styles = StyleSheet.create({
   TextInput: {
     marginTop: 6,
     height: 43,
-    color: 'black',
+    color: "black"
   },
   inputouter: {
     height: 44,
@@ -699,6 +728,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 10,
     borderColor: '#C0C0C0',
+    paddingLeft: 4,
     borderWidth: 1,
     width: 110,
     height: 36,

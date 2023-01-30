@@ -9,11 +9,7 @@ const Heading = (props, { navigation }) => {
         <Text style={styles.headtext}> {props.heading} </Text>
         {
           editAble.body ? (
-            <View style={{
-              marginLeft: 237, borderRadius: 4, borderColor: '#808080', margin: 5,
-              borderWidth: 4, backgroundColor: '#808080', alignContent: 'center', justifyContent: 'center',
-              paddingLeft: 5, paddingRight: 5, paddingBottom: 5
-            }}>
+            <View style={styles.butt}>
               <TouchableOpacity onPress={() => {
                 seteditAble({ ...editAble, body: false })
                 update()
@@ -22,11 +18,7 @@ const Heading = (props, { navigation }) => {
               </TouchableOpacity>
             </View>
           ) : (
-            <View style={{
-              marginLeft: 237, borderRadius: 4, borderColor: '#808080', margin: 5,
-              borderWidth: 4, backgroundColor: '#808080', alignContent: 'center', justifyContent: 'center',
-              paddingLeft: 8, paddingRight: 8, paddingBottom: 5
-            }}>
+            <View style={styles.butt}>
               <TouchableOpacity onPress={() => {
                 seteditAble({ ...editAble, body: true })
               }}>
@@ -44,7 +36,10 @@ const Heading = (props, { navigation }) => {
 const styles = StyleSheet.create({
 
   butt: {
-    color: 'black'
+    marginLeft: 237, borderRadius: 4, borderColor: '#808080', margin: 5,
+    borderWidth: 4, backgroundColor: '#808080',
+    alignContent: 'center', justifyContent: 'center',
+    padding: 5
   },
   heading: {
     flexDirection: 'row',

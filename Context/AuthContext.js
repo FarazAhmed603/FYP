@@ -23,7 +23,11 @@ export const AuthProvider = ({ children }) => {
         email: Email,
         password: Password,
       })
-      .then((response) => setresponse(response))
+      .then((response) => setresponse(response)
+        .then(() => {
+          setisLoading(false)
+
+        }))
       .catch(function (error) {
         console.log(error);
       });
@@ -36,12 +40,12 @@ export const AuthProvider = ({ children }) => {
     let token = response.data.Token;
     let decoded = await jwt_decode(token);
     if (decoded) {
+      setisLoading(true);
       await setUserToken(response.data.Token);
       await setuserInfo(decoded);
       await AsyncStorage.setItem('userToken', response.data.Token);
       await AsyncStorage.setItem('userInfo', JSON.stringify(decoded));
       console.log('decoded', decoded);
-      console.log('user info while login', userInfo);
     }
   }
 
