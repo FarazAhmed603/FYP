@@ -54,7 +54,7 @@ const Login = ({ navigation }) => {
       handleError('Please input password', 'password');
       isValid = false;
     } else if (password.length < 8) {
-      handleError('Min password length of 8 ', 'password');
+      handleError('Min password length of 8 ', ' password');
       isValid = false;
     }
 

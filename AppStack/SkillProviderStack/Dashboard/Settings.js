@@ -7,14 +7,12 @@ export default function Settings({navigation, route}) {
   const {change} = useContext(AuthContext);
   const {switchClient} = useContext(AuthContext);
   const [isEnabled, setisEnabled] = useState(change);
+  //console.log('i an skillprovider setting');
   const {logout} = useContext(AuthContext);
   console.log('i an skillprovider setting');
   const toggleSwitch = () => {
     setisEnabled(previousState => !previousState);
-    if (isEnabled) {
-      console.log(isEnabled);
-    } else {
-      console.log(isEnabled);
+    if (!isEnabled) {
       switchClient();
     }
   };

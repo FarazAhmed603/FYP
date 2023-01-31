@@ -18,6 +18,7 @@ export default function Settings({navigation}) {
   const [isEnabled, setisEnabled] = useState(change);
   const {logout} = useContext(AuthContext);
   const {userInfo} = useContext(AuthContext);
+  const {logout} = useContext(AuthContext);
 
   console.log('i an ub setting');
 
