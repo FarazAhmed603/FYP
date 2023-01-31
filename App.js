@@ -9,7 +9,7 @@ import { AuthProvider } from './Context/AuthContext';
 export default function App() {
   useEffect(() => {
     messaging().getToken(firebase.app().options.messagingSenderId).then((token) => {
-      console.log('\n \t\tTooken:  ', token)
+      console.log('\n \t\tTooken:  ', token, '\n\n')
     })
   }, [])
   return (
