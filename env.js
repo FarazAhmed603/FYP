@@ -1,4 +1,4 @@
 const ENV = {
-  IP: 'http://5ad4-182-178-246-124.ngrok.io/',
+  IP: 'http://3964-110-39-25-94.ngrok.io/',
 };
 export default ENV;
