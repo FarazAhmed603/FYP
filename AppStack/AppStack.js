@@ -29,8 +29,8 @@ const ClientStack = props => {
   const { change } = useContext(AuthContext);
   const [names, setname] = useState(change);
   const navigation = useNavigation();
-  console.log('value of change from context in appstack', change);
-  console.log('i am here in appstack');
+  // console.log('value of change from context in appstack', change);
+  // console.log('i am here in appstack');
   return (
     <>
       {change ? (

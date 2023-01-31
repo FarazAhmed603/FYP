@@ -165,7 +165,7 @@ const ChangePassword = ({ navigation }) => {
 
   const { userInfo } = useContext(AuthContext);
 
-  console.log('userinfo in change password', userInfo.email);
+  //console.log('userinfo in change password', userInfo.email);
 
   const createuser = () => {
     try {

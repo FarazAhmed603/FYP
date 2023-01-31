@@ -1,19 +1,16 @@
-import React, {useState, useContext} from 'react';
-import {View, TouchableOpacity, Switch, StyleSheet, Text} from 'react-native';
-import {AuthContext} from '../../../Context/AuthContext';
+import React, { useState, useContext } from 'react';
+import { View, TouchableOpacity, Switch, StyleSheet, Text } from 'react-native';
+import { AuthContext } from '../../../Context/AuthContext';
 import SettingComponent from '../Component/SettingComponent';
 
-export default function Settings({navigation, route}) {
-  const {change} = useContext(AuthContext);
-  const {switchClient} = useContext(AuthContext);
+export default function Settings({ navigation, route }) {
+  const { change } = useContext(AuthContext);
+  const { switchClient } = useContext(AuthContext);
   const [isEnabled, setisEnabled] = useState(change);
-  console.log('i an skillprovider setting');
+  //console.log('i an skillprovider setting');
   const toggleSwitch = () => {
     setisEnabled(previousState => !previousState);
-    if (isEnabled) {
-      console.log(isEnabled);
-    } else {
-      console.log(isEnabled);
+    if (!isEnabled) {
       switchClient();
     }
   };
@@ -68,7 +65,7 @@ export default function Settings({navigation, route}) {
           <Text style={styles.itemText}>Switch to client mode</Text>
         </View>
         <Switch
-          trackColor={{false: 'lightgreen', true: 'lightgrey'}}
+          trackColor={{ false: 'lightgreen', true: 'lightgrey' }}
           thumbColor={isEnabled ? 'grey' : 'grey'}
           onValueChange={toggleSwitch}
           value={isEnabled}

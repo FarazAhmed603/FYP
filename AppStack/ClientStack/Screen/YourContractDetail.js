@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import ContractHeading from '../Components/ContractHeading';
 import env from '../../../env';
 import axios from 'axios';
 
-export default function YourContractDetail({navigation, route}) {
+export default function YourContractDetail({ navigation, route }) {
   const [id, setid] = useState(route.params.Uid);
   const [image, setimage] = useState(route.params.profile);
   console.log('contract ID', id);
@@ -27,7 +27,7 @@ export default function YourContractDetail({navigation, route}) {
       .get(getreq)
       .then(res => {
         setuserdata(res.data);
-        console.log(userdata);
+        // console.log(userdata);
       })
       .catch(error => {
         console.log(error);
@@ -45,11 +45,11 @@ export default function YourContractDetail({navigation, route}) {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      {text: 'OK', onPress: () => navigation.goBack()},
+      { text: 'OK', onPress: () => navigation.goBack() },
     ]);
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF', margin: 10}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF', margin: 10 }}>
       <View
         style={{
           //   backgroundColor: 'yellow',
@@ -77,29 +77,29 @@ export default function YourContractDetail({navigation, route}) {
           backgroundColor: 'white',
           alignItems: 'center',
         }}>
-        <Text style={{fontWeight: 'bold', fontSize: 25}}>
+        <Text style={{ fontWeight: 'bold', fontSize: 25 }}>
           {userdata.firstname} {userdata.lastname}
         </Text>
       </View>
       <ScrollView>
         <ContractHeading heading="Category" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+        <Text style={{ marginHorizontal: 20, marginVertical: 10 }}>
           {route.params.category}
         </Text>
         <ContractHeading heading="Title" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+        <Text style={{ marginHorizontal: 20, marginVertical: 10 }}>
           {route.params.title}
         </Text>
         <ContractHeading heading="Description" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+        <Text style={{ marginHorizontal: 20, marginVertical: 10 }}>
           {route.params.description}
         </Text>
         <ContractHeading heading="Loction" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+        <Text style={{ marginHorizontal: 20, marginVertical: 10 }}>
           {route.params.location}
         </Text>
         <ContractHeading heading="Date" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+        <Text style={{ marginHorizontal: 20, marginVertical: 10 }}>
           {route.params.date}
         </Text>
         <ContractHeading heading="Budget" />
@@ -114,7 +114,7 @@ export default function YourContractDetail({navigation, route}) {
         </Text>
 
         <TouchableOpacity style={styles.button} onPress={ConfirmationAlert}>
-          <Text style={{color: 'white'}}>Delete Contract</Text>
+          <Text style={{ color: 'white' }}>Delete Contract</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
