@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (Email, Password) => {
 
     //console.log('in login fun authContext');
-    // setisLoading(true);
+    setisLoading(true);
     const request = env.IP + 'login';
     //console.log('\n\n\t\tToken in login: ', await DeviceToken)
     await axios
@@ -51,7 +51,6 @@ export const AuthProvider = ({ children }) => {
     let token = response.data.Token;
     let decoded = await jwt_decode(token);
     if (decoded) {
-      await setisLoading(true);
       await setUserToken(response.data.Token);
       await setuserInfo(decoded);
       await AsyncStorage.setItem('userToken', response.data.Token);
