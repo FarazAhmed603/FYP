@@ -16,7 +16,6 @@ export default function Settings({navigation}) {
   const {change} = useContext(AuthContext);
   const {switchToSkillProvider} = useContext(AuthContext);
   const [isEnabled, setisEnabled] = useState(change);
-  const {logout} = useContext(AuthContext);
   const {userInfo} = useContext(AuthContext);
   const {logout} = useContext(AuthContext);
 
