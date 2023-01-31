@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Task = props => {
+  const [image, setimage] = useState(props.profile);
   return (
     <View style={{borderRadius: 10}}>
       <View style={styles.inputView}>
@@ -20,7 +21,7 @@ const Task = props => {
             onPress={() => Alert.alert('image clicked')}>
             <Image
               source={{
-                uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
+                uri: image,
               }}
               style={styles.avatar}
             />
@@ -28,14 +29,19 @@ const Task = props => {
         </View>
         <View style={styles.inputView3}>
           <Text style={styles.email} numberOfLines={1} ellipsizeMode="tail">
-            {props.title}{' '}
+            {props.category}
           </Text>
           <Text style={styles.email1} numberOfLines={1} ellipsizeMode="tail">
-            {props.description} I have 2 room jbaso
+            {props.description}
           </Text>
           <Text style={styles.email1} numberOfLines={1} ellipsizeMode="tail">
-            {props.location} Lahore
+            {props.location}
           </Text>
+        </View>
+        <View style={styles.inputView2}>
+          <View>
+            <Text style={styles.text3}>{props.budget}</Text>
+          </View>
         </View>
       </View>
     </View>
@@ -47,6 +53,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 70,
   },
+  inputView2: {
+    width: '30%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
   inputView1: {
     width: '20%',
     backgroundColor: '#fff',
@@ -56,7 +68,7 @@ const styles = StyleSheet.create({
 
   inputView3: {
     backgroundColor: '#fff',
-    width: '80%',
+    width: '55%',
     flexDirection: 'column',
     paddingRight: 20,
   },

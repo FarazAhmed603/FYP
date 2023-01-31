@@ -14,27 +14,23 @@ import env from '../../../env';
 
 const HomeComponent = props => {
   // const [image, setimage] = useState();
-  // const [id, setid] = useState(props.id);
-  // const [userdata, setuserdata] = useState();
+  const [id, setid] = useState(props.id);
+  const [userdata, setuserdata] = useState();
 
-  // const getUserName = () => {
-  //   console.log(id);
+  // const getuserdata = async () => {
   //   const request = env.IP + 'user/' + id;
-  //   let getreq = request;
-  //   axios
-  //     .get(getreq)
-  //     .then(res => {
-  //       let data = res.data;
-  //       setuserdata(data);
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
+  //   try {
+  //     let res = await axios.get(request);
+  //     setuserdata(res.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
   // };
 
   // useEffect(() => {
-  //   getUserName();
+  //   getuserdata();
   // }, []);
+
   return (
     <View style={{borderRadius: 10}}>
       <View style={styles.inputView}>
@@ -55,15 +51,15 @@ const HomeComponent = props => {
             {props.category}
           </Text>
           <Text style={styles.email1} numberOfLines={1} ellipsizeMode="tail">
-            {props.title}
+            {props.description}
           </Text>
           <Text style={styles.email1} numberOfLines={1} ellipsizeMode="tail">
-            {props.location} lahore
+            {props.location}
           </Text>
         </View>
         <View style={styles.inputView2}>
           <View>
-            <Text style={styles.text3}>HIRE</Text>
+            <Text style={styles.text3}>{props.budget}</Text>
           </View>
         </View>
       </View>

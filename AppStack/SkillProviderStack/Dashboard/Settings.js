@@ -7,6 +7,7 @@ export default function Settings({navigation, route}) {
   const {change} = useContext(AuthContext);
   const {switchClient} = useContext(AuthContext);
   const [isEnabled, setisEnabled] = useState(change);
+  const {logout} = useContext(AuthContext);
   console.log('i an skillprovider setting');
   const toggleSwitch = () => {
     setisEnabled(previousState => !previousState);
@@ -59,8 +60,9 @@ export default function Settings({navigation, route}) {
         <SettingComponent text="Contact Us" />
       </TouchableOpacity>
       <TouchableOpacity
-      // onPress={() => navigation.navigate('Login')}
-      >
+        onPress={() => {
+          logout();
+        }}>
         <SettingComponent text="Logout" />
       </TouchableOpacity>
       <View style={styles.item1}>

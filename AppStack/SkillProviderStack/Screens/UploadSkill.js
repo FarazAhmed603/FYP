@@ -8,6 +8,7 @@ import {
   TextInput,
   Keyboard,
   multiline,
+  ScrollView,
 } from 'react-native';
 
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -27,14 +28,14 @@ export default function UploadSkill({navigation}) {
   const [budget, setbudget] = useState('');
 
   const [items, setItems] = useState([
-    {value: '1', label: 'painter'},
-    {value: '2', label: 'plumber'},
-    {value: '3', label: 'writer'},
-    {value: '4', label: 'gardener'},
-    {value: '5', label: 'developer'},
-    {value: '6', label: 'teacher'},
-    {value: '7', label: 'electrition'},
-    {value: '8', label: 'housekeeper'},
+    {value: 'painter', label: 'painter'},
+    {value: 'plumber', label: 'plumber'},
+    {value: 'writer', label: 'writer'},
+    {value: 'gardener', label: 'gardener'},
+    {value: 'developer', label: 'developer'},
+    {value: 'teacher', label: 'teacher'},
+    {value: 'electrition', label: 'electrition'},
+    {value: 'housekeeper', label: 'housekeeper'},
   ]);
 
   const validate = () => {
@@ -73,9 +74,8 @@ export default function UploadSkill({navigation}) {
   };
 
   const createcontract = async () => {
-    console.log('createcontract called');
     console.log(
-      '/ndata..........',
+      'data..........',
       id,
       '.....',
       valuepicker,
@@ -95,13 +95,17 @@ export default function UploadSkill({navigation}) {
           category: valuepicker,
           description: description,
           location: address,
+          budget: budget,
         })
         .then(res => {
-          console.log('contract created ', res);
+          console.log('contract created........... ', res);
           navigation.goBack();
         })
         .catch(err => {
-          console.log(err);
+          console.log(
+            err.response.data.message,
+            '..........................................',
+          );
         });
     } catch (e) {
       console.log('/n kuch be', e);
@@ -115,7 +119,9 @@ export default function UploadSkill({navigation}) {
       ) : (
         <Text style={styles.textFailed}> </Text>
       )}
+
       <Text style={styles.categoryTitle}>Skills</Text>
+
       <DropDownPicker
         open={open}
         value={valuepicker}
@@ -124,35 +130,36 @@ export default function UploadSkill({navigation}) {
         setValue={setValuepicker}
         setItems={setItems}
       />
+      <ScrollView>
+        <Text style={styles.categoryTitle}>Description</Text>
+        <Text>max 200 letters</Text>
+        <TextInput
+          style={styles.TextInput2}
+          placeholder="e.g Clean 2 rooms                                          "
+          placeholderTextColor="grey"
+          multiline={multiline || true}
+          maxLength={200}
+          onChangeText={description => setdescription(description)}
+        />
 
-      <Text style={styles.categoryTitle}>Description</Text>
-      <Text>max 200 letters</Text>
-      <TextInput
-        style={styles.TextInput2}
-        placeholder="e.g Clean 2 rooms                                          "
-        placeholderTextColor="grey"
-        multiline={multiline || true}
-        maxLength={200}
-        onChangeText={description => setdescription(description)}
-      />
-
-      <Text style={styles.categoryTitle}>Address</Text>
-      <TextInput
-        style={styles.TextInput1}
-        placeholder="e.g house xyz                                         "
-        placeholderTextColor="grey"
-        onChangeText={address => setaddress(address)}
-      />
-      <Text style={styles.categoryTitle}>Budget</Text>
-      <TextInput
-        style={styles.TextInput1}
-        placeholder="Enter budget in ruppees                                         "
-        placeholderTextColor="grey"
-        onChangeText={budget => setbudget(budget)}
-      />
-      <TouchableOpacity style={styles.button} onPress={validate}>
-        <Text style={{color: 'white'}}>Add SKill</Text>
-      </TouchableOpacity>
+        <Text style={styles.categoryTitle}>Address</Text>
+        <TextInput
+          style={styles.TextInput1}
+          placeholder="e.g house xyz                                         "
+          placeholderTextColor="grey"
+          onChangeText={address => setaddress(address)}
+        />
+        <Text style={styles.categoryTitle}>Budget</Text>
+        <TextInput
+          style={styles.TextInput1}
+          placeholder="Enter budget in ruppees                                         "
+          placeholderTextColor="grey"
+          onChangeText={budget => setbudget(budget)}
+        />
+        <TouchableOpacity style={styles.button} onPress={validate}>
+          <Text style={{color: 'white'}}>Add SKill</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }

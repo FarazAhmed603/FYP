@@ -16,7 +16,6 @@ import axios from 'axios';
 export default function YourContractDetail({navigation, route}) {
   const [id, setid] = useState(route.params.Uid);
   const [image, setimage] = useState(route.params.profile);
-  console.log('contract ID', id);
   const [userdata, setuserdata] = useState('');
 
   const getUserName = () => {
@@ -58,7 +57,7 @@ export default function YourContractDetail({navigation, route}) {
           alignItems: 'center',
           borderColor: 'lightgrey',
           borderWidth: 5,
-          borderRadius: 25,
+          borderRadius: 120,
           marginTop: 15,
           marginHorizontal: 70,
         }}>
@@ -127,7 +126,7 @@ const styles = StyleSheet.create({
     height: '100%',
     // flex: 1,
     borderWidth: 5,
-    borderRadius: 20,
+    borderRadius: 120,
     alignSelf: 'center',
     position: 'absolute',
   },

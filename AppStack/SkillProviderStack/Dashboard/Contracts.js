@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -13,45 +13,56 @@ import {
 } from 'react-native';
 
 // import Task from '../Components/ContractComponent';
+import env from '../../../env';
 import ContractComponent from '../Component/ContractComponent';
+import {AuthContext} from '../../../Context/AuthContext';
 
 export default function Contracts({navigation}) {
-  const [task, setTask] = useState();
-  const [taskItems, setTaskItems] = useState([]);
-  const [search, setSearch] = useState('');
+  const {userInfo} = useContext(AuthContext);
+  const request = env.IP + 'getcontract';
+
   const [filteredDataSource, setFilteredDataSource] = useState([]);
-  const [masterDataSource, setMasterDataSource] = useState([]);
 
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/posts')
+    fetch(request)
       .then(response => response.json())
       .then(responseJson => {
-        setFilteredDataSource(responseJson);
-        // setMasterDataSource(responseJson);
+        setFilteredDataSource(
+          responseJson.filter(
+            item =>
+              item.userid === userInfo._id && item.createdby === 'skprovider',
+          ),
+        );
       })
       .catch(error => {
         console.error(error);
       });
-  }, []);
+  }, [filteredDataSource]);
   const ItemView = ({item}) => {
     return (
       // Flat List Item
       <View style={{margin: 3}}>
         <TouchableOpacity
           onPress={() =>
-            navigation.push('YourContractDetail', {
-              id: item.id,
-              title: item.title,
+            navigation.push('YourContractDetails', {
+              Uid: item.userid,
+              Cid: item._id,
+              category: item.category,
+              description: item.description,
+              location: item.location,
+              budget: item.budget,
+              profile: userInfo.profile,
             })
           }>
-          <ContractComponent title={item.id} description={item.title} />
+          <ContractComponent
+            category={item.category}
+            description={item.description}
+            location={item.location}
+            budget={item.budget}
+            profile={userInfo.profile}
+          />
         </TouchableOpacity>
       </View>
-      // <Text style={styles.itemStyle} onPress={() => getItem(item)}>
-      //   {item.id}
-      //   {'.'}
-      //   {item.title.toUpperCase()}
-      // </Text>
     );
   };
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,11 +10,11 @@ import {
   Alert,
   Linking,
 } from 'react-native';
-import ProfileHeading from '../Component/ProfileHeading';
+import ContractHeading from '../Component/ContractHeading';
 import axios from 'axios';
 import env from '../../../env';
 
-export default function ContractDetails({ navigation, route }) {
+export default function ContractDetails({navigation, route}) {
   const [press, setpress] = useState(false);
   const [id, setid] = useState(route.params.id);
   const [userdata, setuserdata] = useState('');
@@ -45,7 +45,7 @@ export default function ContractDetails({ navigation, route }) {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      { text: 'Yes', onPress: () => setpress(true) },
+      {text: 'Yes', onPress: () => setpress(true)},
     ]);
   const dialCall = () => {
     let phoneNumber = '';
@@ -59,20 +59,20 @@ export default function ContractDetails({ navigation, route }) {
     Linking.openURL(phoneNumber);
   };
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF', margin: 10 }}>
+    <View style={{flex: 1, backgroundColor: '#FFF', margin: 10}}>
       <View
         style={{
           height: '30%',
           alignItems: 'center',
           borderColor: 'lightgrey',
           borderWidth: 5,
-          borderRadius: 25,
+          borderRadius: 120,
           marginTop: 15,
           marginHorizontal: 70,
         }}>
         <Image
           source={{
-            uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
+            uri: userdata.profile,
             // uri: image.uri,
             // uri: 'data:image/jpeg;base64,' + image,
           }}
@@ -85,12 +85,12 @@ export default function ContractDetails({ navigation, route }) {
           backgroundColor: 'white',
           alignItems: 'center',
         }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 25 }}>
+        <Text style={{fontWeight: 'bold', fontSize: 25}}>
           {userdata.firstname} {userdata.lastname}
         </Text>
       </View>
       <ScrollView>
-        <ProfileHeading heading="Category" />
+        <ContractHeading heading="Category" />
         <Text
           style={{
             marginHorizontal: 10,
@@ -98,23 +98,23 @@ export default function ContractDetails({ navigation, route }) {
           }}>
           {route.params.category}
         </Text>
-        <ProfileHeading heading="Title" />
-        <Text style={{ marginHorizontal: 10, marginVertical: 10 }}>
+        <ContractHeading heading="Title" />
+        <Text style={{marginHorizontal: 10, marginVertical: 10}}>
           {route.params.title}
         </Text>
-        <ProfileHeading heading="Description" />
-        <Text style={{ marginHorizontal: 10, marginVertical: 10 }}>
+        <ContractHeading heading="Description" />
+        <Text style={{marginHorizontal: 10, marginVertical: 10}}>
           {route.params.description}
         </Text>
-        <ProfileHeading heading="Loction" />
-        <Text style={{ marginHorizontal: 10, marginVertical: 10 }}>
+        <ContractHeading heading="Loction" />
+        <Text style={{marginHorizontal: 10, marginVertical: 10}}>
           {route.params.location}
         </Text>
-        <ProfileHeading heading="Date" />
-        <Text style={{ marginHorizontal: 10, marginVertical: 10 }}>
+        <ContractHeading heading="Date" />
+        <Text style={{marginHorizontal: 10, marginVertical: 10}}>
           {route.params.date}
         </Text>
-        <ProfileHeading heading="Budget" />
+        <ContractHeading heading="Budget" />
         <Text
           style={{
             marginHorizontal: 10,
@@ -125,7 +125,7 @@ export default function ContractDetails({ navigation, route }) {
           {route.params.budget}
         </Text>
         <TouchableOpacity style={styles.button} onPress={ConfirmationAlert}>
-          <Text style={{ color: 'white' }}>Accept </Text>
+          <Text style={{color: 'white'}}>Accept </Text>
         </TouchableOpacity>
         {press && (
           <Text
@@ -140,7 +140,7 @@ export default function ContractDetails({ navigation, route }) {
         )}
         {press && (
           <TouchableOpacity style={styles.button} onPress={dialCall}>
-            <Text style={{ color: 'white' }}>Call Now</Text>
+            <Text style={{color: 'white'}}>Call Now</Text>
           </TouchableOpacity>
         )}
       </ScrollView>
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     height: '100%',
     // flex: 1,
     borderWidth: 5,
-    borderRadius: 20,
+    borderRadius: 120,
     alignSelf: 'center',
     position: 'absolute',
   },

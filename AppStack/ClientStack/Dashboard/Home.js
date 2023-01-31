@@ -10,8 +10,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import axios from 'axios';
-import ContractComponent from '../Components/ContractComponent';
+
 import HomeComponent from '../Components/HomeComponent';
 import Icon from 'react-native-vector-icons/Fontisto';
 import env from '../../../env';
@@ -78,13 +77,17 @@ export default function Home({navigation}) {
           onPress={() =>
             navigation.navigate('SkillProviderDetail', {
               id: item.userid,
-              title: item.title,
+              description: item.description,
               category: item.category,
+              location: item.location,
+              budget: item.budget,
             })
           }>
           <HomeComponent
             category={item.category}
-            title={item.title}
+            description={item.description}
+            location={item.location}
+            budget={item.budget}
             id={item.userid}
           />
         </TouchableOpacity>

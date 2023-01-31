@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Task = props => {
   const [image, setimage] = useState(props.profile);
+
   return (
     <View style={{borderRadius: 10}}>
       <View style={styles.inputView}>

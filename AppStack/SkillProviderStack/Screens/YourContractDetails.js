@@ -7,51 +7,70 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Alert,
   Linking,
 } from 'react-native';
-
-import ContractHeading from '../Components/ContractHeading';
-import env from '../../../env';
+import ContractHeading from '../Component/ContractHeading';
 import axios from 'axios';
+import env from '../../../env';
 
-export default function SkillProviderDetail({navigation, route}) {
+export default function YourContractDetails({navigation, route}) {
   const [press, setpress] = useState(false);
-  const [id, setid] = useState(route.params.id);
+  const [id, setid] = useState(route.params.Uid);
+  const [Contractid, setContractid] = useState(route.params.Cid);
   const [userdata, setuserdata] = useState('');
+  const [image, setimage] = useState(route.params.profile);
 
-  const getuserdata = async () => {
+  const getUserName = () => {
+    console.log('user id', id);
     const request = env.IP + 'user/' + id;
-    try {
-      let res = await axios.get(request);
-      setuserdata(res.data);
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+    let getreq = request;
+    axios
+      .get(getreq)
+      .then(res => {
+        setuserdata(res.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
-    getuserdata();
+    getUserName();
   }, []);
 
-  const dialCall = () => {
-    let phoneNumber = '';
+  const ConfirmationAlert = () =>
+    Alert.alert('Accept Contract', 'Want to work on contract', [
+      {
+        text: 'No',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'Yes', onPress: () => DelContract()},
+    ]);
 
-    if (Platform.OS === 'android') {
-      phoneNumber = 'tel:${' + userdata.phone + '}';
-    } else {
-      phoneNumber = 'telprompt:${' + userdata.phone + '}';
+  const DelContract = () => {
+    console.log('contract id', Contractid);
+    const request = env.IP + 'deletecontract/' + Contractid;
+    try {
+      axios
+        .delete(request)
+        .then(res => {
+          console.log('contract deleted');
+          navigation.goBack();
+        })
+        .catch(error => {
+          console.log(error, 'error while deleting contract');
+        });
+    } catch (error) {
+      console.log(error);
     }
-
-    Linking.openURL(phoneNumber);
   };
 
   return (
     <View style={{flex: 1, backgroundColor: '#FFF', margin: 10}}>
       <View
         style={{
-          //   backgroundColor: 'yellow',
-          //   margin: 10,
           height: '30%',
           alignItems: 'center',
           borderColor: 'lightgrey',
@@ -62,7 +81,7 @@ export default function SkillProviderDetail({navigation, route}) {
         }}>
         <Image
           source={{
-            uri: userdata.profile,
+            uri: image,
             // uri: image.uri,
             // uri: 'data:image/jpeg;base64,' + image,
           }}
@@ -80,22 +99,24 @@ export default function SkillProviderDetail({navigation, route}) {
         </Text>
       </View>
       <ScrollView>
-        <ContractHeading heading="About" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
-          {userdata.description}
-        </Text>
         <ContractHeading heading="Skill" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+        <Text
+          style={{
+            marginHorizontal: 10,
+            marginVertical: 10,
+          }}>
           {route.params.category}
         </Text>
+
         <ContractHeading heading="Description" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+        <Text style={{marginHorizontal: 10, marginVertical: 10}}>
           {route.params.description}
         </Text>
-        <ContractHeading heading="Location" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+        <ContractHeading heading="Loction" />
+        <Text style={{marginHorizontal: 10, marginVertical: 10}}>
           {route.params.location}
         </Text>
+
         <ContractHeading heading="Budget" />
         <Text
           style={{
@@ -106,25 +127,9 @@ export default function SkillProviderDetail({navigation, route}) {
           }}>
           {route.params.budget}
         </Text>
-        <TouchableOpacity style={styles.button} onPress={() => setpress(true)}>
-          <Text style={{color: 'white'}}>Hire </Text>
+        <TouchableOpacity style={styles.button} onPress={ConfirmationAlert}>
+          <Text style={{color: 'white'}}>Delete Contract</Text>
         </TouchableOpacity>
-        {press && (
-          <Text
-            style={{
-              marginHorizontal: 20,
-              marginVertical: 10,
-              fontWeight: 'bold',
-              fontSize: 30,
-            }}>
-            {userdata.phone}
-          </Text>
-        )}
-        {press && (
-          <TouchableOpacity style={styles.button} onPress={dialCall}>
-            <Text style={{color: 'white'}}>Call Now</Text>
-          </TouchableOpacity>
-        )}
       </ScrollView>
     </View>
   );

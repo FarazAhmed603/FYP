@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   ScrollView,
+  Alert,
 } from 'react-native';
 
 import SettingComponent from '../Components/SettingComponent';
@@ -16,6 +17,7 @@ export default function Settings({navigation}) {
   const {switchToSkillProvider} = useContext(AuthContext);
   const [isEnabled, setisEnabled] = useState(change);
   const {logout} = useContext(AuthContext);
+  const {userInfo} = useContext(AuthContext);
 
   console.log('i an ub setting');
 

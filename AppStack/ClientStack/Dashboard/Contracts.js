@@ -41,7 +41,7 @@ export default function Contracts({navigation}) {
       .catch(error => {
         console.error(error);
       });
-  }, []);
+  }, [filteredDataSource]);
   const ItemView = ({item}) => {
     // console.log(item.profile);
     return (
