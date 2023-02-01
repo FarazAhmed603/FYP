@@ -1,48 +1,54 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+//import Button from './Button';
 
-const Heading = (props, {navigation}) => {
-  const {editAble, seteditAble, update} = props;
+const Heading = (props, { navigation }) => {
+  const { editAble, seteditAble, update, load, setload } = props;
   return (
     <View>
       <View style={styles.heading}>
         <Text style={styles.headtext}> {props.heading} </Text>
-        {editAble.body ? (
-          <View style={styles.butt}>
-            <TouchableOpacity
-              onPress={() => {
-                seteditAble({...editAble, body: false});
-                update();
+        {
+          editAble.body ? (
+            <View style={{
+              marginLeft: 237, borderRadius: 4, borderColor: '#808080', margin: 5,
+              borderWidth: 4, backgroundColor: '#808080', alignContent: 'center', justifyContent: 'center',
+              paddingLeft: 5, paddingRight: 5, paddingBottom: 5
+            }}>
+              <TouchableOpacity onPress={() => {
+
+                update()
+                  .then(() => { seteditAble({ ...editAble, body: false }) })
+                  .then(() => { setload(false); console.log(load); })
               }}>
-              <Text style={{fontSize: 15, color: 'white'}}>Save</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.butt}>
-            <TouchableOpacity
-              onPress={() => {
-                seteditAble({...editAble, body: true});
+                <Text style={{ fontSize: 15, color: 'white' }}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={{
+              marginLeft: 237, borderRadius: 4, borderColor: '#808080', margin: 5,
+              borderWidth: 4, backgroundColor: '#808080', alignContent: 'center', justifyContent: 'center',
+              paddingLeft: 8, paddingRight: 8, paddingBottom: 5
+            }}>
+              <TouchableOpacity onPress={() => {
+                seteditAble({ ...editAble, body: true })
               }}>
-              <Text style={{fontSize: 15, color: 'white'}}>Edit</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+                <Text style={{ fontSize: 15, color: 'white' }}>Edit</Text>
+              </TouchableOpacity>
+            </View>
+          )
+        }
+
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+
   butt: {
-    marginLeft: 237,
-    borderRadius: 4,
-    borderColor: '#808080',
-    margin: 5,
-    borderWidth: 4,
-    backgroundColor: '#808080',
-    alignContent: 'center',
-    justifyContent: 'center',
-    padding: 5,
+    color: 'black'
   },
   heading: {
     flexDirection: 'row',

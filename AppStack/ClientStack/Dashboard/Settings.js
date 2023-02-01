@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -10,16 +10,16 @@ import {
 } from 'react-native';
 
 import SettingComponent from '../Components/SettingComponent';
-import {AuthContext} from '../../../Context/AuthContext';
+import { AuthContext } from '../../../Context/AuthContext';
 
-export default function Settings({navigation}) {
-  const {change} = useContext(AuthContext);
-  const {switchToSkillProvider} = useContext(AuthContext);
+export default function Settings({ navigation }) {
+  const { change } = useContext(AuthContext);
+  const { switchToSkillProvider } = useContext(AuthContext);
   const [isEnabled, setisEnabled] = useState(change);
-  const {userInfo} = useContext(AuthContext);
-  const {logout} = useContext(AuthContext);
+  const { userInfo } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
 
-  console.log('i an ub setting');
+  //console.log('i am ub setting');
 
   const checkuserinfo = () => {
     let chechinfo = true;
@@ -39,13 +39,13 @@ export default function Settings({navigation}) {
     if (!userInfo.cnic) {
       chechinfo = false;
     }
-    if (!userInfo.skill) {
-      chechinfo = false;
-    }
     if (!userInfo.firstname) {
       chechinfo = false;
     }
     if (!userInfo.lastname) {
+      chechinfo = false;
+    }
+    if (userInfo.skill[0] == null) {
       chechinfo = false;
     }
 
@@ -53,7 +53,7 @@ export default function Settings({navigation}) {
       switchToSkillProvider();
     } else {
       setisEnabled(previousState => !previousState);
-      Alert.alert('Profile missing', 'Update your profile ');
+      Alert.alert('Personal data missing', 'Compelete your profile ');
       navigation.navigate('Profile');
     }
   };
@@ -120,7 +120,7 @@ export default function Settings({navigation}) {
             <Text style={styles.itemText}>Switch to seller mode</Text>
           </View>
           <Switch
-            trackColor={{false: 'lightgreen', true: 'lightgrey'}}
+            trackColor={{ false: 'lightgreen', true: 'lightgrey' }}
             thumbColor={isEnabled ? 'grey' : 'grey'}
             onValueChange={toggleSwitch}
             value={isEnabled}

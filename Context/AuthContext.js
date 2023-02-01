@@ -3,7 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import env from '../env';
-import PushNotification from "react-native-push-notification";
+import messaging from '@react-native-firebase/messaging';
+import firebase from '@react-native-firebase/app';
+
 
 export const AuthContext = createContext();
 
@@ -12,37 +14,28 @@ export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState('');
   const [change, setchange] = useState(true);
   const [userInfo, setuserInfo] = useState('');
-  const [DeviceToken, setToken] = useState();
-
-  useEffect(() => {
-    PushNotification.configure({
-      onRegister: function (token) {
-        setToken(token.token);
-      },
-    })
-  }, [])
 
   const login = async (Email, Password) => {
 
-    //console.log('in login fun authContext');
     setisLoading(true);
     const request = env.IP + 'login';
-    //console.log('\n\n\t\tToken in login: ', await DeviceToken)
-    await axios
-      .post(request, {
-        email: Email,
-        password: Password,
-        DeviceToken: DeviceToken,
-      })
-      .then(response =>
-        setresponse(response).then(() => {
-          setisLoading(false);
-        }),
-      )
-      .catch(function (error) {
-        console.log(error);
-      })
-
+    await messaging().getToken(firebase.app().options.messagingSenderId).then((token) => {
+      console.log('token ', token)
+      axios
+        .post(request, {
+          email: Email,
+          password: Password,
+          DeviceToken: token,
+        })
+        .then(response =>
+          setresponse(response).then(() => {
+            setisLoading(false);
+          }),
+        )
+        .catch(function (error) {
+          console.log(error);
+        })
+    });
     // setisLoading(false);
   };
 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,18 +12,20 @@ import {
   TouchableHighlight,
   Alert,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Material from 'react-native-vector-icons/MaterialIcons';
-import {AuthContext} from '../../../Context/AuthContext';
+import { AuthContext } from '../../../Context/AuthContext';
 import ProfileHeading from '../Components/ProfileHeading';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import env from '../../../env';
 import axios from 'axios';
 
-export default function Profile({navigation}) {
-  const {userInfo, setuserInfo} = useContext(AuthContext);
+export default function Profile({ navigation }) {
+  const [isLoading, setIsloading] = useState(false);
+  const { userInfo, setuserInfo } = useContext(AuthContext);
   const {
     _id,
     firstname,
@@ -52,7 +54,7 @@ export default function Profile({navigation}) {
   });
 
   const request = env.IP + 'updateuser/' + userInfo._id;
-  const [isEditMode, setIsEditMode] = useState({name: false, body: false});
+  const [isEditMode, setIsEditMode] = useState({ name: false, body: false });
 
   let val = 60;
   if (description) {
@@ -62,24 +64,28 @@ export default function Profile({navigation}) {
       val = 60;
     }
   }
-  const [height, setHeight] = useState(val);
+  const [Height, setHeight] = useState({ height: val });
 
   //---------------update data---------------
   const updateUserInfo = async () => {
     try {
+      setIsloading(true);
       const response = await axios.put(request, data).catch(err => {
         console.log('\n Data update error :  ', err.response.data.message);
       });
-      await setuserInfo({...userInfo, ...data});
-      await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+      await setuserInfo({ ...userInfo, ...data });
+      await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo))
+        .then(setIsloading(false));
+      console.log("userInfo updated")
     } catch (error) {
       console.log('update error', error);
     }
   };
 
   useEffect(() => {
-    updateUserInfo();
-  }, [data]);
+    updateUserInfo()
+      .then(() => { setIsloading(false); });
+  }, [data.profile]);
 
   //--------api end------------
 
@@ -102,7 +108,7 @@ export default function Profile({navigation}) {
         } else if (res.customButton) {
           console.log('\n User tapped custom button: ', res.customButton);
         } else {
-          let {uri} = res.assets[0];
+          let { uri } = res.assets[0];
           console.log('\n uri value', uri);
           setData({
             ...data,
@@ -116,8 +122,8 @@ export default function Profile({navigation}) {
   };
 
   // useEffect(() => {
-  //   console.log(height);
-  // }, [height]);
+  //   console.log(Height);
+  // }, [Height]);
 
   //--------picker end---------
   const createTwoButtonAlert = () =>
@@ -127,20 +133,20 @@ export default function Profile({navigation}) {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
+      { text: 'OK', onPress: () => console.log('OK Pressed') },
     ]);
 
   //----------------skills-------------------
 
   const [items, setItems] = useState([
-    {label: 'painter', selected: userInfo.skill.includes('painter')},
-    {label: 'plumber', selected: userInfo.skill.includes('plumber')},
-    {label: 'writer', selected: userInfo.skill.includes('writer')},
-    {label: 'gardener', selected: userInfo.skill.includes('gardener')},
-    {label: 'developer', selected: userInfo.skill.includes('developer')},
-    {label: 'teacher', selected: userInfo.skill.includes('teacher')},
-    {label: 'electrition', selected: userInfo.skill.includes('electrition')},
-    {label: 'housekeeper', selected: userInfo.skill.includes('housekeeper')},
+    { label: 'painter', selected: userInfo.skill.includes('painter') },
+    { label: 'plumber', selected: userInfo.skill.includes('plumber') },
+    { label: 'writer', selected: userInfo.skill.includes('writer') },
+    { label: 'gardener', selected: userInfo.skill.includes('gardener') },
+    { label: 'developer', selected: userInfo.skill.includes('developer') },
+    { label: 'teacher', selected: userInfo.skill.includes('teacher') },
+    { label: 'electrition', selected: userInfo.skill.includes('electrition') },
+    { label: 'housekeeper', selected: userInfo.skill.includes('housekeeper') },
   ]);
 
   let count;
@@ -166,22 +172,23 @@ export default function Profile({navigation}) {
   //-----------------------render starts here---------------------------------------------------------------------------------------------
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+      {isLoading ? (<ActivityIndicator size="large" color="lightgrey" animating={isLoading} />) : <></>}
       <ScrollView keyboardDismissMode="on-drag">
         <View style={styles.header}>
           {/*-----------------name---------------*/}
 
-          <View style={{borderBottomColor: 'black'}}>
+          <View style={{ borderBottomColor: 'black' }}>
             {isEditMode.name ? (
               <View style={styles.headerbody}>
                 <Icon
-                  style={{marginTop: 8}}
+                  style={{ marginTop: 8 }}
                   name="account"
                   size={23}
                   color="black"
                 />
+                {/* --------------input name----------- */}
                 <View style={styles.inputouter}>
-                  {/* --------------input name----------- */}
                   <TextInput
                     style={styles.inputInner}
                     placeholder="First name"
@@ -205,11 +212,12 @@ export default function Profile({navigation}) {
                     }
                   />
                 </View>
-                <View style={{marginTop: 10, direction: 'ltr'}}>
+                <View style={{ marginTop: 10, direction: 'ltr' }}>
                   <TouchableOpacity
                     onPress={() => {
-                      setIsEditMode({...isEditMode, name: false});
-                      updateUserInfo();
+                      setIsEditMode({ ...isEditMode, name: false });
+                      updateUserInfo()
+                        .then(() => { setIsloading(false); });
                     }}>
                     <Icon name="pencil-outline" size={23} color="black" />
                   </TouchableOpacity>
@@ -218,7 +226,7 @@ export default function Profile({navigation}) {
             ) : (
               <View style={styles.headerbody}>
                 <Icon
-                  style={{marginTop: 8}}
+                  style={{ marginTop: 8 }}
                   name="account"
                   size={23}
                   color="black"
@@ -228,10 +236,10 @@ export default function Profile({navigation}) {
                 </Text>
 
                 <View
-                  style={{marginLeft: 180, marginTop: 10, direction: 'ltr'}}>
+                  style={{ marginLeft: 180, marginTop: 10, direction: 'ltr' }}>
                   <TouchableOpacity
                     onPress={() => {
-                      setIsEditMode({...isEditMode, name: true});
+                      setIsEditMode({ ...isEditMode, name: true });
                     }}>
                     <Icon name="pencil" size={23} color="black" />
                   </TouchableOpacity>
@@ -242,7 +250,7 @@ export default function Profile({navigation}) {
 
           {/*-----------------email---------------*/}
           <View style={styles.headerbody}>
-            <Icon style={{marginTop: 8}} name="email" size={23} color="black" />
+            <Icon style={{ marginTop: 8 }} name="email" size={23} color="black" />
             <Text style={styles.text}>{userInfo.email} </Text>
           </View>
           {/*-----------------image---------------*/}
@@ -277,9 +285,9 @@ export default function Profile({navigation}) {
 
           <View>
             <View style={styles.inputView}>
-              <View style={{flexDirection: 'column'}}>
+              <View style={{ flexDirection: 'column' }}>
                 <Icon
-                  style={{marginHorizontal: 20, marginTop: 5}}
+                  style={{ marginHorizontal: 20, marginTop: 5 }}
                   name="phone"
                   size={23}
                   color="black"
@@ -325,18 +333,17 @@ export default function Profile({navigation}) {
           {/*-----------------description---------------*/}
           <View>
             <View
-              style={{
+              style={[{
                 flex: 1,
-                height: height,
                 borderBottomWidth: 1,
                 borderColor: '#c2c2a3',
                 flexDirection: 'row',
                 marginTop: 3,
                 marginLeft: 10,
-              }}>
-              <View style={{flexDirection: 'column'}}>
+              }, Height]}>
+              <View style={{ flexDirection: 'column' }}>
                 <Material
-                  style={{marginHorizontal: 20, marginTop: 15}}
+                  style={{ marginHorizontal: 20, marginTop: 15 }}
                   name="description"
                   size={23}
                   color="black"
@@ -354,7 +361,7 @@ export default function Profile({navigation}) {
 
               {isEditMode.body ? (
                 <TextInput
-                  style={{
+                  style={[{
                     paddingLeft: 5,
                     marginRight: 15,
                     backgroundColor: '#FFF',
@@ -362,12 +369,11 @@ export default function Profile({navigation}) {
                     borderColor: '#C0C0C0',
                     borderWidth: 1,
                     width: 300,
-                    height: height,
-                  }}
+                  }, Height]}
                   multiline={true}
                   numberOfLines={0}
-                  placeholder="description"
                   value={data.description}
+                  placeholder="description"
                   onChangeText={e => {
                     setData({
                       ...data,
@@ -381,18 +387,17 @@ export default function Profile({navigation}) {
                         val = 60;
                       }
                     }
-                    setHeight(val);
+                    setHeight({ height: val });
                   }}
                 />
               ) : (
                 <Text
-                  style={{
+                  style={[{
                     marginVertical: 10,
-                    height: height,
                     width: 300,
                     paddingLeft: 5,
                     color: userInfo.description ? 'black' : 'grey',
-                  }}>
+                  }, Height]}>
                   {!userInfo.description
                     ? 'Press edit to add education'
                     : userInfo.description}
@@ -403,9 +408,9 @@ export default function Profile({navigation}) {
           {/*-----------------location---------------*/}
           <View>
             <View style={styles.inputView}>
-              <View style={{flexDirection: 'column'}}>
+              <View style={{ flexDirection: 'column' }}>
                 <Icon
-                  style={{marginHorizontal: 20, marginTop: 4}}
+                  style={{ marginHorizontal: 20, marginTop: 4 }}
                   name="map-marker-account"
                   size={23}
                   color="black"
@@ -460,9 +465,9 @@ export default function Profile({navigation}) {
           {/*--------------------CNIC---------------------- */}
           <View>
             <View style={styles.inputView}>
-              <View style={{flexDirection: 'column'}}>
+              <View style={{ flexDirection: 'column' }}>
                 <Icon
-                  style={{marginHorizontal: 20, marginTop: 4}}
+                  style={{ marginHorizontal: 20, marginTop: 4 }}
                   name="card-account-details-outline"
                   size={23}
                   color="black"
@@ -514,9 +519,9 @@ export default function Profile({navigation}) {
           {/*-----------------education---------------*/}
           <View>
             <View style={styles.inputView}>
-              <View style={{flexDirection: 'column'}}>
+              <View style={{ flexDirection: 'column' }}>
                 <Icon
-                  style={{marginRight: 20, marginLeft: 20, marginTop: 4}}
+                  style={{ marginRight: 20, marginLeft: 20, marginTop: 4 }}
                   name="book-education-outline"
                   size={23}
                   color="black"
@@ -545,7 +550,7 @@ export default function Profile({navigation}) {
                   }}
                   placeholder="Your education"
                   value={data.education}
-                  onChangeText={e => setData({...data, education: e})}
+                  onChangeText={e => setData({ ...data, education: e })}
                 />
               ) : (
                 <Text
@@ -570,9 +575,9 @@ export default function Profile({navigation}) {
               overflow: 'scroll',
               flexDirection: 'row',
             }}>
-            <View style={{flexDirection: 'column'}}>
+            <View style={{ flexDirection: 'column' }}>
               <Icon
-                style={{marginHorizontal: 20, marginTop: 10}}
+                style={{ marginHorizontal: 20, marginTop: 10 }}
                 name="emoticon-cool-outline"
                 size={23}
                 color="black"
@@ -591,12 +596,12 @@ export default function Profile({navigation}) {
               //<View style={{ flexDirection: 'column' }}>
               <FlatList
                 nestedScrollEnabled={true}
-                style={{marginTop: 13}}
+                style={{ marginTop: 13 }}
                 horizontal
                 data={items}
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={item => item.label}
-                renderItem={({item}) => {
+                renderItem={({ item }) => {
                   // if (item.selected) {
                   return (
                     <TouchableOpacity
@@ -606,7 +611,7 @@ export default function Profile({navigation}) {
                             setItems(
                               items.map(i =>
                                 i.label === item.label
-                                  ? {...i, selected: !item.selected}
+                                  ? { ...i, selected: !item.selected }
                                   : i,
                               ),
                             );
@@ -640,7 +645,7 @@ export default function Profile({navigation}) {
               />
             ) : (
               //</View>
-              <View style={{flexDirection: 'row'}}>
+              <View style={{ flexDirection: 'row' }}>
                 {userInfo.skill[0] ? (
                   data.skill.map((item, index) => {
                     return (

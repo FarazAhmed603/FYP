@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -32,7 +32,7 @@ const HomeComponent = props => {
   // }, []);
 
   return (
-    <View style={{borderRadius: 10}}>
+    <View style={{ borderRadius: 10 }}>
       <View style={styles.inputView}>
         <View style={styles.inputView1}>
           <TouchableOpacity
@@ -40,7 +40,7 @@ const HomeComponent = props => {
             onPress={() => Alert.alert('image clicked')}>
             <Image
               source={{
-                uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
+                uri: props.profile,
               }}
               style={styles.avatar}
             />

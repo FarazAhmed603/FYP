@@ -1,9 +1,9 @@
-import React, {useState, useContext} from 'react';
-import {StatusBar, Button} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React, { useState, useContext } from 'react';
+import { StatusBar, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // context
-import {AuthContext} from '../Context/AuthContext';
+import { AuthContext } from '../Context/AuthContext';
 // Client Stack
 import Dashboard from './ClientStack/Dashboard/Dashboard';
 import CreateContract from './ClientStack/Screen/CreateContract';
@@ -16,7 +16,7 @@ import settings from './ClientStack/Dashboard/Settings';
 import SkillProviderDetail from './ClientStack/Screen/SkillProviderDetail';
 import YourContractDetail from './ClientStack/Screen/YourContractDetail';
 import EditContract from './ClientStack/Screen/EditContract';
-import Message from './ClientStack/Screen/Message';
+
 
 // Skill provider stack
 import SkillProviderDashboard from './SkillProviderStack/Dashboard/Dashboard';
@@ -25,11 +25,11 @@ import UploadSkill from './SkillProviderStack/Screens/UploadSkill';
 import SkillProviderProfile from './SkillProviderStack/Screens/Profile';
 import SkillProviderPaymentMethod from './SkillProviderStack/Screens/PaymentMethod';
 import YourContractDetails from './SkillProviderStack/Screens/YourContractDetails';
-import Messages from './SkillProviderStack/Screens/Message';
+
 
 const Stack = createNativeStackNavigator();
 const ClientStack = props => {
-  const {change} = useContext(AuthContext);
+  const { change } = useContext(AuthContext);
   const [names, setname] = useState(change);
   const navigation = useNavigation();
   // console.log('value of change from context in appstack', change);
@@ -41,7 +41,7 @@ const ClientStack = props => {
           <Stack.Screen
             name="dashboard"
             component={Dashboard}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="CreateContract"
@@ -54,20 +54,20 @@ const ClientStack = props => {
           <Stack.Screen
             name="settings"
             component={settings}
-            initialParams={{setname: setname}}
+            initialParams={{ setname: setname }}
           />
           <Stack.Screen
             name="Profile"
             component={Profile}
-            // options={{
-            //   headerRight: () => (
-            //     <Button
-            //       onPress={() => navigation.navigate('Edit')}
-            //       title="Edit"
-            //       color="grey"
-            //     />
-            //   ),
-            // }}
+          // options={{
+          //   headerRight: () => (
+          //     <Button
+          //       onPress={() => navigation.navigate('Edit')}
+          //       title="Edit"
+          //       color="grey"
+          //     />
+          //   ),
+          // }}
           />
           <Stack.Screen name="Verification" component={Verification} />
           <Stack.Screen
@@ -75,7 +75,7 @@ const ClientStack = props => {
             component={SkillProviderDetail}
           />
           <Stack.Screen name="EditContract" component={EditContract} />
-          <Stack.Screen name="Message" component={Message} />
+
           <Stack.Screen
             name="YourContractDetail"
             component={YourContractDetail}
@@ -83,7 +83,7 @@ const ClientStack = props => {
           <Stack.Screen
             name="PaymentMethod"
             component={PaymentMethod}
-            options={{title: 'Payment Method'}}
+            options={{ title: 'Payment Method' }}
           />
           {/* <Stack.Screen name="cnic" component={CnicVerification} /> */}
           <Stack.Screen name="ChangePassword" component={ChangePassword} />
@@ -93,7 +93,7 @@ const ClientStack = props => {
           <Stack.Screen
             name="dashboard"
             component={SkillProviderDashboard}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen name="ContractDetails" component={ContractDetails} />
           <Stack.Screen
@@ -105,9 +105,9 @@ const ClientStack = props => {
           <Stack.Screen
             name="PaymentMethod"
             component={SkillProviderPaymentMethod}
-            options={{title: 'Payment Method'}}
+            options={{ title: 'Payment Method' }}
           />
-          <Stack.Screen name="Message" component={Messages} />
+
         </Stack.Navigator>
       )}
     </>

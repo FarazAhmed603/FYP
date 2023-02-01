@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -10,38 +10,47 @@ import {
   ScrollView,
   SafeAreaView,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 
 // import Task from '../Components/ContractComponent';
 import env from '../../../env';
 import ContractComponent from '../Component/ContractComponent';
-import {AuthContext} from '../../../Context/AuthContext';
+import { AuthContext } from '../../../Context/AuthContext';
 
-export default function Contracts({navigation}) {
-  const {userInfo} = useContext(AuthContext);
+export default function Contracts({ navigation }) {
+  const { userInfo } = useContext(AuthContext);
+  const [isLoading, setIsloading] = useState(false);
+
   const request = env.IP + 'getcontract';
 
   const [filteredDataSource, setFilteredDataSource] = useState([]);
 
-  useEffect(() => {
-    fetch(request)
+  const filtereddata = async () => {
+    setIsloading(true)
+    await fetch(request)
       .then(response => response.json())
       .then(responseJson => {
         setFilteredDataSource(
           responseJson.filter(
-            item =>
-              item.userid === userInfo._id && item.createdby === 'skprovider',
+            item => item.userid === userInfo._id && item.createdby === 'skprovider',
           ),
         );
+        // setMasterDataSource(responseJson);
       })
       .catch(error => {
         console.error(error);
       });
-  }, [filteredDataSource]);
-  const ItemView = ({item}) => {
+  }
+
+  useEffect(() => {
+    filtereddata()
+      .then(() => { setIsloading(false) })
+  }, [])
+  const ItemView = ({ item }) => {
     return (
       // Flat List Item
-      <View style={{margin: 3}}>
+      <View style={{ margin: 3 }}>
         <TouchableOpacity
           onPress={() =>
             navigation.push('YourContractDetails', {
@@ -67,6 +76,7 @@ export default function Contracts({navigation}) {
   };
   return (
     <View style={styles.container}>
+      {isLoading ? (<ActivityIndicator size="large" color="lightgrey" animating={isLoading} />) : <></>}
       <View>
         <FlatList
           data={filteredDataSource}

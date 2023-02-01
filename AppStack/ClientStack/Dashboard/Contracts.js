@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -10,25 +10,29 @@ import {
   ScrollView,
   SafeAreaView,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 
 import Task from '../Components/ContractComponent';
 import env from '../../../env';
-import {AuthContext} from '../../../Context/AuthContext';
+import { AuthContext } from '../../../Context/AuthContext';
 import ContractComponent from '../Components/ContractComponent';
 
-export default function Contracts({navigation}) {
+export default function Contracts({ navigation }) {
+  const [isLoading, setIsloading] = useState(false);
+
   const request = env.IP + 'getcontract';
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
-  const {userInfo} = useContext(AuthContext);
+  const { userInfo } = useContext(AuthContext);
   // console.log('userinfo in client contracts', userInfo._id);
 
-  useEffect(() => {
-    fetch(request)
+  const filtereddata = async () => {
+    setIsloading(true)
+    await fetch(request)
       .then(response => response.json())
       .then(responseJson => {
         setFilteredDataSource(
@@ -41,12 +45,18 @@ export default function Contracts({navigation}) {
       .catch(error => {
         console.error(error);
       });
-  }, [filteredDataSource]);
-  const ItemView = ({item}) => {
+  }
+
+  useEffect(() => {
+    filtereddata()
+      .then(() => { setIsloading(false) })
+  }, [])
+
+  const ItemView = ({ item }) => {
     // console.log(item.profile);
     return (
       // Flat List Item
-      <View style={{margin: 3}}>
+      <View style={{ margin: 3 }}>
         <TouchableOpacity
           onPress={() =>
             navigation.push('YourContractDetail', {
@@ -79,6 +89,7 @@ export default function Contracts({navigation}) {
   };
   return (
     <View style={styles.container}>
+      {isLoading ? (<ActivityIndicator size="large" color="lightgrey" animating={isLoading} />) : <></>}
       <View>
         <FlatList
           data={filteredDataSource}
