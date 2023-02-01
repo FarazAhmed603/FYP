@@ -35,11 +35,11 @@ export default function Settings({navigation, route}) {
       <TouchableOpacity>
         <SettingComponent text="Payment Histroy" />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.push('PaymentMethod')}>
+      {/* <TouchableOpacity onPress={() => navigation.push('PaymentMethod')}>
         <SettingComponent text="Payment methods" />
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <SettingComponent text="Notifications" />
+      </TouchableOpacity> */}
+      <TouchableOpacity onPress={() => navigation.push('Message')}>
+        <SettingComponent text="Message" />
       </TouchableOpacity>
 
       <TouchableOpacity>

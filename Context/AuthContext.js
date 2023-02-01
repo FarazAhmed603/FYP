@@ -1,26 +1,38 @@
-import React, {createContext, useState, useEffect} from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import env from '../env';
+import PushNotification from "react-native-push-notification";
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = ({ children }) => {
   const [isLoading, setisLoading] = useState(false);
   const [userToken, setUserToken] = useState('');
   const [change, setchange] = useState(true);
   const [userInfo, setuserInfo] = useState('');
-  const [ID, setID] = useState();
+  const [DeviceToken, setToken] = useState();
 
-  const login = (Email, Password) => {
+  useEffect(() => {
+    PushNotification.configure({
+      onRegister: function (token) {
+        setToken(token.token);
+      },
+    })
+  }, [])
+
+  const login = async (Email, Password) => {
+
     //console.log('in login fun authContext');
     setisLoading(true);
     const request = env.IP + 'login';
-    axios
+    //console.log('\n\n\t\tToken in login: ', await DeviceToken)
+    await axios
       .post(request, {
         email: Email,
         password: Password,
+        DeviceToken: DeviceToken,
       })
       .then(response =>
         setresponse(response).then(() => {
@@ -29,9 +41,9 @@ export const AuthProvider = ({children}) => {
       )
       .catch(function (error) {
         console.log(error);
-      });
+      })
 
-    setisLoading(false);
+    // setisLoading(false);
   };
 
   const setresponse = async response => {
@@ -39,7 +51,6 @@ export const AuthProvider = ({children}) => {
     let token = response.data.Token;
     let decoded = await jwt_decode(token);
     if (decoded) {
-      setisLoading(true);
       await setUserToken(response.data.Token);
       await setuserInfo(decoded);
       await AsyncStorage.setItem('userToken', response.data.Token);
@@ -50,6 +61,8 @@ export const AuthProvider = ({children}) => {
 
   const logout = async () => {
     //console.log('in logout function in authContext');
+    const request = env.IP + 'logout' + `/${userInfo.email}`;
+    await axios.put(request)
     await setisLoading(true);
     await setUserToken(null);
     AsyncStorage.removeItem('userInfo').then(() =>
@@ -61,7 +74,6 @@ export const AuthProvider = ({children}) => {
       ),
     );
     // AsyncStorage.clear();
-
     await setisLoading(false);
   };
 
@@ -73,7 +85,7 @@ export const AuthProvider = ({children}) => {
       let userToken = await AsyncStorage.getItem('userToken');
       //console.log('without stringify...........', await userInfo);
       userInfo = JSON.parse(userInfo);
-      //console.log('user info in login function in authcontext', userInfo);
+      console.log('user info in login function in authcontext', userInfo);
       //console.log('user Token in login function in authcontext\n\t\t', userToken);
       if (userToken) {
         setUserToken(userToken);

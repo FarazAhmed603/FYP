@@ -7,14 +7,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Contracts from './Contracts';
 import Home from './Home';
 import Settings from './Settings';
-import Message from './Massage';
+import notification from './Notification';
 
 const Tab = createBottomTabNavigator();
 
 const homeName = 'Home';
 const myContractsName = 'Contracts';
 const settingsName = 'Settings';
-const messagesName = 'Messages';
+const Notification = 'notification';
 
 const Dashboard = ({navigation, route}) => {
   return (
@@ -31,10 +31,8 @@ const Dashboard = ({navigation, route}) => {
             iconName = focused ? 'clipboard' : 'clipboard-outline';
           } else if (rn === settingsName) {
             iconName = focused ? 'settings' : 'settings-outline';
-          } else if (rn === messagesName) {
-            iconName = focused
-              ? 'chatbox-ellipses'
-              : 'chatbox-ellipses-outline';
+          } else if (rn === Notification) {
+            iconName = focused ? 'notifications' : 'notifications-outline';
           }
 
           // You can return any component that you like here!
@@ -64,7 +62,7 @@ const Dashboard = ({navigation, route}) => {
           // ),
         }}
       />
-      <Tab.Screen name={messagesName} component={Message} />
+      <Tab.Screen name={Notification} component={notification} />
       <Tab.Screen name={settingsName} component={Settings} />
     </Tab.Navigator>
   );

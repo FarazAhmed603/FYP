@@ -21,11 +21,48 @@ export default function Settings({navigation}) {
 
   console.log('i an ub setting');
 
+  const checkuserinfo = () => {
+    let chechinfo = true;
+
+    if (!userInfo.education) {
+      chechinfo = false;
+    }
+    if (!userInfo.phone) {
+      chechinfo = false;
+    }
+    if (!userInfo.description) {
+      chechinfo = false;
+    }
+    if (!userInfo.location) {
+      chechinfo = false;
+    }
+    if (!userInfo.cnic) {
+      chechinfo = false;
+    }
+    if (!userInfo.skill) {
+      chechinfo = false;
+    }
+    if (!userInfo.firstname) {
+      chechinfo = false;
+    }
+    if (!userInfo.lastname) {
+      chechinfo = false;
+    }
+
+    if (chechinfo) {
+      switchToSkillProvider();
+    } else {
+      setisEnabled(previousState => !previousState);
+      Alert.alert('Profile missing', 'Update your profile ');
+      navigation.navigate('Profile');
+    }
+  };
+
   const toggleSwitch = () => {
     setisEnabled(previousState => !previousState);
     if (isEnabled) {
       console.log('if toggle  true', isEnabled);
-      switchToSkillProvider();
+      checkuserinfo();
     } else {
       console.log('if toggle false ', isEnabled);
     }
@@ -45,18 +82,18 @@ export default function Settings({navigation}) {
         <TouchableOpacity>
           <SettingComponent text="Payment Histroy" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.push('PaymentMethod')}>
+        {/* <TouchableOpacity onPress={() => navigation.push('PaymentMethod')}>
           <SettingComponent text="Payment methods" />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <SettingComponent text="Notifications" />
+        </TouchableOpacity> */}
+        <TouchableOpacity onPress={() => navigation.push('Message')}>
+          <SettingComponent text="Message" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.push('ChangePassword')}>
           <SettingComponent text="Change Password" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.push('Verification')}>
+        {/* <TouchableOpacity onPress={() => navigation.push('Verification')}>
           <SettingComponent text="Verifications" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity>
           <SettingComponent text="About us" />
         </TouchableOpacity>

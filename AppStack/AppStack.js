@@ -16,6 +16,7 @@ import settings from './ClientStack/Dashboard/Settings';
 import SkillProviderDetail from './ClientStack/Screen/SkillProviderDetail';
 import YourContractDetail from './ClientStack/Screen/YourContractDetail';
 import EditContract from './ClientStack/Screen/EditContract';
+import Message from './ClientStack/Screen/Message';
 
 // Skill provider stack
 import SkillProviderDashboard from './SkillProviderStack/Dashboard/Dashboard';
@@ -24,6 +25,7 @@ import UploadSkill from './SkillProviderStack/Screens/UploadSkill';
 import SkillProviderProfile from './SkillProviderStack/Screens/Profile';
 import SkillProviderPaymentMethod from './SkillProviderStack/Screens/PaymentMethod';
 import YourContractDetails from './SkillProviderStack/Screens/YourContractDetails';
+import Messages from './SkillProviderStack/Screens/Message';
 
 const Stack = createNativeStackNavigator();
 const ClientStack = props => {
@@ -73,6 +75,7 @@ const ClientStack = props => {
             component={SkillProviderDetail}
           />
           <Stack.Screen name="EditContract" component={EditContract} />
+          <Stack.Screen name="Message" component={Message} />
           <Stack.Screen
             name="YourContractDetail"
             component={YourContractDetail}
@@ -104,6 +107,7 @@ const ClientStack = props => {
             component={SkillProviderPaymentMethod}
             options={{title: 'Payment Method'}}
           />
+          <Stack.Screen name="Message" component={Messages} />
         </Stack.Navigator>
       )}
     </>
