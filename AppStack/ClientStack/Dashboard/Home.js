@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 
 // import all the components we are going to use
 import {
@@ -15,17 +15,16 @@ import {
 import HomeComponent from '../Components/HomeComponent';
 import Icon from 'react-native-vector-icons/Fontisto';
 import env from '../../../env';
-import { AuthContext } from '../../../Context/AuthContext';
+import {AuthContext} from '../../../Context/AuthContext';
 
-export default function Home({ navigation }) {
-  const { userInfo } = useContext(AuthContext);
+export default function Home({navigation}) {
+  const {userInfo} = useContext(AuthContext);
   const request = env.IP + 'getcontract';
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   const [errror, seterrror] = useState('');
   const [isLoading, setIsloading] = useState(false);
-
 
   const fetchusers = async () => {
     setIsloading(true);
@@ -34,24 +33,27 @@ export default function Home({ navigation }) {
       .then(responseJson => {
         setFilteredDataSource(
           responseJson.filter(
-            item => item.userid !== userInfo._id && item.createdby === 'skprovider',
+            item =>
+              item.userid !== userInfo._id && item.createdby === 'skprovider',
           ),
         );
         setMasterDataSource(
           responseJson.filter(
-            item => item.userid !== userInfo._id && item.createdby === 'skprovider',
+            item =>
+              item.userid !== userInfo._id && item.createdby === 'skprovider',
           ),
         );
       })
       .catch(error => {
         console.error(error);
       });
-  }
+  };
 
   useEffect(() => {
-    fetchusers()
-      .then(() => { setIsloading(false) })
-  }, [])
+    fetchusers().then(() => {
+      setIsloading(false);
+    });
+  }, []);
 
   const searchFilterFunction = text => {
     // Check if searched text is not blank
@@ -76,18 +78,19 @@ export default function Home({ navigation }) {
     }
   };
 
-  const ItemView = ({ item }) => {
+  const ItemView = ({item}) => {
     return (
       // Flat List Item
-      <View style={{ margin: 3 }}>
+      <View style={{margin: 3}}>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('SkillProviderDetail', {
+            navigation.push('SkillProviderDetail', {
               id: item.userid,
               description: item.description,
               category: item.category,
               location: item.location,
               budget: item.budget,
+              Contractid: item._id,
             })
           }>
           <HomeComponent
@@ -113,12 +116,12 @@ export default function Home({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{flex: 1}}>
       {!errror && (
         <View>
           <View style={styles.textInputStyle}>
             <Icon
-              style={{ marginRight: 10, marginTop: 6 }}
+              style={{marginRight: 10, marginTop: 6}}
               name="search"
               size={23}
               color="black"
@@ -130,7 +133,15 @@ export default function Home({ navigation }) {
               placeholder="Search Here"
             />
           </View>
-          {isLoading ? (<ActivityIndicator size="large" color="lightgrey" animating={isLoading} />) : <></>}
+          {isLoading ? (
+            <ActivityIndicator
+              size="large"
+              color="lightgrey"
+              animating={isLoading}
+            />
+          ) : (
+            <></>
+          )}
           <FlatList
             data={filteredDataSource}
             keyExtractor={(item, index) => index.toString()}

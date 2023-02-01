@@ -47,7 +47,11 @@ const Dashboard = ({navigation, route}) => {
       //   style: {padding: 10, height: 70},
       // }}
     >
-      <Tab.Screen name={homeName} component={Home} />
+      <Tab.Screen
+        name={homeName}
+        component={Home}
+        options={{title: 'Client'}}
+      />
       <Tab.Screen
         name={myContractsName}
         component={Contracts}

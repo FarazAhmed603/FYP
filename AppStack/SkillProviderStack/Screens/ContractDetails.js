@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -13,11 +13,35 @@ import {
 import ContractHeading from '../Component/ContractHeading';
 import axios from 'axios';
 import env from '../../../env';
+import {AuthContext} from '../../../Context/AuthContext';
 
 export default function ContractDetails({navigation, route}) {
+  const {userInfo} = useContext(AuthContext);
   const [press, setpress] = useState(false);
   const [id, setid] = useState(route.params.id);
   const [userdata, setuserdata] = useState('');
+  const [contractid, setcontractid] = useState(route.params.Contractid);
+
+  const skrequest = () => {
+    const request = env.IP + 'skrequest';
+    try {
+      axios
+        .post(request, {
+          senderid: userInfo._id,
+          contractid: contractid,
+        })
+        .then(res => {
+          Alert.alert('Request send', 'Soon you will get response ');
+          console.log(res, 'notification send to client');
+          navigation.goBack();
+        })
+        .catch(err => {
+          console.log(err, 'error while hiring a skill provider');
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getUserName = () => {
     console.log(id);
@@ -124,7 +148,7 @@ export default function ContractDetails({navigation, route}) {
           }}>
           {route.params.budget}
         </Text>
-        <TouchableOpacity style={styles.button} onPress={ConfirmationAlert}>
+        <TouchableOpacity style={styles.button} onPress={() => skrequest()}>
           <Text style={{color: 'white'}}>Accept </Text>
         </TouchableOpacity>
         {press && (

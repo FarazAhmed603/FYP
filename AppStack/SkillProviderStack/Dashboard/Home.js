@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 
 // import all the components we are going to use
 import {
@@ -15,16 +15,15 @@ import {
 import HomeComponent from '../Component/HomeComponent';
 import Icon from 'react-native-vector-icons/Fontisto';
 import env from '../../../env';
-import { AuthContext } from '../../../Context/AuthContext';
+import {AuthContext} from '../../../Context/AuthContext';
 
-export default function Home({ navigation }) {
+export default function Home({navigation}) {
   const request = env.IP + 'getcontract';
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
-  const { userInfo } = useContext(AuthContext);
+  const {userInfo} = useContext(AuthContext);
   const [isLoading, setIsloading] = useState(false);
-
 
   const fetchusers = async () => {
     setIsloading(true);
@@ -45,11 +44,12 @@ export default function Home({ navigation }) {
       .catch(error => {
         console.error(error);
       });
-  }
+  };
   useEffect(() => {
-    fetchusers()
-      .then(() => { setIsloading(false) })
-  }, [])
+    fetchusers().then(() => {
+      setIsloading(false);
+    });
+  }, []);
 
   const searchFilterFunction = text => {
     // Check if searched text is not blank
@@ -74,13 +74,13 @@ export default function Home({ navigation }) {
     }
   };
 
-  const ItemView = ({ item }) => {
+  const ItemView = ({item}) => {
     return (
       // Flat List Item
-      <View style={{ margin: 3 }}>
+      <View style={{margin: 3}}>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('ContractDetails', {
+            navigation.push('ContractDetails', {
               category: item.category,
               title: item.title,
               description: item.description,
@@ -88,6 +88,7 @@ export default function Home({ navigation }) {
               date: item.jobdate,
               budget: item.budget,
               id: item.userid,
+              Contractid: item._id,
             })
           }>
           <HomeComponent
@@ -115,11 +116,10 @@ export default function Home({ navigation }) {
 
   return (
     <SafeAreaView>
-
       <View>
         <View style={styles.textInputStyle}>
           <Icon
-            style={{ marginRight: 10, marginTop: 6 }}
+            style={{marginRight: 10, marginTop: 6}}
             name="search"
             size={23}
             color="black"
@@ -131,7 +131,15 @@ export default function Home({ navigation }) {
             placeholder="Search Here"
           />
         </View>
-        {isLoading ? (<ActivityIndicator size="large" color="lightgrey" animating={isLoading} />) : <></>}
+        {isLoading ? (
+          <ActivityIndicator
+            size="large"
+            color="lightgrey"
+            animating={isLoading}
+          />
+        ) : (
+          <></>
+        )}
         <FlatList
           data={filteredDataSource}
           keyExtractor={(item, index) => index.toString()}

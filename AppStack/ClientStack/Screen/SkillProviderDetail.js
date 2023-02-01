@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -8,16 +8,41 @@ import {
   TouchableOpacity,
   TextInput,
   Linking,
+  Alert,
 } from 'react-native';
 
 import ContractHeading from '../Components/ContractHeading';
 import env from '../../../env';
 import axios from 'axios';
+import {AuthContext} from '../../../Context/AuthContext';
 
-export default function SkillProviderDetail({ navigation, route }) {
+export default function SkillProviderDetail({navigation, route}) {
+  const {userInfo} = useContext(AuthContext);
   const [press, setpress] = useState(false);
   const [id, setid] = useState(route.params.id);
   const [userdata, setuserdata] = useState('');
+  const [contractid, setcontractid] = useState(route.params.Contractid);
+
+  const clientrequest = () => {
+    const request = env.IP + 'clientrequest';
+    try {
+      axios
+        .post(request, {
+          senderid: userInfo._id,
+          contractid: contractid,
+        })
+        .then(res => {
+          Alert.alert('Request send', 'Soon you will get response ');
+          console.log(res, 'notification send');
+          navigation.goBack();
+        })
+        .catch(err => {
+          console.log(err, 'error while hiring a skill provider');
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getuserdata = async () => {
     const request = env.IP + 'user/' + id;
@@ -47,7 +72,7 @@ export default function SkillProviderDetail({ navigation, route }) {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF', margin: 10 }}>
+    <View style={{flex: 1, backgroundColor: '#FFF', margin: 10}}>
       <View
         style={{
           //   backgroundColor: 'yellow',
@@ -75,25 +100,25 @@ export default function SkillProviderDetail({ navigation, route }) {
           backgroundColor: 'white',
           alignItems: 'center',
         }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 25 }}>
+        <Text style={{fontWeight: 'bold', fontSize: 25}}>
           {userdata.firstname} {userdata.lastname}
         </Text>
       </View>
       <ScrollView>
         <ContractHeading heading="About" />
-        <Text style={{ marginHorizontal: 20, marginVertical: 10 }}>
+        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {userdata.description}
         </Text>
         <ContractHeading heading="Skill" />
-        <Text style={{ marginHorizontal: 20, marginVertical: 10 }}>
+        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.category}
         </Text>
         <ContractHeading heading="Description" />
-        <Text style={{ marginHorizontal: 20, marginVertical: 10 }}>
+        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.description}
         </Text>
         <ContractHeading heading="Location" />
-        <Text style={{ marginHorizontal: 20, marginVertical: 10 }}>
+        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
           {route.params.location}
         </Text>
         <ContractHeading heading="Budget" />
@@ -106,8 +131,8 @@ export default function SkillProviderDetail({ navigation, route }) {
           }}>
           {route.params.budget}
         </Text>
-        <TouchableOpacity style={styles.button} onPress={() => setpress(true)}>
-          <Text style={{ color: 'white' }}>Hire </Text>
+        <TouchableOpacity style={styles.button} onPress={() => clientrequest()}>
+          <Text style={{color: 'white'}}>Hire </Text>
         </TouchableOpacity>
         {press && (
           <Text
@@ -122,7 +147,7 @@ export default function SkillProviderDetail({ navigation, route }) {
         )}
         {press && (
           <TouchableOpacity style={styles.button} onPress={dialCall}>
-            <Text style={{ color: 'white' }}>Call Now</Text>
+            <Text style={{color: 'white'}}>Call Now</Text>
           </TouchableOpacity>
         )}
       </ScrollView>
