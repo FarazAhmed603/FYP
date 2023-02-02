@@ -1,5 +1,7 @@
-import React, {useState, useEffect} from 'react';
-
+import React, { useState, useEffect } from 'react';
+import firebase from '@react-native-firebase/app';
+import messaging from '@react-native-firebase/messaging';
+import PushNotification, { Importance } from 'react-native-push-notification';
 import {
   View,
   Text,
@@ -8,6 +10,7 @@ import {
   Image,
   Alert,
 } from 'react-native';
+
 
 const NotificationComponent = () => {
   const [checkaction, setcheckaction] = useState(false);
@@ -51,13 +54,14 @@ const styles = StyleSheet.create({
   buttonview: {
     width: '50%',
     alignItems: 'center',
+    paddingLeft: 14,
     justifyContent: 'center',
     backgroundColor: '#fff',
     flexDirection: 'row',
   },
   button: {
     backgroundColor: 'black',
-    marginRight: 10,
+    marginLeft: 10,
     height: '50%',
     borderRadius: 10,
   },
@@ -80,7 +84,9 @@ const styles = StyleSheet.create({
   },
 
   text3: {
-    fontSize: 25,
+    fontSize: 16,
+    paddingHorizontal: 5,
+    paddingVertical: 3,
     color: 'white',
     // fontWeight: 'bold',
   },

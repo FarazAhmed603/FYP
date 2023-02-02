@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }) => {
         )
         .catch(function (error) {
           console.log(error);
+          setisLoading(false);
         })
     });
     // setisLoading(false);
@@ -53,21 +54,22 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
+    await setisLoading(true);
     //console.log('in logout function in authContext');
     const request = env.IP + 'logout' + `/${userInfo.email}`;
     await axios.put(request)
-    await setisLoading(true);
     await setUserToken(null);
     AsyncStorage.removeItem('userInfo').then(() =>
       AsyncStorage.removeItem('userToken').then(() =>
         AsyncStorage.clear().then(() => {
           setuserInfo();
           setUserToken();
+          setisLoading(false);
         }),
       ),
     );
     // AsyncStorage.clear();
-    await setisLoading(false);
+
   };
 
   const isLoggedIn = async () => {
