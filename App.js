@@ -40,12 +40,12 @@ export default function App() {
   useEffect(() => {
 
     messaging().getToken(firebase.app().options.messagingSenderId).then((token) => {
-      console.log(' \n\n\t\t token ', token)
+      console.log(' \n\n\t\t token: ', token, '\n\n')
     });
     const unsub = messaging().onMessage(async remoteMsg => {
       const channelId = Math.random().toString(36).substring(7);
       createchannel(channelId);
-      showNotification(channelId, { title: remoteMsg.notification.android.title, body: remoteMsg.notification.body });
+      showNotification(channelId, { title: remoteMsg.notification.title, body: remoteMsg.notification.body });
       console.log('remoteMsg: ', remoteMsg)
     })
     messaging().setBackgroundMessageHandler(async remoteMsg => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   FlatList,
   ActivityIndicator,
+  RefreshControl
 } from 'react-native';
 
 import Task from '../Components/ContractComponent';
@@ -20,13 +21,17 @@ import ContractComponent from '../Components/ContractComponent';
 
 export default function Contracts({ navigation }) {
   const [isLoading, setIsloading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const request = env.IP + 'getcontract';
-  const [task, setTask] = useState();
-  const [taskItems, setTaskItems] = useState([]);
-  const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
-  const [masterDataSource, setMasterDataSource] = useState([]);
   const { userInfo } = useContext(AuthContext);
   // console.log('userinfo in client contracts', userInfo._id);
 
@@ -48,9 +53,10 @@ export default function Contracts({ navigation }) {
   }
 
   useEffect(() => {
+    console.log('useeffect fetchdata in contracts')
     filtereddata()
       .then(() => { setIsloading(false) })
-  }, [])
+  }, [refreshing])
 
   const ItemView = ({ item }) => {
     // console.log(item.profile);
@@ -89,12 +95,14 @@ export default function Contracts({ navigation }) {
   };
   return (
     <View style={styles.container}>
-      {isLoading ? (<ActivityIndicator size="large" color="lightgrey" animating={isLoading} />) : <></>}
-      <View>
+      {isLoading ? (<ActivityIndicator size="small" color="lightgrey" animating={isLoading} />) : <></>}
+      <View style={{ flex: 1 }}>
         <FlatList
+          style={{ flex: 1 }}
           data={filteredDataSource}
           keyExtractor={(item, index) => index.toString()}
           renderItem={ItemView}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         />
       </View>
       <KeyboardAvoidingView

@@ -15,6 +15,8 @@ export const AuthProvider = ({ children }) => {
   const [change, setchange] = useState(true);
   const [userInfo, setuserInfo] = useState('');
 
+
+
   const login = async (Email, Password) => {
 
     setisLoading(true);
@@ -59,35 +61,47 @@ export const AuthProvider = ({ children }) => {
     const request = env.IP + 'logout' + `/${userInfo.email}`;
     await axios.put(request)
     await setUserToken(null);
-    AsyncStorage.removeItem('userInfo').then(() =>
-      AsyncStorage.removeItem('userToken').then(() =>
-        AsyncStorage.clear().then(() => {
-          setuserInfo();
-          setUserToken();
-          setisLoading(false);
-        }),
-      ),
-    );
-    // AsyncStorage.clear();
+    AsyncStorage.removeItem('userInfo')
+      .then(() =>
+        AsyncStorage.removeItem('userToken').then(() =>
+          AsyncStorage.clear().then(() => {
+            setuserInfo();
+            setUserToken();
+          }),),)
+      .then(() => setisLoading(false))
+      .catch((err) => {
+        console.log(err);
+        setisLoading(false);
+      });
 
   };
 
   const isLoggedIn = async () => {
     //console.log('isLogIn function in AuthContext for checking login status');
     try {
-      setisLoading(true);
-      let userInfo = await AsyncStorage.getItem('userInfo');
+      //setisLoading(true);
+      let userinfo = await AsyncStorage.getItem('userInfo');
       let userToken = await AsyncStorage.getItem('userToken');
-      //console.log('without stringify...........', await userInfo);
-      userInfo = JSON.parse(userInfo);
-      console.log('user info in login function in authcontext', userInfo);
+      //console.log('without stringify...........', await userinfo);
+      userinfo = JSON.parse(userinfo);
+      console.log('\tuser info in authcontext .................................', userinfo.email, '\n\n');
       //console.log('user Token in login function in authcontext\n\t\t', userToken);
       if (userToken) {
         setUserToken(userToken);
-        setuserInfo(userInfo);
-        //console.log('user info..................................', userInfo);
+        // console.log(userinfo._id)
+        const request = env.IP + 'user/' + userinfo._id;
+        await axios.get(request)
+          .then((res) => { setuserInfo(res.data) })
+          .then(() => setisLoading(false))
+          .catch((err) => {
+            console.log(err);
+            setisLoading(false);
+          })
+
+        // setisLoading(false);
+        // sconsole.log('user info .................................', await userInfo.notification[0].title);
       }
-      setisLoading(false);
+
     } catch (e) {
       console.log(e);
     }
@@ -113,6 +127,7 @@ export const AuthProvider = ({ children }) => {
         switchClient,
         setisLoading,
         setuserInfo,
+        isLoggedIn,
         isLoading,
         change,
         userToken,

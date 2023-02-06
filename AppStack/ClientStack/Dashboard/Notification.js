@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 import {
   View,
@@ -9,7 +9,8 @@ import {
   Alert,
   ActivityIndicator,
   ScrollView,
-  FlatList
+  FlatList,
+  RefreshControl
 } from 'react-native';
 import NotificationComponent from '../Components/NotificationComponent';
 import { AuthContext } from '../../../Context/AuthContext';
@@ -17,121 +18,80 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import env from '../../../env';
 import axios from 'axios';
 
-
 const Notification = () => {
   const [isLoading, setIsloading] = useState(false);
-  const { userInfo, setuserInfo } = useContext(AuthContext);
+  const { userInfo, isLoggedIn } = useContext(AuthContext);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const {
-    _id,
-    firstname,
-    lastname,
-    email,
-    location,
-    phone,
-    profile,
-    skill,
-    cnic,
-    education,
-    description,
     notification,
   } = userInfo;
 
-  const [data, setData] = useState({
-    firstname: firstname,
-    lastname: lastname,
-    email: email,
-    phone: phone,
-    profile: profile,
-    skill: skill,
-    cnic: cnic,
-    location: location,
-    description: description,
-    education: education,
-    notification: notification,
-  });
-
   // const noti = {
-  //   title: notification.title,
-  //   body: notification.body,
-  //   status: notification.status,
-  //   contractid: notification.contractid,
-  //   senderid: notification.senderid
+  // title: notification.title,
+  // body: notification.body,
+  // status: notification.status,
+  // contractid: notification.contractid,
+  // senderid: notification.senderid
   // }
 
-  const [contracts, setContracts] = useState()
-
-  const getcontract = async () => {
-    const request = env.IP + 'getcontract';
-    setIsloading(true);
-    await fetch(request)
-      .then(res => {
-        console.log("Response: ", res);
-        return res.json();
-      })
-      .then(dataa => {
-        console.log("Data: ", dataa);
-        setContracts(
-          dataa.filter(
-            item =>
-              item.notification !== ' '
-          ),
-        );
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }
-
   useEffect(() => {
-    getcontract()
-      .then(() => {
-        setIsloading(false);
-        console.log('.  \n\t\t', contracts[0])
-      })
-  }, [])
-
-
-  const updateUserInfo = async () => {
-    const request = env.IP + 'updateuser/' + userInfo._id;
-    try {
-      setIsloading(true);
-      const response = await axios.put(request, data).catch(err => {
-        console.log('\n Data update error :  ', err.response.data.message);
-      });
-      await setuserInfo({ ...userInfo, ...data });
-      await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo))
-        .then(setIsloading(false));
-      console.log("Notification updated")
-    } catch (error) {
-      console.log('update error', error);
-    }
-  };
+    isLoggedIn();
+  }, [refreshing])
 
 
   const ItemView = ({ item }) => {
+    // notification.find(noti => { if (item._id === noti.contractid) { return noti.title } }).title
     return (
       // Flat List Item
       <View style={{ margin: 3 }}>
         <NotificationComponent
-          description={item.description}
+          title={item.title}
+          description={item.body}
           location={item.location}
-          budget={item.budget}
-          id={item.userid}
+          status={item.status}
+          id={item._id}
+          contractid={item.contractid}
+          requestyid={item.senderid}
+          refresh={onRefresh}
         />
-
       </View>
     );
   };
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       {isLoading ? (<ActivityIndicator size="small" color="lightgrey" animating={isLoading} />) : <></>}
-      <NotificationComponent title={contracts} />
-      <FlatList
-        data={contracts}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={ItemView}
-      />
+      {notification[0] && (
+        <FlatList
+          style={{ flex: 1 }}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          data={notification}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={ItemView}
+        />
+      )}
+      {!notification[0] && (
+        <FlatList
+          style={{ flex: 1 }}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          data={[
+            { key: '1', value: 'No notifications' }
+          ]}
+          renderItem={({ item }) => (
+            <View style={{ flex: 1 }}>
+              <Text style={{ flex: 1, alignSelf: 'center', paddingTop: 300, fontSize: 17, fontWeight: 'bold' }} >{item.value}</Text>
+            </View>
+          )}
+
+        />
+      )}
     </View>
   );
 };

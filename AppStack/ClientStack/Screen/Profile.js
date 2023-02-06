@@ -7,21 +7,19 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Button,
   ScrollView,
-  TouchableHighlight,
   Alert,
   TextInput,
   ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Material from 'react-native-vector-icons/MaterialIcons';
-import { AuthContext } from '../../../Context/AuthContext';
-import ProfileHeading from '../Components/ProfileHeading';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import env from '../../../env';
 import axios from 'axios';
+import { AuthContext } from '../../../Context/AuthContext';
+import ProfileHeading from '../Components/ProfileHeading';
+import env from '../../../env';
 
 export default function Profile({ navigation }) {
   const [isLoading, setIsloading] = useState(false);
@@ -68,7 +66,7 @@ export default function Profile({ navigation }) {
   }
   const [Height, setHeight] = useState({ height: val });
 
-  //---------------update data---------------
+  // ---------------update data---------------
   const updateUserInfo = async () => {
     try {
       setIsloading(true);
@@ -84,10 +82,10 @@ export default function Profile({ navigation }) {
     }
   };
 
-  //--------api end------------
+  // --------api end------------
 
-  //-----------image picker--------------
-  var options = {
+  // -----------image picker--------------
+  const options = {
     title: 'Select Image',
 
     storageOptions: {
@@ -123,19 +121,9 @@ export default function Profile({ navigation }) {
       .then(() => { setIsloading(false); });
   }, [data.profile]);
 
+  // --------picker end---------
 
-  //--------picker end---------
-  const createTwoButtonAlert = () =>
-    Alert.alert('Alert Title', 'My Alert Msg', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      { text: 'OK', onPress: () => console.log('OK Pressed') },
-    ]);
-
-  //----------------skills-------------------
+  // ----------------skills-------------------
 
   const [items, setItems] = useState([
     { label: 'painter', selected: userInfo.skill.includes('painter') },
@@ -147,6 +135,8 @@ export default function Profile({ navigation }) {
     { label: 'electrition', selected: userInfo.skill.includes('electrition') },
     { label: 'housekeeper', selected: userInfo.skill.includes('housekeeper') },
   ]);
+
+
 
   let count;
   const checkcount = async () => {
@@ -160,15 +150,13 @@ export default function Profile({ navigation }) {
   };
 
   useEffect(() => {
-    setData(prevData => {
-      return {
-        ...prevData,
-        skill: items.filter(item => item.selected).map(item => item.label),
-      };
-    });
+    setData(prevData => ({
+      ...prevData,
+      skill: items.filter(item => item.selected).map(item => item.label),
+    }));
   }, [items]);
 
-  //-----------------------render starts here---------------------------------------------------------------------------------------------
+  // -----------------------render starts here---------------------------------------------------------------------------------------------
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -515,7 +503,7 @@ export default function Profile({ navigation }) {
               )}
             </View>
           </View>
-          {/*-----------------education---------------*/}
+          {/* -----------------education---------------*/}
           <View>
             <View style={styles.inputView}>
               <View style={{ flexDirection: 'column' }}>
@@ -566,7 +554,7 @@ export default function Profile({ navigation }) {
               )}
             </View>
           </View>
-          {/*-----------------skills---------------*/}
+          {/* -----------------skills---------------*/}
           <View
             style={{
               height: 70,
@@ -592,7 +580,7 @@ export default function Profile({ navigation }) {
               </Text>
             </View>
             {isEditMode.body ? (
-              //<View style={{ flexDirection: 'column' }}>
+              // <View style={{ flexDirection: 'column' }}>
               <FlatList
                 nestedScrollEnabled={true}
                 style={{ marginTop: 13 }}
@@ -638,7 +626,7 @@ export default function Profile({ navigation }) {
                 }}
               />
             ) : (
-              //</View>
+              // </View>
               <View style={{ flexDirection: 'row' }}>
                 {userInfo.skill[0] ? (
                   data.skill.map((item, index) => {

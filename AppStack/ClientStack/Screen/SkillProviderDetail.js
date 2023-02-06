@@ -44,25 +44,34 @@ export default function SkillProviderDetail({ navigation, route }) {
     }
   };
 
-  const getuserdata = async () => {
+  const getUserName = () => {
+    console.log(id);
     const request = env.IP + 'user/' + id;
-    try {
-      await axios.get(request)
-        .then(() => {
-          setuserdata(res.data);
-        });
-
-      //console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+    let getreq = request;
+    axios
+      .get(getreq)
+      .then(res => {
+        setuserdata(res.data);
+        console.log(userdata);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
-    getuserdata()
-      .then(() => { console.log('done') });
+    getUserName();
   }, []);
 
+  const ConfirmationAlert = () =>
+    Alert.alert('Accept Contract', 'Want to work on contract', [
+      {
+        text: 'No',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      { text: 'Yes', onPress: () => setpress(true) },
+    ]);
   const dialCall = () => {
     let phoneNumber = '';
 
@@ -74,13 +83,10 @@ export default function SkillProviderDetail({ navigation, route }) {
 
     Linking.openURL(phoneNumber);
   };
-
   return (
     <View style={{ flex: 1, backgroundColor: '#FFF', margin: 10 }}>
       <View
         style={{
-          //   backgroundColor: 'yellow',
-          //   margin: 10,
           height: '30%',
           alignItems: 'center',
           borderColor: 'lightgrey',

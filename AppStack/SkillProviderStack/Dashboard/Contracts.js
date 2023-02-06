@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   FlatList,
   ActivityIndicator,
+  RefreshControl
 } from 'react-native';
 
 // import Task from '../Components/ContractComponent';
@@ -21,9 +22,16 @@ import { AuthContext } from '../../../Context/AuthContext';
 export default function Contracts({ navigation }) {
   const { userInfo } = useContext(AuthContext);
   const [isLoading, setIsloading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const request = env.IP + 'getcontract';
-
   const [filteredDataSource, setFilteredDataSource] = useState([]);
 
   const filtereddata = async () => {
@@ -46,7 +54,8 @@ export default function Contracts({ navigation }) {
   useEffect(() => {
     filtereddata()
       .then(() => { setIsloading(false) })
-  }, [])
+  }, [refreshing])
+
   const ItemView = ({ item }) => {
     return (
       // Flat List Item
@@ -76,12 +85,14 @@ export default function Contracts({ navigation }) {
   };
   return (
     <View style={styles.container}>
-      {isLoading ? (<ActivityIndicator size="large" color="lightgrey" animating={isLoading} />) : <></>}
-      <View>
+      {isLoading ? (<ActivityIndicator size="small" color="lightgrey" animating={isLoading} />) : <></>}
+      <View style={{ flex: 1 }}>
         <FlatList
+          style={{ flex: 1 }}
           data={filteredDataSource}
           keyExtractor={(item, index) => index.toString()}
           renderItem={ItemView}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         />
       </View>
       <KeyboardAvoidingView

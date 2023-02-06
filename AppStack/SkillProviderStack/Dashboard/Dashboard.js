@@ -1,7 +1,7 @@
-import {StatusBar, Button} from 'react-native';
+import { StatusBar, Button } from 'react-native';
 import * as React from 'react';
 
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Contracts from './Contracts';
@@ -16,12 +16,12 @@ const myContractsName = 'Contracts';
 const settingsName = 'Settings';
 const notification = 'Notification';
 
-const Dashboard = ({navigation}) => {
+const Dashboard = ({ navigation }) => {
   return (
     <Tab.Navigator
       initialRouteName={homeName}
-      screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           let rn = route.name;
 
@@ -39,18 +39,18 @@ const Dashboard = ({navigation}) => {
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
-      // tabBarOptions={{
-      //   activeTintColor: 'black',
-      //   inactiveTintColor: 'black',
-      //   showLabel: false,
-      //   labelStyle: {paddingBottom: 10, fontSize: 10},
-      //   style: {padding: 10, height: 70},
-      // }}
+    // tabBarOptions={{
+    //   activeTintColor: 'black',
+    //   inactiveTintColor: 'black',
+    //   showLabel: false,
+    //   labelStyle: {paddingBottom: 10, fontSize: 10},
+    //   style: {padding: 10, height: 70},
+    // }}
     >
       <Tab.Screen
         name={homeName}
         component={Home}
-        options={{title: 'Skill Provider'}}
+        options={{ title: 'Home' }}
       />
       <Tab.Screen
         name={myContractsName}
