@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, {createContext, useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
@@ -6,36 +6,38 @@ import env from '../env';
 import messaging from '@react-native-firebase/messaging';
 import firebase from '@react-native-firebase/app';
 
-
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({children}) => {
   const [isLoading, setisLoading] = useState(false);
   const [userToken, setUserToken] = useState('');
   const [change, setchange] = useState(true);
   const [userInfo, setuserInfo] = useState('');
+  const [sms, setsms] = useState('');
 
   const login = async (Email, Password) => {
-
     setisLoading(true);
     const request = env.IP + 'login';
-    await messaging().getToken(firebase.app().options.messagingSenderId).then((token) => {
-      console.log('token ', token)
-      axios
-        .post(request, {
-          email: Email,
-          password: Password,
-          DeviceToken: token,
-        })
-        .then(response =>
-          setresponse(response).then(() => {
-            setisLoading(false);
-          }),
-        )
-        .catch(function (error) {
-          console.log(error);
-        })
-    });
+    await messaging()
+      .getToken(firebase.app().options.messagingSenderId)
+      .then(token => {
+        console.log('token ', token);
+        axios
+          .post(request, {
+            email: Email,
+            password: Password,
+            DeviceToken: token,
+          })
+          .then(response =>
+            setresponse(response).then(() => {
+              setisLoading(false);
+            }),
+          )
+          .catch(function (error) {
+            console.log(error.response.message);
+            setsms(error);
+          });
+      });
     // setisLoading(false);
   };
 
@@ -55,7 +57,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     //console.log('in logout function in authContext');
     const request = env.IP + 'logout' + `/${userInfo.email}`;
-    await axios.put(request)
+    await axios.put(request);
     await setisLoading(true);
     await setUserToken(null);
     AsyncStorage.removeItem('userInfo').then(() =>

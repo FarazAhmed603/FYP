@@ -101,11 +101,6 @@ export default function Home({navigation}) {
           />
         </TouchableOpacity>
       </View>
-      // <Text style={styles.itemStyle} onPress={() => getItem(item)}>
-      //   {item.id}
-      //   {'.'}
-      //   {item.title.toUpperCase()}
-      // </Text>
     );
   };
 
