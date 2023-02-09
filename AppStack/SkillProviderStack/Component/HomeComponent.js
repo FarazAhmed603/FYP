@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ActivityIndicator,
+
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,30 +19,32 @@ const HomeComponent = props => {
   const [id, setid] = useState(props.id);
   const request = env.IP + 'user/' + id;
 
-  // const getuser = () => {
-  //   try {
-  //     axios
-  //       .get(request)
-  //       .then(res => {
-  //         console.log('console res ', res.data.profile);
-  //         let data = JSON.stringify(res.data.profile);
-  //         setimage(data);
-  //         console.log(id, '\n', image);
-  //       })
-  //       .catch(err => {
-  //         console.log(err);
-  //       });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const [isLoading, setIsloading] = useState(false);
+  const [data, setdata] = useState(false);
 
-  // useEffect(() => {
-  //   getuser();
-  // }, []);
+  const getuserdata = async () => {
+    const request = env.IP + 'user/' + id;
+    try {
+      setIsloading(true);
+      await axios.get(request)
+        .then((res) => {
+          let dataa = res.data;
+          setdata(dataa.profile);
+        })
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getuserdata()
+      .then(() => { setIsloading(false) });
+  }, []);
+
 
   return (
-    <View style={{borderRadius: 10}}>
+    <View style={{ borderRadius: 10 }}>
+      {isLoading ? (<ActivityIndicator size="small" color="lightgrey" animating={isLoading} />) : <></>}
       <View style={styles.inputView}>
         <View style={styles.inputView1}>
           <TouchableOpacity
@@ -48,7 +52,7 @@ const HomeComponent = props => {
             onPress={() => Alert.alert('image clicked')}>
             <Image
               source={{
-                uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
+                uri: data,
               }}
               style={styles.avatar}
             />

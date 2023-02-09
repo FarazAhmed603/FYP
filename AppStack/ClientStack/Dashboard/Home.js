@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 // import all the components we are going to use
 import {
@@ -10,24 +10,35 @@ import {
   TextInput,
   ActivityIndicator,
   TouchableOpacity,
+  RefreshControl
 } from 'react-native';
 
 import HomeComponent from '../Components/HomeComponent';
 import Icon from 'react-native-vector-icons/Fontisto';
 import env from '../../../env';
-import {AuthContext} from '../../../Context/AuthContext';
+import { AuthContext } from '../../../Context/AuthContext';
 
-export default function Home({navigation}) {
-  const {userInfo} = useContext(AuthContext);
+export default function Home({ navigation }) {
+  const { userInfo } = useContext(AuthContext);
   const request = env.IP + 'getcontract';
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   const [errror, seterrror] = useState('');
   const [isLoading, setIsloading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const fetchusers = async () => {
     setIsloading(true);
+
+    console.log(await userInfo._id)
     await fetch(request)
       .then(response => response.json())
       .then(responseJson => {
@@ -53,7 +64,7 @@ export default function Home({navigation}) {
     fetchusers().then(() => {
       setIsloading(false);
     });
-  }, []);
+  }, [refreshing, userInfo._id]);
 
   const searchFilterFunction = text => {
     // Check if searched text is not blank
@@ -78,10 +89,10 @@ export default function Home({navigation}) {
     }
   };
 
-  const ItemView = ({item}) => {
+  const ItemView = ({ item }) => {
     return (
       // Flat List Item
-      <View style={{margin: 3}}>
+      <View style={{ margin: 3 }}>
         <TouchableOpacity
           onPress={() =>
             navigation.push('SkillProviderDetail', {
@@ -102,11 +113,6 @@ export default function Home({navigation}) {
           />
         </TouchableOpacity>
       </View>
-      // <Text style={styles.itemStyle} onPress={() => getItem(item)}>
-      //   {item.id}
-      //   {'.'}
-      //   {item.title.toUpperCase()}
-      // </Text>
     );
   };
 
@@ -116,12 +122,13 @@ export default function Home({navigation}) {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView
+      style={{ flex: 1 }}>
       {!errror && (
-        <View>
+        <View style={{ flex: 1 }}>
           <View style={styles.textInputStyle}>
             <Icon
-              style={{marginRight: 10, marginTop: 6}}
+              style={{ marginRight: 10, marginTop: 6 }}
               name="search"
               size={23}
               color="black"
@@ -134,19 +141,33 @@ export default function Home({navigation}) {
             />
           </View>
           {isLoading ? (
-            <ActivityIndicator
-              size="large"
-              color="lightgrey"
-              animating={isLoading}
-            />
+            <ActivityIndicator size="small" color="lightgrey" animating={isLoading} />
           ) : (
             <></>
           )}
-          <FlatList
-            data={filteredDataSource}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={ItemView}
-          />
+          {filteredDataSource[0] && (
+            <FlatList
+              style={{ flex: 1 }}
+              data={filteredDataSource}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={ItemView}
+              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            />
+          )}
+          {!filteredDataSource[0] && (
+            <FlatList
+              style={{ flex: 1 }}
+              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+              data={[
+                { key: '1', value: 'No Contracts' }
+              ]}
+              renderItem={({ item }) => (
+                <View style={{ flex: 1 }}>
+                  <Text style={{ flex: 1, alignSelf: 'center', paddingTop: '80%', fontSize: 17, fontWeight: 'bold' }} >{item.value}</Text>
+                </View>
+              )}
+            />
+          )}
         </View>
       )}
       {errror && (

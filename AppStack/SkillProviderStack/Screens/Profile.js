@@ -38,6 +38,7 @@ export default function Profile({ navigation }) {
     cnic,
     education,
     description,
+    notification,
   } = userInfo;
 
   const [data, setData] = useState({
@@ -51,6 +52,7 @@ export default function Profile({ navigation }) {
     location: location,
     description: description,
     education: education,
+    notification: notification,
   });
 
   const request = env.IP + 'updateuser/' + userInfo._id;
@@ -609,11 +611,7 @@ export default function Profile({ navigation }) {
                         checkcount().then(res => {
                           if (res || item.selected == true) {
                             setItems(
-                              items.map(i =>
-                                i.label === item.label
-                                  ? { ...i, selected: !item.selected }
-                                  : i,
-                              ),
+                              items.map(i => i.label === item.label ? { ...i, selected: !item.selected } : i),
                             );
                           }
                         });

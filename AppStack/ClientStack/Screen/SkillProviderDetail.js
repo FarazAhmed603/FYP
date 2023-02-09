@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
@@ -14,10 +14,10 @@ import {
 import ContractHeading from '../Components/ContractHeading';
 import env from '../../../env';
 import axios from 'axios';
-import {AuthContext} from '../../../Context/AuthContext';
+import { AuthContext } from '../../../Context/AuthContext';
 
-export default function SkillProviderDetail({navigation, route}) {
-  const {userInfo} = useContext(AuthContext);
+export default function SkillProviderDetail({ navigation, route }) {
+  const { userInfo } = useContext(AuthContext);
   const [press, setpress] = useState(false);
   const [id, setid] = useState(route.params.id);
   const [userdata, setuserdata] = useState('');
@@ -44,21 +44,34 @@ export default function SkillProviderDetail({navigation, route}) {
     }
   };
 
-  const getuserdata = async () => {
+  const getUserName = () => {
+    console.log(id);
     const request = env.IP + 'user/' + id;
-    try {
-      let res = await axios.get(request);
-      setuserdata(res.data);
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+    let getreq = request;
+    axios
+      .get(getreq)
+      .then(res => {
+        setuserdata(res.data);
+        console.log(userdata);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
-    getuserdata();
+    getUserName();
   }, []);
 
+  const ConfirmationAlert = () =>
+    Alert.alert('Accept Contract', 'Want to work on contract', [
+      {
+        text: 'No',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      { text: 'Yes', onPress: () => setpress(true) },
+    ]);
   const dialCall = () => {
     let phoneNumber = '';
 
@@ -70,13 +83,10 @@ export default function SkillProviderDetail({navigation, route}) {
 
     Linking.openURL(phoneNumber);
   };
-
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF', margin: 10}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF', margin: 10 }}>
       <View
         style={{
-          //   backgroundColor: 'yellow',
-          //   margin: 10,
           height: '30%',
           alignItems: 'center',
           borderColor: 'lightgrey',
@@ -100,25 +110,25 @@ export default function SkillProviderDetail({navigation, route}) {
           backgroundColor: 'white',
           alignItems: 'center',
         }}>
-        <Text style={{fontWeight: 'bold', fontSize: 25}}>
+        <Text style={{ fontWeight: 'bold', fontSize: 25 }}>
           {userdata.firstname} {userdata.lastname}
         </Text>
       </View>
       <ScrollView>
         <ContractHeading heading="About" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+        <Text style={{ marginHorizontal: 20, marginVertical: 10 }}>
           {userdata.description}
         </Text>
         <ContractHeading heading="Skill" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+        <Text style={{ marginHorizontal: 20, marginVertical: 10 }}>
           {route.params.category}
         </Text>
         <ContractHeading heading="Description" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+        <Text style={{ marginHorizontal: 20, marginVertical: 10 }}>
           {route.params.description}
         </Text>
         <ContractHeading heading="Location" />
-        <Text style={{marginHorizontal: 20, marginVertical: 10}}>
+        <Text style={{ marginHorizontal: 20, marginVertical: 10 }}>
           {route.params.location}
         </Text>
         <ContractHeading heading="Budget" />
@@ -132,24 +142,8 @@ export default function SkillProviderDetail({navigation, route}) {
           {route.params.budget}
         </Text>
         <TouchableOpacity style={styles.button} onPress={() => clientrequest()}>
-          <Text style={{color: 'white'}}>Hire </Text>
+          <Text style={{ color: 'white' }}>Request to hire </Text>
         </TouchableOpacity>
-        {press && (
-          <Text
-            style={{
-              marginHorizontal: 20,
-              marginVertical: 10,
-              fontWeight: 'bold',
-              fontSize: 30,
-            }}>
-            {userdata.phone}
-          </Text>
-        )}
-        {press && (
-          <TouchableOpacity style={styles.button} onPress={dialCall}>
-            <Text style={{color: 'white'}}>Call Now</Text>
-          </TouchableOpacity>
-        )}
       </ScrollView>
     </View>
   );

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,26 +14,34 @@ import axios from 'axios';
 import env from '../../../env';
 
 const HomeComponent = props => {
-  // const [image, setimage] = useState();
+  const [image, setimage] = useState();
+
   const [id, setid] = useState(props.id);
-  const [userdata, setuserdata] = useState();
+  const [isLoading, setIsloading] = useState(false);
+  const [data, setdata] = useState(false);
 
-  // const getuserdata = async () => {
-  //   const request = env.IP + 'user/' + id;
-  //   try {
-  //     let res = await axios.get(request);
-  //     setuserdata(res.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const getuserdata = async () => {
+    const request = env.IP + 'user/' + id;
+    try {
+      setIsloading(true);
+      await axios.get(request)
+        .then((res) => {
+          let dataa = res.data;
+          setdata(dataa.profile);
+        })
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // useEffect(() => {
-  //   getuserdata();
-  // }, []);
+  useEffect(() => {
+    getuserdata()
+      .then(() => { setIsloading(false) });
+  }, []);
 
   return (
     <View style={{ borderRadius: 10 }}>
+      {isLoading ? (<ActivityIndicator size="small" color="lightgrey" animating={isLoading} />) : <></>}
       <View style={styles.inputView}>
         <View style={styles.inputView1}>
           <TouchableOpacity
@@ -40,7 +49,7 @@ const HomeComponent = props => {
             onPress={() => Alert.alert('image clicked')}>
             <Image
               source={{
-                uri: 'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png',
+                uri: data,
               }}
               style={styles.avatar}
             />
